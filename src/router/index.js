@@ -18,8 +18,14 @@ Vue.use(VueRouter)
   },
   {
     path: '/currentuser',
-    name: 'About',
-    component: () => import('../views/About.vue')
+    name: 'CurrentUser',
+    component: () => import('../views/CurrentUser.vue')
+  },
+  {
+    path: '/user/name/:username',
+    name: 'UserByUsername',
+    props: true,
+    component: () => import('../views/UserByUsername.vue')
   }
 ]
 

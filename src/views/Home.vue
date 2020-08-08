@@ -53,13 +53,10 @@ export default {
       }
     },
     methods: {
-      onSubmit(evt) {
+      async onSubmit(evt) {
         evt.preventDefault()
         //alert(JSON.stringify(this.form))
-        this.$root.api.sendRequest('getAvailabilityAuth', {}, (auth) => {
-          console.log(auth);
-        });
-        this.$root.api.sendRequest('auth', { // Авторизация
+        var res = await this.$root.api.request('auth', { // Авторизация
             login: this.form.username,
             password: {
                 password: this.form.password,
@@ -69,20 +66,14 @@ export default {
             getSession: true,
             authType: "API",
             initProxy: false
-        }, (res) => {
+        });
             console.log(res);
             localStorage.setItem("authdata", JSON.stringify(res));
             this.$store.commit('onAuth', res);
-            this.$root.api.sendRequest('lkExtendedInfo', {}, (extInfo) => {
-              console.log(extInfo);
-              this.$store.commit('onExtInfo', extInfo);
-            }, (error) => {
-              console.log(JSON.stringify(error))
-            });
+          var extInfo = await this.$root.api.request('lkExtendedInfo', {});
+            console.log(extInfo);
+            this.$store.commit('onExtInfo', extInfo);
             this.$router.push("/currentuser");
-        }, (error) => {
-            console.log(JSON.stringify(error));
-        });
 
       },
       onReset(evt) {

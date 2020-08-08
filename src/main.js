@@ -10,7 +10,7 @@ Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 const api = new GravitApi();
 api.connect('ws://localhost:9274/api');
-
+/*
 api.onOpen = () => {
    var res = localStorage.getItem("authdata");
    if(res)
@@ -36,6 +36,39 @@ api.onOpen = () => {
    {
     router.push("/login");
    }
+};
+*/
+api.onopen_promise = new Promise((resolve, reject) => {
+  api.onopen_resolve = resolve;
+  api.onopen_reject = reject;
+});
+api.onOpen = () => {
+  api.onopen_resolve();
+  var res = localStorage.getItem("authdata");
+  if(res)
+  {
+    var resdata = JSON.parse(res);
+     console.log(resdata);
+     api.sendRequest("restoreSession", { session: Number(resdata.session) }, (result) => {
+      console.log(result);
+      store.commit('onAuth', resdata);
+      api.sendRequest('lkExtendedInfo', {}, (extInfo) => {
+        console.log(extInfo);
+        store.commit('onExtInfo', extInfo);
+      }, (error) => {
+        console.log(JSON.stringify(error))
+      });
+     }, () => {});
+  }
+}
+api.onError = (error) => {
+  api.onopen_reject(error);
+}
+api.request = async function (type, data) {
+  await api.onopen_promise;
+  return new Promise(function(resolve, reject) {
+      api.sendRequest(type, data, resolve, reject);
+  });
 };
 new Vue({
   router,

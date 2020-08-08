@@ -10,6 +10,8 @@ export default new Vuex.Store({
       uuid: undefined,
       permissions: 0,
       flags: 0,
+      skin: undefined,
+      cloak: undefined,
       ext: {
         gender: undefined,
         status: undefined,
@@ -25,6 +27,8 @@ export default new Vuex.Store({
     onAuth(state, event) {
       state.user.username = event.playerProfile.username;
       state.user.uuid = event.playerProfile.uuid;
+      state.user.skin = event.playerProfile.skin == undefined ? undefined : event.playerProfile.skin.url;
+      state.user.cloak = event.playerProfile.cloak == undefined ? undefined : event.playerProfile.cloak.url;
       state.user.permissions = event.permissions.permissions;
       state.user.flags = event.permissions.flags;
     },
