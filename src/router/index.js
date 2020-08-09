@@ -22,6 +22,11 @@ Vue.use(VueRouter)
     component: () => import('../views/CurrentUser.vue')
   },
   {
+    path: '/register',
+    name: 'RegisterUser',
+    component: () => import('../views/RegisterUser.vue')
+  },
+  {
     path: '/user/name/:username',
     name: 'UserByUsername',
     props: true,

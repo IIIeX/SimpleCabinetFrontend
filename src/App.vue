@@ -20,7 +20,9 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
+    <b-container>
     <router-view/>
+    </b-container>
   </div>
 </template>
 <script>

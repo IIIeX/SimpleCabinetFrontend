@@ -49,7 +49,7 @@ api.onOpen = () => {
   {
     var resdata = JSON.parse(res);
      console.log(resdata);
-     api.sendRequest("restoreSession", { session: Number(resdata.session) }, (result) => {
+     api.sendRequest("restoreSession", { session: resdata.session }, (result) => {
       console.log(result);
       store.commit('onAuth', resdata);
       api.sendRequest('lkExtendedInfo', {}, (extInfo) => {
