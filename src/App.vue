@@ -1,22 +1,13 @@
 <template>
   <div id="app">
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand to="/">GravitLauncher Wiki</b-navbar-brand>
+      <b-navbar-brand to="/">SimpleCabinet</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown text="Разделы" right>
-            <b-dropdown-item to="/">Главная</b-dropdown-item>
-            <b-dropdown-item to="/authprovider">AuthProvider</b-dropdown-item>
-            <b-dropdown-item to="/authhandler">AuthHandler</b-dropdown-item>
-            <b-dropdown-item to="/protection">Защита</b-dropdown-item>
-            <b-dropdown-item to="/clientbuild">Сборка клиента</b-dropdown-item>
-            <b-dropdown-item to="/serverbuild">Сборка сервера</b-dropdown-item>
-          </b-nav-item-dropdown>
-          <b-nav-item-dropdown text="Разработчикам" right>
-            <b-dropdown-item to="/developerapi">Написание модулей</b-dropdown-item>
-            <b-dropdown-item to="/runtimeapi">Редактирование runtime</b-dropdown-item>
-          </b-nav-item-dropdown>
+          <b-nav-item v-if="!this.$store.state.user.uuid" to="/login">Войти</b-nav-item>
+          <b-nav-item v-if="!this.$store.state.user.uuid" to="/register">Регистрация</b-nav-item>
+          <b-nav-item v-if="this.$store.state.user.uuid" to="/currentuser">Личный кабинет</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -27,7 +18,7 @@
 </template>
 <script>
 export default {
-  
+
 }
 </script>
 <style lang="scss">

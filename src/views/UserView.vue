@@ -4,7 +4,7 @@
       <b-row>
         <b-col>
           <p>
-            <img style="width: 100%; image-rendering: optimizespeed;" :src="user.skin" />
+            <SkinViewer :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
           </p>
           <b-button v-if="owner" variant="primary" @click="uploadSkin()">Загрузить скин</b-button>
           <b-button v-if="owner" variant="primary" @click="uploadCloak()">Загрузить плащ</b-button>
@@ -80,8 +80,10 @@
 </template>
 <script>
 //import { mapState } from 'vuex';
+import SkinViewer from "../components/SkinViewer"
 export default {
   props: ["user", "owner", "admin"],
+  components: { SkinViewer },
   //computed: mapState({
   //  user: state => state.user
   //})
