@@ -86,7 +86,7 @@
 </template>
 <script>
 //import { mapState } from 'vuex';
-import SkinViewer from "../components/SkinViewer"
+import SkinViewer from "@/components/SkinViewer"
 export default {
   props: ["user", "owner", "admin"],
   components: { SkinViewer },

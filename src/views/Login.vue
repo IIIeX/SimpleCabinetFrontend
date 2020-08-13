@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group
         id="input-group-1"
@@ -32,13 +31,9 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
-  },
   data() {
       return {
         form: {
@@ -53,24 +48,8 @@ export default {
       async onSubmit(evt) {
         evt.preventDefault()
         //alert(JSON.stringify(this.form))
-        var res = await this.$root.api.request('auth', { // Авторизация
-            login: this.form.username,
-            password: {
-                password: this.form.password,
-                type: "plain"
-            },
-            auth_id: "std",
-            getSession: true,
-            authType: "API",
-            initProxy: false
-        });
-            console.log(res);
-            localStorage.setItem("authdata", JSON.stringify(res));
-            this.$store.commit('onAuth', res);
-          var extInfo = await this.$root.api.request('lkExtendedInfo', {});
-            console.log(extInfo);
-            this.$store.commit('onExtInfo', extInfo);
-            this.$router.push("/currentuser");
+        await this.$store.dispatch('requestAuth', { login: this.form.username, passowrd: this.form.password, authId: 'std' });
+        await this.$store.dispatch('requestExtInfo', {});
 
       },
       onReset(evt) {

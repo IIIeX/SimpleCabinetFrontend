@@ -2,7 +2,7 @@
     <UserView v-if="user" :user="user" :owner="false" :admin="(user.permissions & 1) != 0"/>
 </template>
 <script>
-import UserView from "./UserView.vue"
+import UserView from "@/components/UserView.vue"
 export default {
     components: { UserView },
     props: ["username"],

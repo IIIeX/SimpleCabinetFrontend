@@ -2,7 +2,7 @@
   <UserView :user="user" :owner="true" :admin="(user.permissions & 1) != 0" />
 </template>
 <script>
-import UserView from "./UserView.vue";
+import UserView from "@/components/UserView.vue";
 import { mapState } from "vuex";
 export default {
   components: { UserView },

@@ -48,6 +48,29 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    requestExtInfo: async function (context) {
+      var res = await this.$root.api.request('lkExtendedInfo', {});
+      context.commit('onExtInfo', res);
+    },
+    requestAuth: async function (context, login, password, authId) {
+      var res = await this._vm.api.request('auth', { // Авторизация
+        login: login,
+        password: {
+          password: password,
+          type: "plain"
+        },
+        auth_id: authId,
+        getSession: true,
+        authType: "API",
+        initProxy: false
+      });
+      localStorage.setItem("authdata", JSON.stringify(res));
+      context.commit('onAuth', res);
+    },
+    requestExit: async function (context, exitAll) {
+      var res = await this.$root.api.request('exit', { exitAll });
+      context.commit('exit', res);
+    }
   },
   modules: {
   }
