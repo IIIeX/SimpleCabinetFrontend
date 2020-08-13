@@ -40,6 +40,11 @@ export default new Vuex.Store({
       state.user.ext.donateMoney = event.donateMoney;
       state.user.ext.extendedMoney = event.extendedMoney;
       state.user.ext.isBanned = event.isBanned;
+    },
+    exit(state) {
+      state.user = {
+        ext: {}
+      };
     }
   },
   actions: {

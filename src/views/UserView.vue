@@ -6,16 +6,14 @@
           <p>
             <SkinViewer :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
           </p>
-          <b-button v-if="owner" variant="primary" @click="uploadSkin()">Загрузить скин</b-button>
-          <b-button v-if="owner" variant="primary" @click="uploadCloak()">Загрузить плащ</b-button>
+          <b-button v-if="owner" variant="primary" @click="uploadSkin()">Загрузить скин</b-button> <b-button v-if="owner" variant="primary" @click="uploadCloak()">Загрузить плащ</b-button>
           <b-dropdown v-if="owner" text="Действия" class="m-md-2">
-            <b-dropdown-item @click="modalChangePassword = !modalChangePassword">Сменить пароль</b-dropdown-item>
-            <b-dropdown-item>Сменить статус</b-dropdown-item>
+            <b-dropdown-item @click="modalChangePassword.show = !modalChangePassword.show">Сменить пароль</b-dropdown-item>
           </b-dropdown>
           <b-dropdown v-if="admin" text="Администрирование" variant="danger" class="m-md-2">
             <b-dropdown-item
               variant="danger"
-              @click="modalAdminChangePassword = !modalAdminChangePassword"
+              @click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
             >Сменить пароль</b-dropdown-item>
           </b-dropdown>
         </b-col>
@@ -34,13 +32,19 @@
                 <td>UUID</td>
                 <td>{{ user.uuid }}</td>
               </tr>
-              <tr v-if="user.ext.status">
+              <tr v-if="user.ext.status || editProfileForm.show">
                 <td>Статус</td>
-                <td>{{ user.ext.status }}</td>
+                <td v-if="!editProfileForm.show">{{ user.ext.status }}</td>
+                <td v-if="editProfileForm.show">
+                  <b-form-input v-model="editProfileForm.status" type="text" placeholder="Ваш статус"></b-form-input>
+                </td>
               </tr>
               <tr>
                 <td>Пол</td>
-                <td>{{ user.ext.gender == undefined ? "Не указан" : user.ext.gender == "FEMALE" ? "Женский" : "Мужской" }}</td>
+                <td v-if="!editProfileForm.show">{{ !user.ext.gender ? "Не указан" : user.ext.gender == "FEMALE" ? "Женский" : "Мужской" }}</td>
+                <td v-if="editProfileForm.show">
+                  <b-form-select v-model="editProfileForm.gender" :options="editProfileForm.genderOptions"></b-form-select>
+                </td>
               </tr>
               <tr v-if="user.ext.email">
                 <td>Email</td>
@@ -56,25 +60,27 @@
               </tr>
             </tbody>
           </table>
+          <b-button v-if="!editProfileForm.show" @click="editProfileForm.show = !editProfileForm.show" variant="outline-primary">Редактировать</b-button>
+          <b-button v-if="editProfileForm.show" @click="editProfile" variant="primary">Применить</b-button>
         </b-col>
       </b-row>
     </b-container>
-    <b-modal v-model="modalChangePassword" id="modal-changepassword" @ok="userChangePassword">
-      <b-form-input v-model="userChangeOldPassword" type="password" placeholder="Старый пароль"></b-form-input>
-      <b-form-input v-model="userChangeNewPassword" type="password" placeholder="Новый пароль"></b-form-input>
+    <b-modal v-model="modalChangePassword.show" id="modal-changepassword" @ok="userChangePassword">
+      <b-form-input v-model="modalChangePassword.oldPassword" type="password" placeholder="Старый пароль"></b-form-input>
+      <b-form-input v-model="modalChangePassword.newPassword" type="password" placeholder="Новый пароль"></b-form-input>
       <b-form-input
-        v-model="userChangeNewPasswordRetry"
+        v-model="modalChangePassword.newPasswordRetry"
         type="password"
         placeholder="Повторите пароль"
       ></b-form-input>
-      <b-form-invalid-feedback :state="userChangePasswordValidationMatch">Пароли не совпадают</b-form-invalid-feedback>
+      <b-form-invalid-feedback :state="modalChangePassword.validation">Пароли не совпадают</b-form-invalid-feedback>
     </b-modal>
     <b-modal
-      v-model="modalAdminChangePassword"
+      v-model="modalAdminChangePassword.show"
       id="modal-admin-changepassword"
       @ok="adminChangePassword"
     >
-      <b-form-input v-model="adminChangeNewPassword" type="password" placeholder="Новый пароль"></b-form-input>
+      <b-form-input v-model="modalAdminChangePassword.newPassword" type="password" placeholder="Новый пароль"></b-form-input>
     </b-modal>
   </div>
 </template>
@@ -87,34 +93,57 @@ export default {
   //computed: mapState({
   //  user: state => state.user
   //})
-  data: () => {
+  data: function() {
     return {
       items: [{ a: 1 }, { a: 1 }, { a: 1 }],
-      modalChangePassword: false,
-      modalAdminChangePassword: false,
-      userChangePasswordValidationMatch: true,
-      userChangeOldPassword: null,
-      userChangeNewPassword: null,
-      userChangeNewPasswordRetry: null,
-      adminChangeNewPassword: null,
+      modalChangePassword: {
+        show: false,
+        validation: true,
+        oldPassword: null,
+        newPassword: null,
+        newPasswordRetry: null
+      },
+      modalAdminChangePassword: {
+        show: false,
+        newPassword: null
+      },
+      editProfileForm: {
+        show: false,
+        status: this.user.ext.status,
+        gender: this.user.ext.gender == undefined ? null : this.user.ext.gender,
+        genderOptions: [
+          { value: null, text: "Не указано" },
+          { value: "FEMALE", text: "Женский" },
+          { value: "MALE", text: "Мужской" }
+        ]
+      }
     };
   },
   methods: {
     userChangePassword: async function (evt) {
       evt.preventDefault();
-      if (this.userChangeNewPassword != this.userChangeNewPasswordRetry) {
+      if (this.modalChangePassword.newPassword != this.modalChangePassword.newPasswordRetry) {
         //TODO
-        this.userChangePasswordValidationMatch = false;
-        this.modalChangePassword = true;
+        this.modalChangePassword.validation = false;
+        this.modalChangePassword.show = true;
       } else {
         var res = await this.$root.api.request("lkChangePassword", {
-          oldPassword: this.userChangeOldPassword,
-          newPassword: this.userChangeNewPassword,
+          oldPassword: this.modalChangePassword.oldPassword,
+          newPassword: this.modalChangePassword.newPassword,
         });
         console.log(res);
-        this.modalChangePassword = false;
-        this.userChangePasswordValidationMatch = true;
+        this.modalChangePassword.show = false;
+        this.modalChangePassword.validation = true;
       }
+    },
+    editProfile: async function () {
+        var res = await this.$root.api.request('lkUpdateExtendedInfo', {
+          username: ( this.admin && !this.owner ) ? this.user.username : undefined,
+          status: this.editProfileForm.status,
+          gender: this.editProfileForm.gender
+        });
+        this.editProfileForm.show = false;
+        console.log(res);
     },
     adminChangePassword: async function (evt) {
       evt.preventDefault();

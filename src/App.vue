@@ -8,6 +8,7 @@
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/login">Войти</b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/register">Регистрация</b-nav-item>
           <b-nav-item v-if="this.$store.state.user.uuid" to="/currentuser">Личный кабинет</b-nav-item>
+          <b-nav-item v-if="this.$store.state.user.uuid" @click="exitAccount">Выход</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -18,7 +19,16 @@
 </template>
 <script>
 export default {
+  methods: {
+    exitAccount: async function() {
+      var res = await this.$root.api.request('exit', {
 
+      });
+      console.log(res);
+      this.$store.commit('exit');
+      this.$router.push("/");
+    }
+  }
 }
 </script>
 <style lang="scss">
