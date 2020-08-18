@@ -48,8 +48,9 @@ export default {
       async onSubmit(evt) {
         evt.preventDefault()
         //alert(JSON.stringify(this.form))
-        await this.$store.dispatch('requestAuth', { login: this.form.username, passowrd: this.form.password, authId: 'std' });
+        await this.$store.dispatch('requestAuth', { login: this.form.username, password: this.form.password, authId: 'std' });
         await this.$store.dispatch('requestExtInfo', {});
+        this.$router.push('/currentuser');
 
       },
       onReset(evt) {

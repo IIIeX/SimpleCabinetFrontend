@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import GravitApi from "gravit-api"
 
 Vue.use(Vuex)
 
@@ -21,7 +22,8 @@ export default new Vuex.Store({
         extendedMoney: 0,
         isBanned: false
       }
-    }
+    },
+    api: new GravitApi()
   },
   mutations: {
     onAuth(state, event) {
@@ -49,11 +51,12 @@ export default new Vuex.Store({
   },
   actions: {
     requestExtInfo: async function (context) {
-      var res = await this.$root.api.request('lkExtendedInfo', {});
+      var res = await context.dispatch('request',{type:'lkExtendedInfo'});
       context.commit('onExtInfo', res);
     },
-    requestAuth: async function (context, login, password, authId) {
-      var res = await this._vm.api.request('auth', { // Авторизация
+    requestAuth: async function (context, {login, password, authId}) {
+      var res = await context.dispatch('request', { // Авторизация
+        type: 'auth',
         login: login,
         password: {
           password: password,
@@ -68,8 +71,15 @@ export default new Vuex.Store({
       context.commit('onAuth', res);
     },
     requestExit: async function (context, exitAll) {
-      var res = await this.$root.api.request('exit', { exitAll });
+      var res = await context.state.api.request('exit', { exitAll });
       context.commit('exit', res);
+    },
+    request: async function (context, data) {
+      await context.state.api.onopen_promise;
+      console.log(data);
+      return new Promise(function(resolve, reject) {
+          context.state.api.sendRequest(data.type, data, resolve, reject);
+      });
     }
   },
   modules: {

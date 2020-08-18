@@ -13,9 +13,8 @@ export default {
     },
     methods: {
         fetchUser: async function(username) {
-            const api = this.$root.api;
-            var info = await api.request('profileByUsername', {username});
-            var extInfo = await api.request('lkExtendedInfo', {username});
+            var info = await this.$store.dispatch('request', { type: 'profileByUsername', username});
+            var extInfo = await this.$store.dispatch('request', { type: 'lkExtendedInfo', username});
             console.log(info);
             console.log(extInfo);
             return {
@@ -23,6 +22,8 @@ export default {
                 uuid: info.playerProfile.uuid,
                 permissions: 0,
                 flags: 0,
+                skin: info.playerProfile.skin ? info.playerProfile.skin.url : undefined,
+                cloak: info.playerProfile.cloak ? info.playerProfile.cloak.url : undefined,
                 ext: extInfo
             };
         }

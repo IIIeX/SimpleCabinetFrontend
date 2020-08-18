@@ -1,14 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import BootstrapVue from "bootstrap-vue"
-import GravitApi from "gravit-api"
 import router from './router'
 import store from './store'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
-const api = new GravitApi();
+const api = store.state.api;
 api.connect('ws://localhost:9274/api');
 /*
 api.onOpen = () => {
@@ -64,12 +63,6 @@ api.onOpen = () => {
 api.onError = (error) => {
   api.onopen_reject(error);
 }
-api.request = async function (type, data) {
-  await api.onopen_promise;
-  return new Promise(function(resolve, reject) {
-      api.sendRequest(type, data, resolve, reject);
-  });
-};
 new Vue({
   router,
   store,

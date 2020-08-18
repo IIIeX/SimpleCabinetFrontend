@@ -127,7 +127,8 @@ export default {
         this.modalChangePassword.validation = false;
         this.modalChangePassword.show = true;
       } else {
-        var res = await this.$root.api.request("lkChangePassword", {
+        var res = await this.$store.dispatch('request', {
+          type: 'lkChangePassword',
           oldPassword: this.modalChangePassword.oldPassword,
           newPassword: this.modalChangePassword.newPassword,
         });
@@ -137,17 +138,21 @@ export default {
       }
     },
     editProfile: async function () {
-        var res = await this.$root.api.request('lkUpdateExtendedInfo', {
+        var res = await this.$store.dispatch('request', {
+          type: 'lkUpdateExtendedInfo',
           username: ( this.admin && !this.owner ) ? this.user.username : undefined,
           status: this.editProfileForm.status,
           gender: this.editProfileForm.gender
         });
+        this.user.ext.status = this.editProfileForm.status;
+        this.user.ext.gender = this.editProfileForm.gender;
         this.editProfileForm.show = false;
         console.log(res);
     },
     adminChangePassword: async function (evt) {
       evt.preventDefault();
-      var res = await this.$root.api.request("lkChangePassword", {
+      var res = await this.$store.dispatch('request', {
+        type: 'lkChangePassword',
         userUsername: this.user.username,
         newPassword: this.adminChangeNewPassword,
       });
@@ -155,7 +160,8 @@ export default {
     },
     uploadSkin: async function () {
       const data = await this.readFileToBase64();
-      var result = await this.$root.api.request("lkUploadSkin", {
+      var result = await this.$store.dispatch('request', {
+        type: 'lkUploadSkin',
         skinType: "SKIN",
         data: data.split("+").join("-").split("/").join("_"),
       });
@@ -163,7 +169,8 @@ export default {
     },
     uploadCloak: async function () {
       const data = await this.readFileToBase64();
-      var result = await this.$root.api.request("lkUploadSkin", {
+      var result = await this.$store.dispatch('request', {
+        type: 'lkUploadSkin',
         skinType: "CLOAK",
         data: data.split("+").join("-").split("/").join("_"),
       });

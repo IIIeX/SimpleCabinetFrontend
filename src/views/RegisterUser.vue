@@ -45,7 +45,8 @@ export default {
   methods: {
     async onSubmit(evt) {
       evt.preventDefault();
-      var res = await this.$root.api.request("lkRegister", {
+      var res = await this.$store.dispatch('request', {
+        type: 'lkRegister',
         username: this.form.username,
         email: this.form.email,
         password: this.form.password,
