@@ -1,5 +1,5 @@
 <template>
-    <UserView v-if="user" :user="user" :owner="false" :admin="(user.permissions & 1) != 0"/>
+    <UserView v-if="user" :user="user" :owner="false" :admin="(this.$store.state.user.permissions & 1) != 0"/>
 </template>
 <script>
 import UserView from "@/components/UserView.vue"

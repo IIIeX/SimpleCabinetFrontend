@@ -24,7 +24,7 @@
           placeholder="Enter email"
         ></b-form-input>
       </b-form-group>
-
+      <b-form-invalid-feedback :state="form.serverErrorShow">{{ form.serverError }}</b-form-invalid-feedback>
       <b-button type="submit" variant="primary">Register</b-button>
     </b-form>
   </div>
@@ -38,6 +38,8 @@ export default {
         username: "",
         password: "",
         email: "",
+        serverError: null,
+        serverErrorShow: true
       },
       show: true,
     };
@@ -45,12 +47,21 @@ export default {
   methods: {
     async onSubmit(evt) {
       evt.preventDefault();
+      this.form.serverErrorShow=true;
+      try {
       var res = await this.$store.dispatch('request', {
         type: 'lkRegister',
         username: this.form.username,
         email: this.form.email,
         password: this.form.password,
       });
+      } catch(e) {
+        console.log(e);
+        this.form.serverError = e.error;
+        this.form.serverErrorShow = false;
+        return;
+      }
+      this.$router.push('/login');
       console.log(res);
     },
   },

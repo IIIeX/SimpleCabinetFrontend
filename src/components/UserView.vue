@@ -15,6 +15,10 @@
               variant="danger"
               @click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
             >Сменить пароль</b-dropdown-item>
+          <b-dropdown-item
+              variant="danger"
+              @click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
+            >Сменить имя пользователя</b-dropdown-item>
           </b-dropdown>
         </b-col>
         <b-col cols="8">
@@ -60,7 +64,7 @@
               </tr>
             </tbody>
           </table>
-          <b-button v-if="!editProfileForm.show" @click="editProfileForm.show = !editProfileForm.show" variant="outline-primary">Редактировать</b-button>
+          <b-button v-if="!editProfileForm.show && (admin || owner)" @click="editProfileForm.show = !editProfileForm.show" variant="outline-primary">Редактировать</b-button>
           <b-button v-if="editProfileForm.show" @click="editProfile" variant="primary">Применить</b-button>
         </b-col>
       </b-row>
@@ -74,6 +78,7 @@
         placeholder="Повторите пароль"
       ></b-form-input>
       <b-form-invalid-feedback :state="modalChangePassword.validation">Пароли не совпадают</b-form-invalid-feedback>
+      <b-form-invalid-feedback :state="modalChangePassword.serverErrorShow">{{ modalChangePassword.serverError }}</b-form-invalid-feedback>
     </b-modal>
     <b-modal
       v-model="modalAdminChangePassword.show"
@@ -82,11 +87,19 @@
     >
       <b-form-input v-model="modalAdminChangePassword.newPassword" type="password" placeholder="Новый пароль"></b-form-input>
     </b-modal>
+    <b-modal
+      v-model="modalAdminChangeUsername.show"
+      id="modal-admin-changeusername"
+      @ok="adminChangeUsername"
+    >
+      <b-form-input v-model="modalAdminChangeUsername.newUsername" type="" placeholder="Новое имя пользователя"></b-form-input>
+    </b-modal>
   </div>
 </template>
 <script>
 //import { mapState } from 'vuex';
 import SkinViewer from "@/components/SkinViewer"
+//import func from '../../vue-temp/vue-editor-bridge';
 export default {
   props: ["user", "owner", "admin"],
   components: { SkinViewer },
@@ -101,7 +114,13 @@ export default {
         validation: true,
         oldPassword: null,
         newPassword: null,
-        newPasswordRetry: null
+        newPasswordRetry: null,
+        serverErrorShow: true,
+        serverError: null
+      },
+      modalAdminChangeUsername: {
+        show: false,
+        newUsername: null
       },
       modalAdminChangePassword: {
         show: false,
@@ -119,22 +138,38 @@ export default {
       }
     };
   },
+  watch: {
+      'user.ext.status': function(newStatus) {
+        this.editProfileForm.status = newStatus;
+      },
+      'user.ext.gender': function(newGender) {
+        this.editProfileForm.gender = newGender;
+      }
+  },
   methods: {
     userChangePassword: async function (evt) {
       evt.preventDefault();
+      this.modalChangePassword.serverErrorShow = false;
       if (this.modalChangePassword.newPassword != this.modalChangePassword.newPasswordRetry) {
         //TODO
         this.modalChangePassword.validation = false;
         this.modalChangePassword.show = true;
       } else {
+        this.modalChangePassword.validation = true;
+        try {
         var res = await this.$store.dispatch('request', {
           type: 'lkChangePassword',
           oldPassword: this.modalChangePassword.oldPassword,
           newPassword: this.modalChangePassword.newPassword,
         });
+        } catch(e) {
+            console.log(e);
+            this.modalChangePassword.serverError = e.error;
+            this.modalChangePassword.serverErrorShow = false;
+            return;
+        }
         console.log(res);
         this.modalChangePassword.show = false;
-        this.modalChangePassword.validation = true;
       }
     },
     editProfile: async function () {
@@ -154,26 +189,53 @@ export default {
       var res = await this.$store.dispatch('request', {
         type: 'lkChangePassword',
         userUsername: this.user.username,
-        newPassword: this.adminChangeNewPassword,
+        newPassword: this.modalAdminChangePassword.newPassword,
       });
       console.log(res);
+      this.modalAdminChangePassword.show = false;
+    },
+    adminChangeUsername: async function (evt) {
+      evt.preventDefault();
+      var res = await this.$store.dispatch('request', {
+        type: 'lkChangeUsername',
+        userUsername: this.user.username,
+        newUsername: this.modalAdminChangeUsername.newUsername,
+      });
+      console.log(res);
+      this.modalAdminChangeUsername.show = false;
     },
     uploadSkin: async function () {
       const data = await this.readFileToBase64();
+      try {
       var result = await this.$store.dispatch('request', {
         type: 'lkUploadSkin',
         skinType: "SKIN",
         data: data.split("+").join("-").split("/").join("_"),
       });
+      } catch(e) {
+        this.$bvToast.toast(e.error, {
+          title: 'Ошибка при загрузке скина',
+          autoHideDelay: 5000
+        });
+        return;
+      }
       console.log(result);
     },
     uploadCloak: async function () {
       const data = await this.readFileToBase64();
+      try {
       var result = await this.$store.dispatch('request', {
         type: 'lkUploadSkin',
         skinType: "CLOAK",
         data: data.split("+").join("-").split("/").join("_"),
       });
+      } catch(e) {
+        this.$bvToast.toast(e.error, {
+          title: 'Ошибка при загрузке плаща',
+          autoHideDelay: 5000
+        });
+        return;
+      }
       console.log(result);
     },
     readFileToBase64: async function () {

@@ -23,7 +23,7 @@
           placeholder="Enter password"
         ></b-form-input>
       </b-form-group>
-
+      <b-form-invalid-feedback :state="form.serverErrorShow">{{ form.serverError }}</b-form-invalid-feedback>
       <b-button type="submit" variant="primary">Login</b-button>
     </b-form>
   </div>
@@ -38,20 +38,28 @@ export default {
       return {
         form: {
           username: '',
-          password: ''
+          password: '',
+          serverError: null,
+          serverErrorShow: true
         },
-        foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
         show: true
       }
     },
     methods: {
       async onSubmit(evt) {
-        evt.preventDefault()
+        evt.preventDefault();
+        this.form.serverErrorShow=true;
         //alert(JSON.stringify(this.form))
+        try {
         await this.$store.dispatch('requestAuth', { login: this.form.username, password: this.form.password, authId: 'std' });
         await this.$store.dispatch('requestExtInfo', {});
+        } catch(e) {
+          console.log(e);
+          this.form.serverError = e.error;
+          this.form.serverErrorShow = false;
+          return;
+        }
         this.$router.push('/currentuser');
-
       },
       onReset(evt) {
         evt.preventDefault()
