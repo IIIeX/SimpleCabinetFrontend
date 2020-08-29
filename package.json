@@ -14,7 +14,7 @@
     "gravit-api": "^1.1.0-rc2",
     "gravitlauncher-ws-api": "file:../gravitlauncher-ws-api",
     "skinview3d": "^2.0.0-alpha.6",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-router": "^3.4.3",
     "vuex": "^3.4.0"
   },
@@ -29,7 +29,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {
     "root": true,
