@@ -26,6 +26,14 @@
       <b-form-invalid-feedback :state="form.serverErrorShow">{{ form.serverError }}</b-form-invalid-feedback>
       <b-button type="submit" variant="primary">Login</b-button>
     </b-form>
+    <b-modal
+      v-model="modalRequest2FA.show"
+      id="modal-request2fa"
+      @ok="send2FA"
+    >
+      <b-form-input v-model="modalRequest2FA.totp" type="text" placeholder="Ключ из приложения"></b-form-input>
+      <b-form-invalid-feedback :state="modalRequest2FA.serverErrorShow">{{ modalRequest2FA.serverError }}</b-form-invalid-feedback>
+    </b-modal>
   </div>
 </template>
 
@@ -42,6 +50,12 @@ export default {
           serverError: null,
           serverErrorShow: true
         },
+        modalRequest2FA: {
+          totp: null,
+          show: false,
+          serverError: null,
+          serverErrorShow: true
+        },
         show: true
       }
     },
@@ -54,10 +68,26 @@ export default {
         await this.$store.dispatch('requestAuth', { login: this.form.username, password: this.form.password, authId: 'std' });
         await this.$store.dispatch('requestExtInfo', {});
         } catch(e) {
+          if(e.error == "auth.require2fa")
+          {
+            this.modalRequest2FA.show = true;
+            return;
+          }
           console.log(e);
           this.form.serverError = e.error;
           this.form.serverErrorShow = false;
           return;
+        }
+        this.$router.push('/currentuser');
+      },
+      async send2FA(evt) {
+        evt.preventDefault();
+        try {
+        await this.$store.dispatch('requestAuthWith2FA', { login: this.form.username, password: this.form.password, totp: this.modalRequest2FA.totp, authId: 'std' });
+        await this.$store.dispatch('requestExtInfo', {});
+        } catch(e) {
+          this.modalRequest2FA.serverError = e.error;
+          this.modalRequest2FA.serverErrorShow = false;
         }
         this.$router.push('/currentuser');
       },

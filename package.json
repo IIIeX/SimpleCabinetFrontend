@@ -12,6 +12,7 @@
     "bootstrap-vue": "^2.16.0",
     "core-js": "^3.6.5",
     "gravit-api": "^1.1.0-rc2",
+    "gravitlauncher-ws-api": "file:../gravitlauncher-ws-api",
     "skinview3d": "^2.0.0-alpha.6",
     "vue": "^2.6.11",
     "vue-router": "^3.4.3",

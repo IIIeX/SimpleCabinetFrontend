@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import GravitApi from "gravit-api"
+import GravitApi from "gravitlauncher-ws-api"
 
 Vue.use(Vuex)
 
@@ -43,6 +43,14 @@ export default new Vuex.Store({
       state.user.ext.extendedMoney = event.extendedMoney;
       state.user.ext.isBanned = event.isBanned;
     },
+    onUserInfo(state, event) {
+      state.user.permissions = event.permissions.permissions;
+      state.user.flags = event.permissions.flags;
+      state.user.username = event.playerProfile.username;
+      state.user.uuid = event.playerProfile.uuid;
+      state.user.skin = event.playerProfile.skin == undefined ? undefined : event.playerProfile.skin.url;
+      state.user.cloak = event.playerProfile.cloak == undefined ? undefined : event.playerProfile.cloak.url;
+    },
     exit(state) {
       state.user = {
         ext: {}
@@ -67,7 +75,30 @@ export default new Vuex.Store({
         authType: "API",
         initProxy: false
       });
-      localStorage.setItem("authdata", JSON.stringify(res));
+      localStorage.setItem("sessionId", res.session);
+      context.commit('onAuth', res);
+    },
+    requestAuthWith2FA: async function (context, {login, password, totp, authId}) {
+      var res = await context.dispatch('request', { // Авторизация
+        type: 'auth',
+        login: login,
+        password: {
+          firstPassword: {
+            password: password,
+            type: "plain"
+          },
+          secondPassword: {
+            totp: totp,
+            type: "totp"
+          },
+          type: "2fa"
+        },
+        auth_id: authId,
+        getSession: true,
+        authType: "API",
+        initProxy: false
+      });
+      localStorage.setItem("sessionId", res.session);
       context.commit('onAuth', res);
     },
     requestExit: async function (context, exitAll) {

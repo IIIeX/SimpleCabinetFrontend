@@ -37,20 +37,13 @@ api.onOpen = () => {
    }
 };
 */
-api.onopen_promise = new Promise((resolve, reject) => {
-  api.onopen_resolve = resolve;
-  api.onopen_reject = reject;
-});
-api.onOpen = () => {
-  api.onopen_resolve();
-  var res = localStorage.getItem("authdata");
-  if(res)
+api.callbacks.onopen = () => {
+  var sessionId = localStorage.getItem("sessionId");
+  if(sessionId)
   {
-    var resdata = JSON.parse(res);
-     console.log(resdata);
-     api.sendRequest("restoreSession", { session: resdata.session }, (result) => {
+     api.sendRequest("restoreSession", { session: sessionId, needUserInfo: true }, (result) => {
       console.log(result);
-      store.commit('onAuth', resdata);
+      store.commit('onUserInfo', result.userInfo);
       api.sendRequest('lkExtendedInfo', {}, (extInfo) => {
         console.log(extInfo);
         store.commit('onExtInfo', extInfo);
@@ -59,10 +52,7 @@ api.onOpen = () => {
       });
      }, () => {});
   }
-}
-api.onError = (error) => {
-  api.onopen_reject(error);
-}
+};
 new Vue({
   router,
   store,

@@ -92,7 +92,7 @@
       id="modal-admin-changeusername"
       @ok="adminChangeUsername"
     >
-      <b-form-input v-model="modalAdminChangeUsername.newUsername" type="" placeholder="Новое имя пользователя"></b-form-input>
+      <b-form-input v-model="modalAdminChangeUsername.newUsername" type="text" placeholder="Новое имя пользователя"></b-form-input>
     </b-modal>
   </div>
 </template>
