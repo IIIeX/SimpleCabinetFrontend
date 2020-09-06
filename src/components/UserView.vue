@@ -9,6 +9,7 @@
           <b-button v-if="owner" variant="primary" @click="uploadSkin()">Загрузить скин</b-button> <b-button v-if="owner" variant="primary" @click="uploadCloak()">Загрузить плащ</b-button>
           <b-dropdown v-if="owner" text="Действия" class="m-md-2">
             <b-dropdown-item @click="modalChangePassword.show = !modalChangePassword.show">Сменить пароль</b-dropdown-item>
+            <b-dropdown-item @click="twoFactorGenerate(); modal2FAEnable.show = !modal2FAEnable.show">Включить 2FA</b-dropdown-item>
           </b-dropdown>
           <b-dropdown v-if="admin" text="Администрирование" variant="danger" class="m-md-2">
             <b-dropdown-item
@@ -94,15 +95,28 @@
     >
       <b-form-input v-model="modalAdminChangeUsername.newUsername" type="text" placeholder="Новое имя пользователя"></b-form-input>
     </b-modal>
+    <b-modal
+      v-model="modal2FAEnable.show"
+      id="modal-2fa-enable"
+      @ok="twoFactorEnable"
+    >
+      <vue-qrcode :value="modal2FAEnableurl" />
+      <p><b>Код для ручного ввода</b>: {{ modal2FAEnablesecretKey }}</p>
+      <b-form-input v-model="modal2FAEnable.code" type="text" placeholder="Код из приложения"></b-form-input>
+    </b-modal>
   </div>
 </template>
 <script>
 //import { mapState } from 'vuex';
 import SkinViewer from "@/components/SkinViewer"
+import VueQrcode from 'vue-qrcode'
+import * as base32 from 'hi-base32';
+import {Base64} from 'js-base64';
+import GetRandomValues from 'get-random-values'
 //import func from '../../vue-temp/vue-editor-bridge';
 export default {
   props: ["user", "owner", "admin"],
-  components: { SkinViewer },
+  components: { SkinViewer, VueQrcode },
   //computed: mapState({
   //  user: state => state.user
   //})
@@ -126,6 +140,13 @@ export default {
         show: false,
         newPassword: null
       },
+      modal2FAEnable: {
+        show: false,
+        url: null,
+        encodedSecretKey: null,
+        code: null,
+        secretKey: null
+      },
       editProfileForm: {
         show: false,
         status: this.user.ext.status,
@@ -146,7 +167,36 @@ export default {
         this.editProfileForm.gender = newGender;
       }
   },
+  computed: {
+    'modal2FAEnableurl': function() {
+      return "otpauth://totp/"+encodeURIComponent("Minecraft "+this.user.username)+"?secret="+this.modal2FAEnablesecretKey;
+    },
+    'modal2FAEnablesecretKey': function() {
+      if(this.modal2FAEnable.encodedSecretKey == null) return null;
+      let data = base32.encode(this.modal2FAEnable.encodedSecretKey).split('=').join('');
+      console.log(data);
+      return data;
+    }
+  },
   methods: {
+    twoFactorGenerate: function() {
+      var array = new Uint8Array(16);
+      GetRandomValues(array);
+      console.log(array.length);
+      this.modal2FAEnable.encodedSecretKey = array;
+    },
+    twoFactorEnable: async function(evt) {
+      evt.preventDefault();
+      console.log(window.btoa(this.modal2FAEnable.encodedSecretKey));
+      var res = await this.$store.dispatch('request', {
+          type: 'lkTwoFactorEnable',
+          data: Base64.fromUint8Array(this.modal2FAEnable.encodedSecretKey, true),
+          code: this.modal2FAEnable.code,
+        });
+      console.log(res);
+      this.modal2FAEnable.show = false;
+      this.modal2FAEnable.encodedSecretKey = null;
+    },
     userChangePassword: async function (evt) {
       evt.preventDefault();
       this.modalChangePassword.serverErrorShow = false;
