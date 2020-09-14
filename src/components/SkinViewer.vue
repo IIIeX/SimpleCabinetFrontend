@@ -18,7 +18,6 @@ export default {
       skin: this.skinUrl,
       cape: this.cloakUrl
     });
-    console.log(this.skinViewer);
     const control = skinview3d.createOrbitControls(this.skinViewer);
     control.enableRotate = true;
   },

@@ -5,6 +5,12 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
+          <b-nav-item v-if="!this.serverconnect.connected">
+            <b-icon id="iconserverconnectfail" variant="danger" icon="bar-chart-fill"></b-icon>
+            <b-tooltip target="iconserverconnectfail" triggers="hover">
+              Ошибка при попытке соедениться с сервером (Код: {{ serverconnect.code }})
+            </b-tooltip>
+          </b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/login">Войти</b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/register">Регистрация</b-nav-item>
           <b-nav-item v-if="this.$store.state.user.uuid" to="/currentuser">Личный кабинет</b-nav-item>
@@ -27,6 +33,24 @@ export default {
       console.log(res);
       this.$store.commit('exit');
       this.$router.push("/");
+    }
+  },
+  mounted: function() {
+    var instance = this;
+    this.$store.state.api.callbacks.onclose = function (error) {
+      if(error.wasClean) return;
+      console.log(error);
+      instance.serverconnect.code = error.code;
+      instance.serverconnect.connected = false;
+    }
+    this.$store.state.api.callbacks.onerror = this.$store.state.api.callbacks.onclose;
+  },
+  data: function() {
+    return {
+      serverconnect: {
+        connected: true,
+        code: -1
+      }
     }
   }
 }
