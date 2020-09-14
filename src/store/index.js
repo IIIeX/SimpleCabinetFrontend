@@ -48,8 +48,8 @@ export default new Vuex.Store({
       state.user.flags = event.permissions.flags;
       state.user.username = event.playerProfile.username;
       state.user.uuid = event.playerProfile.uuid;
-      state.user.skin = event.playerProfile.skin == undefined ? undefined : event.playerProfile.skin.url;
-      state.user.cloak = event.playerProfile.cloak == undefined ? undefined : event.playerProfile.cloak.url;
+      state.user.skin = event.playerProfile.skin == undefined ? null : event.playerProfile.skin.url;
+      state.user.cloak = event.playerProfile.cloak == undefined ? null : event.playerProfile.cloak.url;
     },
     exit(state) {
       state.user = {

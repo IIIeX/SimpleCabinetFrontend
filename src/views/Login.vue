@@ -88,6 +88,7 @@ export default {
         } catch(e) {
           this.modalRequest2FA.serverError = e.error;
           this.modalRequest2FA.serverErrorShow = false;
+          return;
         }
         this.$router.push('/currentuser');
       },

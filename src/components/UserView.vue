@@ -4,7 +4,7 @@
       <b-row>
         <b-col>
           <p>
-            <SkinViewer :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
+            <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
           </p>
           <b-button v-if="owner" variant="primary" @click="uploadSkin()">Загрузить скин</b-button> <b-button v-if="owner" variant="primary" @click="uploadCloak()">Загрузить плащ</b-button>
           <b-dropdown v-if="owner" text="Действия" class="m-md-2">
@@ -262,6 +262,7 @@ export default {
         skinType: "SKIN",
         data: data.split("+").join("-").split("/").join("_"),
       });
+      this.$refs.skinviewer.updateSkin();
       } catch(e) {
         this.$bvToast.toast(e.error, {
           title: 'Ошибка при загрузке скина',
@@ -279,6 +280,7 @@ export default {
         skinType: "CLOAK",
         data: data.split("+").join("-").split("/").join("_"),
       });
+      this.$refs.skinviewer.updateCloak();
       } catch(e) {
         this.$bvToast.toast(e.error, {
           title: 'Ошибка при загрузке плаща',
