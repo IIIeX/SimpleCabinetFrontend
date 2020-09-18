@@ -3,13 +3,14 @@ import App from './App.vue'
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue"
 import router from './router'
 import store from './store'
+import config from './config.js'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.config.productionTip = false
 const api = store.state.api;
-api.connect('ws://localhost:9274/api');
+api.connect(config.url);
 /*
 api.onOpen = () => {
    var res = localStorage.getItem("authdata");

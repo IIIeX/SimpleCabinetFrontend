@@ -8,15 +8,15 @@ export default new Vuex.Store({
   state: {
     user: {
       username: "Player",
-      uuid: undefined,
+      uuid: null,
       permissions: 0,
       flags: 0,
-      skin: undefined,
-      cloak: undefined,
+      skin: null,
+      cloak: null,
       ext: {
-        gender: undefined,
-        status: undefined,
-        email: undefined,
+        gender: null,
+        status: null,
+        email: null,
         economyMoney: 0,
         donateMoney: 0,
         extendedMoney: 0,
@@ -29,8 +29,8 @@ export default new Vuex.Store({
     onAuth(state, event) {
       state.user.username = event.playerProfile.username;
       state.user.uuid = event.playerProfile.uuid;
-      state.user.skin = event.playerProfile.skin == undefined ? undefined : event.playerProfile.skin.url;
-      state.user.cloak = event.playerProfile.cloak == undefined ? undefined : event.playerProfile.cloak.url;
+      state.user.skin = event.playerProfile.skin == undefined ? null : event.playerProfile.skin.url;
+      state.user.cloak = event.playerProfile.cloak == undefined ? null : event.playerProfile.cloak.url;
       state.user.permissions = event.permissions.permissions;
       state.user.flags = event.permissions.flags;
     },
@@ -52,9 +52,19 @@ export default new Vuex.Store({
       state.user.cloak = event.playerProfile.cloak == undefined ? null : event.playerProfile.cloak.url;
     },
     exit(state) {
-      state.user = {
-        ext: {}
-      };
+      state.user.ext.gender = null;
+      state.user.ext.status = null;
+      state.user.ext.email = null;
+      state.user.ext.economyMoney = 0;
+      state.user.ext.donateMoney = 0;
+      state.user.ext.extendedMoney = 0;
+      state.user.ext.isBanned = false;
+      state.user.permissions = 0;
+      state.user.flags = 0;
+      state.user.username = "Player";
+      state.user.uuid = null;
+      state.user.skin = null;
+      state.user.cloak = null;
     }
   },
   actions: {
