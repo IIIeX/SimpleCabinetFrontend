@@ -74,10 +74,10 @@ export default new Vuex.Store({
   },
   actions: {
     requestExtInfo: async function (context) {
-      var res = await context.dispatch('request',{type:'lkExtendedInfo'});
+      var res = await context.dispatch('request', { type: 'lkExtendedInfo' });
       context.commit('onExtInfo', res);
     },
-    requestAuth: async function (context, {login, password, authId}) {
+    requestAuth: async function (context, { login, password, authId }) {
       var res = await context.dispatch('request', { // Авторизация
         type: 'auth',
         login: login,
@@ -93,7 +93,7 @@ export default new Vuex.Store({
       localStorage.setItem("sessionId", res.session);
       context.commit('onAuth', res);
     },
-    requestAuthWith2FA: async function (context, {login, password, totp, authId}) {
+    requestAuthWith2FA: async function (context, { login, password, totp, authId }) {
       var res = await context.dispatch('request', { // Авторизация
         type: 'auth',
         login: login,
@@ -123,8 +123,8 @@ export default new Vuex.Store({
     request: async function (context, data) {
       await context.state.api.onopen_promise;
       console.log(data);
-      return new Promise(function(resolve, reject) {
-          context.state.api.sendRequest(data.type, data, resolve, reject);
+      return new Promise(function (resolve, reject) {
+        context.state.api.sendRequest(data.type, data, resolve, reject);
       });
     }
   },

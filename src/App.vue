@@ -7,9 +7,10 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item v-if="!this.serverconnect.connected">
             <b-icon id="iconserverconnectfail" variant="danger" icon="bar-chart-fill"></b-icon>
-            <b-tooltip target="iconserverconnectfail" triggers="hover">
-              Ошибка при попытке соедениться с сервером (Код: {{ serverconnect.code }})
-            </b-tooltip>
+            <b-tooltip
+              target="iconserverconnectfail"
+              triggers="hover"
+            >Ошибка при попытке соедениться с сервером (Код: {{ serverconnect.code }})</b-tooltip>
           </b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/login">Войти</b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/register">Регистрация</b-nav-item>
@@ -19,41 +20,41 @@
       </b-collapse>
     </b-navbar>
     <b-container>
-    <router-view/>
+      <router-view />
     </b-container>
   </div>
 </template>
 <script>
 export default {
   methods: {
-    exitAccount: async function() {
-      var res = await this.$store.dispatch('request', {
-        type: 'exit'
+    exitAccount: async function () {
+      var res = await this.$store.dispatch("request", {
+        type: "exit",
       });
       console.log(res);
-      this.$store.commit('exit');
+      this.$store.commit("exit");
       this.$router.push("/");
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     var instance = this;
     this.$store.state.api.callbacks.onclose = function (error) {
-      if(error.wasClean) return;
+      if (error.wasClean) return;
       console.log(error);
       instance.serverconnect.code = error.code;
       instance.serverconnect.connected = false;
-    }
+    };
     this.$store.state.api.callbacks.onerror = this.$store.state.api.callbacks.onclose;
   },
-  data: function() {
+  data: function () {
     return {
       serverconnect: {
         connected: true,
-        code: -1
-      }
-    }
-  }
-}
+        code: -1,
+      },
+    };
+  },
+};
 </script>
 <style lang="scss">
 #app {

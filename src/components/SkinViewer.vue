@@ -2,13 +2,13 @@
   <canvas ref="skinview3dinst"></canvas>
 </template>
 <script>
-import * as skinview3d from "skinview3d"
+import * as skinview3d from "skinview3d";
 export default {
   props: ["skinUrl", "cloakUrl"],
-  data: function() {
-      return {
-        counter: 0
-      };
+  data: function () {
+    return {
+      counter: 0,
+    };
   },
   mounted: function () {
     this.skinViewer = new skinview3d.SkinViewer({
@@ -16,28 +16,28 @@ export default {
       width: 300,
       height: 400,
       skin: this.skinUrl,
-      cape: this.cloakUrl
+      cape: this.cloakUrl,
     });
     const control = skinview3d.createOrbitControls(this.skinViewer);
     control.enableRotate = true;
   },
   methods: {
     updateSkin() {
-      this.skinViewer.loadSkin(this.skinUrl+"?v="+this.counter);
+      this.skinViewer.loadSkin(this.skinUrl + "?v=" + this.counter);
       this.counter++;
     },
     updateCloak() {
-      this.skinViewer.loadCape(this.cloakUrl+"?v="+this.counter);
+      this.skinViewer.loadCape(this.cloakUrl + "?v=" + this.counter);
       this.counter++;
-    }
+    },
   },
   watch: {
-      skinUrl: function(newSkinUrl) {
-          this.skinViewer.loadSkin(newSkinUrl);
-      },
-      cloakUrl: function(newCloakUrl) {
-          this.skinViewer.loadCape(newCloakUrl);
-      }
-  }
+    skinUrl: function (newSkinUrl) {
+      this.skinViewer.loadSkin(newSkinUrl);
+    },
+    cloakUrl: function (newCloakUrl) {
+      this.skinViewer.loadCape(newCloakUrl);
+    },
+  },
 };
 </script>

@@ -40,14 +40,13 @@ api.onOpen = () => {
 };
 */
 api.promises.auth = new Promise(function (resolve, reject) {
-    api.promises.auth_resolve = resolve
-    api.promises.auth_reject = reject
-  });
+  api.promises.auth_resolve = resolve
+  api.promises.auth_reject = reject
+});
 api.callbacks.onopen = () => {
   var sessionId = localStorage.getItem("sessionId");
-  if(sessionId)
-  {
-     api.sendRequest("restoreSession", { session: sessionId, needUserInfo: true }, (result) => {
+  if (sessionId) {
+    api.sendRequest("restoreSession", { session: sessionId, needUserInfo: true }, (result) => {
       console.log(result);
       store.commit('onUserInfo', result.userInfo);
       api.sendRequest('lkExtendedInfo', {}, (extInfo) => {
@@ -58,9 +57,9 @@ api.callbacks.onopen = () => {
         console.log(JSON.stringify(error));
         api.promises.auth_reject(error);
       });
-     }, (error) => {
+    }, (error) => {
       api.promises.auth_reject(error);
-     });
+    });
   }
   else {
     api.promises.auth_reject(null);

@@ -6,13 +6,14 @@
           <p>
             <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
           </p>
-          <b-button v-if="owner" variant="primary" @click="uploadSkin()">Загрузить скин</b-button> <b-button v-if="owner" variant="primary" @click="uploadCloak()">Загрузить плащ</b-button>
+          <b-button v-if="owner" variant="primary" @click="uploadSkin()">Загрузить скин</b-button>
+          <b-button v-if="owner" variant="primary" @click="uploadCloak()">Загрузить плащ</b-button>
           <b-dropdown v-if="admin" text="Администрирование" variant="danger" class="m-md-2">
             <b-dropdown-item
               variant="danger"
               @click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
             >Сменить пароль</b-dropdown-item>
-          <b-dropdown-item
+            <b-dropdown-item
               variant="danger"
               @click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
             >Сменить имя пользователя</b-dropdown-item>
@@ -37,14 +38,23 @@
                 <td>Статус</td>
                 <td v-if="!editProfileForm.show">{{ user.ext.status }}</td>
                 <td v-if="editProfileForm.show">
-                  <b-form-input v-model="editProfileForm.status" type="text" placeholder="Ваш статус"></b-form-input>
+                  <b-form-input
+                    v-model="editProfileForm.status"
+                    type="text"
+                    placeholder="Ваш статус"
+                  ></b-form-input>
                 </td>
               </tr>
               <tr>
                 <td>Пол</td>
-                <td v-if="!editProfileForm.show">{{ !user.ext.gender ? "Не указан" : user.ext.gender == "FEMALE" ? "Женский" : "Мужской" }}</td>
+                <td
+                  v-if="!editProfileForm.show"
+                >{{ !user.ext.gender ? "Не указан" : user.ext.gender == "FEMALE" ? "Женский" : "Мужской" }}</td>
                 <td v-if="editProfileForm.show">
-                  <b-form-select v-model="editProfileForm.gender" :options="editProfileForm.genderOptions"></b-form-select>
+                  <b-form-select
+                    v-model="editProfileForm.gender"
+                    :options="editProfileForm.genderOptions"
+                  ></b-form-select>
                 </td>
               </tr>
               <tr v-if="user.ext.email">
@@ -61,7 +71,11 @@
               </tr>
             </tbody>
           </table>
-          <b-button v-if="!editProfileForm.show && (admin || owner)" @click="editProfileForm.show = !editProfileForm.show" variant="outline-primary">Редактировать</b-button>
+          <b-button
+            v-if="!editProfileForm.show && (admin || owner)"
+            @click="editProfileForm.show = !editProfileForm.show"
+            variant="outline-primary"
+          >Редактировать</b-button>
           <b-button v-if="editProfileForm.show" @click="editProfile" variant="primary">Применить</b-button>
         </b-col>
       </b-row>
@@ -71,20 +85,28 @@
       id="modal-admin-changepassword"
       @ok="adminChangePassword"
     >
-      <b-form-input v-model="modalAdminChangePassword.newPassword" type="password" placeholder="Новый пароль"></b-form-input>
+      <b-form-input
+        v-model="modalAdminChangePassword.newPassword"
+        type="password"
+        placeholder="Новый пароль"
+      ></b-form-input>
     </b-modal>
     <b-modal
       v-model="modalAdminChangeUsername.show"
       id="modal-admin-changeusername"
       @ok="adminChangeUsername"
     >
-      <b-form-input v-model="modalAdminChangeUsername.newUsername" type="text" placeholder="Новое имя пользователя"></b-form-input>
+      <b-form-input
+        v-model="modalAdminChangeUsername.newUsername"
+        type="text"
+        placeholder="Новое имя пользователя"
+      ></b-form-input>
     </b-modal>
   </div>
 </template>
 <script>
 //import { mapState } from 'vuex';
-import SkinViewer from "@/components/SkinViewer"
+import SkinViewer from "@/components/SkinViewer";
 //import func from '../../vue-temp/vue-editor-bridge';
 export default {
   props: ["user", "owner", "admin"],
@@ -92,7 +114,7 @@ export default {
   //computed: mapState({
   //  user: state => state.user
   //})
-  data: function() {
+  data: function () {
     return {
       items: [{ a: 1 }, { a: 1 }, { a: 1 }],
       modalChangePassword: {
@@ -102,15 +124,15 @@ export default {
         newPassword: null,
         newPasswordRetry: null,
         serverErrorShow: true,
-        serverError: null
+        serverError: null,
       },
       modalAdminChangeUsername: {
         show: false,
-        newUsername: null
+        newUsername: null,
       },
       modalAdminChangePassword: {
         show: false,
-        newPassword: null
+        newPassword: null,
       },
       editProfileForm: {
         show: false,
@@ -119,38 +141,37 @@ export default {
         genderOptions: [
           { value: null, text: "Не указано" },
           { value: "FEMALE", text: "Женский" },
-          { value: "MALE", text: "Мужской" }
-        ]
-      }
+          { value: "MALE", text: "Мужской" },
+        ],
+      },
     };
   },
   watch: {
-      'user.ext.status': function(newStatus) {
-        this.editProfileForm.status = newStatus;
-      },
-      'user.ext.gender': function(newGender) {
-        this.editProfileForm.gender = newGender;
-      }
+    "user.ext.status": function (newStatus) {
+      this.editProfileForm.status = newStatus;
+    },
+    "user.ext.gender": function (newGender) {
+      this.editProfileForm.gender = newGender;
+    },
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     editProfile: async function () {
-        var res = await this.$store.dispatch('request', {
-          type: 'lkUpdateExtendedInfo',
-          username: ( this.admin && !this.owner ) ? this.user.username : undefined,
-          status: this.editProfileForm.status,
-          gender: this.editProfileForm.gender
-        });
-        this.user.ext.status = this.editProfileForm.status;
-        this.user.ext.gender = this.editProfileForm.gender;
-        this.editProfileForm.show = false;
-        console.log(res);
+      var res = await this.$store.dispatch("request", {
+        type: "lkUpdateExtendedInfo",
+        username: this.admin && !this.owner ? this.user.username : undefined,
+        status: this.editProfileForm.status,
+        gender: this.editProfileForm.gender,
+      });
+      this.user.ext.status = this.editProfileForm.status;
+      this.user.ext.gender = this.editProfileForm.gender;
+      this.editProfileForm.show = false;
+      console.log(res);
     },
     adminChangePassword: async function (evt) {
       evt.preventDefault();
-      var res = await this.$store.dispatch('request', {
-        type: 'lkChangePassword',
+      var res = await this.$store.dispatch("request", {
+        type: "lkChangePassword",
         userUsername: this.user.username,
         newPassword: this.modalAdminChangePassword.newPassword,
       });
@@ -159,8 +180,8 @@ export default {
     },
     adminChangeUsername: async function (evt) {
       evt.preventDefault();
-      var res = await this.$store.dispatch('request', {
-        type: 'lkChangeUsername',
+      var res = await this.$store.dispatch("request", {
+        type: "lkChangeUsername",
         userUsername: this.user.username,
         newUsername: this.modalAdminChangeUsername.newUsername,
       });
@@ -170,17 +191,17 @@ export default {
     uploadSkin: async function () {
       const data = await this.readFileToBase64();
       try {
-      var result = await this.$store.dispatch('request', {
-        type: 'lkUploadSkin',
-        skinType: "SKIN",
-        data: data.split("+").join("-").split("/").join("_"),
-      });
-      this.$refs.skinviewer.updateSkin();
-      } catch(e) {
+        var result = await this.$store.dispatch("request", {
+          type: "lkUploadSkin",
+          skinType: "SKIN",
+          data: data.split("+").join("-").split("/").join("_"),
+        });
+        this.$refs.skinviewer.updateSkin();
+      } catch (e) {
         this.$bvToast.toast(e.error, {
-          title: 'Ошибка при загрузке скина',
-          variant: 'danger',
-          autoHideDelay: 5000
+          title: "Ошибка при загрузке скина",
+          variant: "danger",
+          autoHideDelay: 5000,
         });
         return;
       }
@@ -189,16 +210,16 @@ export default {
     uploadCloak: async function () {
       const data = await this.readFileToBase64();
       try {
-      var result = await this.$store.dispatch('request', {
-        type: 'lkUploadSkin',
-        skinType: "CLOAK",
-        data: data.split("+").join("-").split("/").join("_"),
-      });
-      this.$refs.skinviewer.updateCloak();
-      } catch(e) {
+        var result = await this.$store.dispatch("request", {
+          type: "lkUploadSkin",
+          skinType: "CLOAK",
+          data: data.split("+").join("-").split("/").join("_"),
+        });
+        this.$refs.skinviewer.updateCloak();
+      } catch (e) {
         this.$bvToast.toast(e.error, {
-          title: 'Ошибка при загрузке плаща',
-          autoHideDelay: 5000
+          title: "Ошибка при загрузке плаща",
+          autoHideDelay: 5000,
         });
         return;
       }

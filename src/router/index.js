@@ -4,7 +4,7 @@ import Index from '../views/Index.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/login',
     name: 'Login',
