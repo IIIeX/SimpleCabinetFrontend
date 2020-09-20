@@ -20,7 +20,10 @@ export default new Vuex.Store({
         economyMoney: 0,
         donateMoney: 0,
         extendedMoney: 0,
-        isBanned: false
+        isBanned: false,
+        privateUserZone: {
+          enabled2FA: false
+        }
       }
     },
     api: new GravitApi()
@@ -42,6 +45,7 @@ export default new Vuex.Store({
       state.user.ext.donateMoney = event.donateMoney;
       state.user.ext.extendedMoney = event.extendedMoney;
       state.user.ext.isBanned = event.isBanned;
+      state.user.ext.privateUserZone.enabled2FA = event.privateUserZone.isEnabled2FA;
     },
     onUserInfo(state, event) {
       state.user.permissions = event.permissions.permissions;
@@ -59,6 +63,7 @@ export default new Vuex.Store({
       state.user.ext.donateMoney = 0;
       state.user.ext.extendedMoney = 0;
       state.user.ext.isBanned = false;
+      state.user.ext.privateUserZone.enabled2FA = false;
       state.user.permissions = 0;
       state.user.flags = 0;
       state.user.username = "Player";

@@ -4,6 +4,7 @@
   <UserView :user="user" :owner="true" :admin="(user.permissions & 1) != 0" />
     </b-tab>
     <b-tab title="Безопасность">
+      <b-container>
       <b-form v-if="formChangePassword.show" @submit="userChangePassword">
       <b-form-group
         id="input-group-1"
@@ -44,7 +45,15 @@
       <b-form-invalid-feedback :state="formChangePassword.serverErrorShow">{{ formChangePassword.serverError }}</b-form-invalid-feedback>
       <b-button type="submit" variant="primary">Сменить пароль</b-button>
     </b-form>
-    <b-button @click="twoFactorGenerate(); modal2FAEnable.show = !modal2FAEnable.show">Включить 2FA</b-button>
+      </b-container>
+      <br>
+      <b-container>
+    <b-form inline>
+      <label class="mr-sm-2" for="2fa-button">Управление двухфакторной аудентификацией</label>
+    <b-button id="2fa-button" v-if="!user.ext.privateUserZone.enabled2FA" @click="twoFactorGenerate(); modal2FAEnable.show = !modal2FAEnable.show">Включить 2FA</b-button>
+    <b-button id="2fa-button" v-if="user.ext.privateUserZone.enabled2FA" @click="modal2FADisable.show = !modal2FADisable.show">Выключить 2FA</b-button>
+    </b-form>
+      </b-container>
     <b-modal
       v-model="modal2FAEnable.show"
       id="modal-2fa-enable"
@@ -53,6 +62,16 @@
       <vue-qrcode :value="modal2FAEnableurl" />
       <p><b>Код для ручного ввода</b>: {{ modal2FAEnablesecretKey }}</p>
       <b-form-input v-model="modal2FAEnable.code" type="text" placeholder="Код из приложения"></b-form-input>
+      <b-form-invalid-feedback :state="modal2FAEnable.validation">Неверный код</b-form-invalid-feedback>
+    </b-modal>
+    <b-modal
+      v-model="modal2FADisable.show"
+      id="modal-2fa-disable"
+      @ok="twoFactorDisable"
+    >
+      <p>Для отключения 2FA нужно ввести код из приложения:</p>
+      <b-form-input v-model="modal2FADisable.code" type="text" placeholder="Код из приложения"></b-form-input>
+      <b-form-invalid-feedback :state="modal2FADisable.validation">Неверный код</b-form-invalid-feedback>
     </b-modal>
     </b-tab>
   </b-tabs>
@@ -101,8 +120,14 @@ export default {
         url: null,
         encodedSecretKey: null,
         code: null,
-        secretKey: null
+        secretKey: null,
+        validation: true
       },
+      modal2FADisable: {
+        show: false,
+        code: null,
+        validation: true
+      }
     };
   },
   watch: {
@@ -161,15 +186,45 @@ export default {
     twoFactorEnable: async function(evt) {
       evt.preventDefault();
       console.log(window.btoa(this.modal2FAEnable.encodedSecretKey));
+      try {
       var res = await this.$store.dispatch('request', {
           type: 'lkTwoFactorEnable',
           data: Base64.fromUint8Array(this.modal2FAEnable.encodedSecretKey, true),
           code: this.modal2FAEnable.code,
         });
+        this.$bvToast.toast("Двухфакторная аудентификация успешно включена", {
+          title: 'Безопасность',
+          variant: 'success',
+          autoHideDelay: 5000
+        });
+      } catch(error) {
+        console.log(error);
+        this.modal2FAEnable.validation = false;
+        return;
+      }
       console.log(res);
       this.modal2FAEnable.show = false;
       this.modal2FAEnable.encodedSecretKey = null;
     },
+    twoFactorDisable: async function(evt) {
+      evt.preventDefault();
+      try {
+      await this.$store.dispatch('request', {
+          type: 'lkTwoFactorEnable',
+          code: this.modal2FADisable.code,
+        });
+        this.$bvToast.toast("Двухфакторная аудентификация успешно отключена", {
+          title: 'Безопасность',
+          variant: 'success',
+          autoHideDelay: 5000
+        });
+      } catch(error) {
+        console.log(error);
+        this.modal2FADisable.validation = false;
+        return;
+      }
+      this.modal2FADisable.show = false;
+    }
   }
 };
 </script>
