@@ -17,6 +17,11 @@
               variant="danger"
               @click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
             >Сменить имя пользователя</b-dropdown-item>
+          <b-dropdown-item
+              v-if="user.ext.privateUserZone.enabled2FA"
+              variant="danger"
+              @click="adminDisable2FA()"
+            >Отключить 2FA</b-dropdown-item>
           </b-dropdown>
         </b-col>
         <b-col>
@@ -166,6 +171,13 @@ export default {
       this.user.ext.status = this.editProfileForm.status;
       this.user.ext.gender = this.editProfileForm.gender;
       this.editProfileForm.show = false;
+      console.log(res);
+    },
+    adminDisable2FA: async function () {
+      var res = await this.$store.dispatch("request", {
+        type: "lkTwoFactorEnable",
+        userUsername: this.user.username,
+      });
       console.log(res);
     },
     adminChangePassword: async function (evt) {

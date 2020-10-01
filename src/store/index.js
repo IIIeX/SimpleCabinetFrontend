@@ -26,6 +26,9 @@ export default new Vuex.Store({
         }
       }
     },
+    config: {
+      projectName: null
+    },
     api: new GravitApi()
   },
   mutations: {
@@ -55,6 +58,15 @@ export default new Vuex.Store({
       state.user.skin = event.playerProfile.skin == undefined ? null : event.playerProfile.skin.url;
       state.user.cloak = event.playerProfile.cloak == undefined ? null : event.playerProfile.cloak.url;
     },
+    onConfig(state, event) {
+      state.config.projectName = event.projectName;
+    },
+    enable2FA(state) {
+      state.user.ext.privateUserZone.enabled2FA = true;
+    },
+    disable2FA(state) {
+      state.user.ext.privateUserZone.enabled2FA = false;
+    },
     exit(state) {
       state.user.ext.gender = null;
       state.user.ext.status = null;
@@ -70,6 +82,11 @@ export default new Vuex.Store({
       state.user.uuid = null;
       state.user.skin = null;
       state.user.cloak = null;
+      state.api.promises.auth = new Promise(function (resolve, reject) {
+        state.api.promises.auth_resolve = resolve
+        state.api.promises.auth_reject = reject
+      });
+      state.api.promises.auth_reject();
     }
   },
   actions: {
@@ -78,41 +95,60 @@ export default new Vuex.Store({
       context.commit('onExtInfo', res);
     },
     requestAuth: async function (context, { login, password, authId }) {
-      var res = await context.dispatch('request', { // Авторизация
-        type: 'auth',
-        login: login,
-        password: {
-          password: password,
-          type: "plain"
-        },
-        auth_id: authId,
-        getSession: true,
-        authType: "API",
-        initProxy: false
+      context.state.api.promises.auth = new Promise(function (resolve, reject) {
+        context.state.api.promises.auth_resolve = resolve
+        context.state.api.promises.auth_reject = reject
       });
+      try {
+        var res = await context.dispatch('request', { // Авторизация
+          type: 'auth',
+          login: login,
+          password: {
+            password: password,
+            type: "plain"
+          },
+          auth_id: authId,
+          getSession: true,
+          authType: "API",
+          initProxy: false
+        });
+        context.state.api.promises.auth_resolve();
+      } catch (e) {
+        context.state.api.promises.auth_reject(e);
+        throw e;
+      }
       localStorage.setItem("sessionId", res.session);
       context.commit('onAuth', res);
     },
     requestAuthWith2FA: async function (context, { login, password, totp, authId }) {
-      var res = await context.dispatch('request', { // Авторизация
-        type: 'auth',
-        login: login,
-        password: {
-          firstPassword: {
-            password: password,
-            type: "plain"
-          },
-          secondPassword: {
-            totp: totp,
-            type: "totp"
-          },
-          type: "2fa"
-        },
-        auth_id: authId,
-        getSession: true,
-        authType: "API",
-        initProxy: false
+      context.state.api.promises.auth = new Promise(function (resolve, reject) {
+        context.state.api.promises.auth_resolve = resolve
+        context.state.api.promises.auth_reject = reject
       });
+      try {
+        var res = await context.dispatch('request', { // Авторизация
+          type: 'auth',
+          login: login,
+          password: {
+            firstPassword: {
+              password: password,
+              type: "plain"
+            },
+            secondPassword: {
+              totp: totp,
+              type: "totp"
+            },
+            type: "2fa"
+          },
+          auth_id: authId,
+          getSession: true,
+          authType: "API",
+          initProxy: false
+        });
+        context.state.api.promises.auth_resolve();
+      } catch (e) {
+        context.state.api.promises.auth_reject(e);
+      }
       localStorage.setItem("sessionId", res.session);
       context.commit('onAuth', res);
     },

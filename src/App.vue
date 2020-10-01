@@ -45,12 +45,35 @@ export default {
       instance.serverconnect.connected = false;
     };
     this.$store.state.api.callbacks.onerror = this.$store.state.api.callbacks.onclose;
+    this.serverconnect.handler = function(event) {
+      console.log(event);
+      if(event.type == "notification") {
+        instance.$bvToast.toast(event.message, {
+          title: event.head,
+          variant: "primary",
+          autoHideDelay: 15000,
+        });
+      }
+      else if(event.type == "userInfo") {
+        instance.$store.commit("onUserInfo", event.userInfo);
+      }
+      else if(event.type == "exit") {
+        if(event.reason != "NO_EXIT") {
+          instance.$store.commit("exit");
+        }
+      }
+    };
+    this.$store.state.api.handlers.add(this.serverconnect.handler);
+  },
+  beforeDestroy: function() {
+    this.$store.state.api.handlers.delete(this.serverconnect.handler);
   },
   data: function () {
     return {
       serverconnect: {
         connected: true,
         code: -1,
+        handler: null
       },
     };
   },

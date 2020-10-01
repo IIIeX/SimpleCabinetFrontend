@@ -9,6 +9,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.config.productionTip = false
+store.commit("onConfig", config);
 const api = store.state.api;
 api.connect(config.url);
 /*
@@ -65,6 +66,9 @@ api.callbacks.onopen = () => {
     api.promises.auth_reject(null);
   }
 };
+api.callbacks.unexpected_handler = function(event) {
+  console.error(event);
+}
 new Vue({
   router,
   store,

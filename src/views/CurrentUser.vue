@@ -65,6 +65,7 @@
         </b-form>
       </b-container>
       <b-modal v-model="modal2FAEnable.show" id="modal-2fa-enable" @ok="twoFactorEnable">
+        <p>Двухфакторная аутентификация помогает защитить ваш аккаунт от взлома если злоумышленику известен пароль</p>
         <vue-qrcode :value="modal2FAEnableurl" />
         <p>
           <b>Код для ручного ввода</b>
@@ -106,7 +107,7 @@ export default {
     modal2FAEnableurl: function () {
       return (
         "otpauth://totp/" +
-        encodeURIComponent("Minecraft " + this.user.username) +
+        encodeURIComponent(this.$store.state.config.projectName + " " + this.user.username) +
         "?secret=" +
         this.modal2FAEnablesecretKey
       );
@@ -153,6 +154,13 @@ export default {
         this.$router.push("/login");
       }
     },
+  },
+  created: async function() {
+    try {
+      await this.$store.state.api.promises.auth;
+    } catch (error) {
+      this.$router.push("/login");
+    }
   },
   methods: {
     userChangePassword: async function (evt) {
@@ -218,6 +226,7 @@ export default {
           variant: "success",
           autoHideDelay: 5000,
         });
+        this.$store.commit("enable2FA");
       } catch (error) {
         console.log(error);
         this.modal2FAEnable.validation = false;
@@ -239,6 +248,7 @@ export default {
           variant: "success",
           autoHideDelay: 5000,
         });
+        this.$store.commit("disable2FA");
       } catch (error) {
         console.log(error);
         this.modal2FADisable.validation = false;
