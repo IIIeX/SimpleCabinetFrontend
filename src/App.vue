@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <b-navbar toggleable="lg" type="dark" variant="info">
+  <div id="app" class="d-flex flex-column h-100">
+    <b-navbar toggleable="lg" type="dark" style="background-color: rgba(0,0,0,0.75);">
       <b-navbar-brand to="/">SimpleCabinet</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
@@ -22,6 +22,19 @@
     <b-container>
       <router-view />
     </b-container>
+    <template>
+        <footer class="footer mt-auto py-1" style="background-color: rgba(0,0,0,0.75);">
+          <b-row class="d-flex mx-0 text-light">
+            <b-col col md class="text-center">
+            </b-col>
+            <b-col col md class="text-center">
+              <b-form-text>Created by Gravit @SimpleCabinet</b-form-text>
+            </b-col>
+            <b-col col md class="text-center">
+            </b-col>
+          </b-row>
+        </footer>
+    </template>
   </div>
 </template>
 <script>
@@ -84,20 +97,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 </style>

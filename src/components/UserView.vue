@@ -1,30 +1,36 @@
 <template>
   <div class="about">
     <b-container class="bv-example-row">
-      <b-row>
-        <b-col>
-          <p>
-            <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
-          </p>
-          <b-button v-if="owner" variant="primary" @click="uploadSkin()">Загрузить скин</b-button>
-          <b-button v-if="owner" variant="primary" @click="uploadCloak()">Загрузить плащ</b-button>
-          <b-dropdown v-if="admin" text="Администрирование" variant="danger" class="m-md-2">
-            <b-dropdown-item
-              variant="danger"
-              @click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
-            >Сменить пароль</b-dropdown-item>
-            <b-dropdown-item
-              variant="danger"
-              @click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
-            >Сменить имя пользователя</b-dropdown-item>
-          <b-dropdown-item
-              v-if="user.ext.privateUserZone.enabled2FA"
-              variant="danger"
-              @click="adminDisable2FA()"
-            >Отключить 2FA</b-dropdown-item>
-          </b-dropdown>
+      <b-row class="d-flex justify-content-center">
+        <b-col col lg="4">
+			<b-card bg-variant="light" no-body>
+				<SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
+				<b-card-body>
+					<b-button-group class="btn-block">
+						<b-button squared v-if="owner" variant="secondary" @click="uploadSkin()">Загрузить скин</b-button>
+					</b-button-group>
+					<b-button-group class="btn-block">
+						<b-button squared v-if="owner" variant="secondary" @click="uploadCloak()">Загрузить плащ</b-button>
+					</b-button-group>
+					<b-dropdown v-if="admin" text="Администрирование" variant="danger" class="btn-block rounded-0">
+						<b-dropdown-item
+							variant="danger"
+							@click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
+							>Сменить пароль</b-dropdown-item>
+						<b-dropdown-item
+							variant="danger"
+							@click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
+							>Сменить имя пользователя</b-dropdown-item>
+						<b-dropdown-item
+							v-if="user.ext.privateUserZone.enabled2FA"
+							variant="danger"
+							@click="adminDisable2FA()"
+							>Отключить 2FA</b-dropdown-item>
+					</b-dropdown>
+				</b-card-body>
+			</b-card>
         </b-col>
-        <b-col>
+        <b-col col md>
           <table class="table">
             <tbody>
               <tr>

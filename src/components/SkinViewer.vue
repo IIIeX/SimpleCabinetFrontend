@@ -1,5 +1,5 @@
 <template>
-  <canvas ref="skinview3dinst"></canvas>
+  <canvas class="card-img-top" ref="skinview3dinst"></canvas>
 </template>
 <script>
 import * as skinview3d from "skinview3d";
