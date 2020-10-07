@@ -4,78 +4,102 @@
       <UserView :user="user" :owner="true" :admin="(user.permissions & 1) != 0" />
     </b-tab>
     <b-tab title="Безопасность">
-      <b-container>
-        <b-form v-if="formChangePassword.show" @submit="userChangePassword">
-          <b-form-group
-            id="input-group-1"
-            label="Старый пароль:"
-            label-for="input-1"
-            description="Старый пароль нужен для подтверждения владения аккаунтом"
-          >
-            <b-form-input
-              id="input-1"
-              v-model="formChangePassword.oldPassword"
-              type="password"
-              required
-              placeholder="Введите текущий пароль"
-            ></b-form-input>
-          </b-form-group>
-
-          <b-form-group id="input-group-2" label="Введите новый пароль:" label-for="input-2">
-            <b-form-input
-              id="input-2"
-              v-model="formChangePassword.newPassword"
-              type="password"
-              required
-              placeholder="Новый пароль"
-            ></b-form-input>
-          </b-form-group>
-
-          <b-form-group id="input-group-3" label="Повторите новый пароль:" label-for="input-3">
-            <b-form-input
-              id="input-3"
-              v-model="formChangePassword.newPasswordRetry"
-              type="password"
-              required
-              placeholder="Новый пароль"
-            ></b-form-input>
-          </b-form-group>
-
-          <b-form-invalid-feedback :state="formChangePasswordvalidation">Пароли не совпадают</b-form-invalid-feedback>
-          <b-form-invalid-feedback
-            :state="formChangePassword.serverErrorShow"
-          >{{ formChangePassword.serverError }}</b-form-invalid-feedback>
-          <b-button type="submit" variant="primary">Сменить пароль</b-button>
-        </b-form>
-      </b-container>
-      <br />
-      <b-container>
-        <b-form inline>
-          <label class="mr-sm-2" for="2fa-button">Управление двухфакторной аудентификацией</label>
-          <b-button
-            id="2fa-button"
-            v-if="!user.ext.privateUserZone.enabled2FA"
-            @click="twoFactorGenerate(); modal2FAEnable.show = !modal2FAEnable.show"
-          >Включить 2FA</b-button>
-          <b-button
-            id="2fa-button"
-            v-if="user.ext.privateUserZone.enabled2FA"
-            @click="modal2FADisable.show = !modal2FADisable.show"
-          >Выключить 2FA</b-button>
-        </b-form>
-      </b-container>
-      <b-modal v-model="modal2FAEnable.show" id="modal-2fa-enable" @ok="twoFactorEnable">
-        <p>Двухфакторная аутентификация помогает защитить ваш аккаунт от взлома если злоумышленику известен пароль</p>
-        <vue-qrcode :value="modal2FAEnableurl" />
-        <p>
-          <b>Код для ручного ввода</b>
-          : {{ modal2FAEnablesecretKey }}
-        </p>
+        <b-row cols-md="2">
+          <b-col col md="6">
+            <b-card
+              bg-variant="light"
+              header-tag="header"
+              class="mb-2">
+              <template v-slot:header>
+                <h4 class="mb-0">Смена пароля</h4>
+              </template>
+              <b-form v-if="formChangePassword.show" @submit="userChangePassword">
+                <b-form-group
+                  id="input-group-1"
+                  label="Старый пароль:"
+                  label-for="oldPassword">
+                  <b-form-input
+                    id="oldPassword"
+                    v-model="formChangePassword.oldPassword"
+                    type="password"
+                    required
+                    placeholder="Введите текущий пароль"
+                    aria-describedby="password-help-block">
+                  </b-form-input>
+                  <b-form-text id="password-help-block">Старый пароль нужен для подтверждения владения аккаунтом</b-form-text>
+                </b-form-group>
+                <b-form-group id="input-group-2" label="Введите новый пароль:" label-for="newPassword">
+                  <b-form-input
+                    id="newPassword"
+                    v-model="formChangePassword.newPassword"
+                    type="password"
+                    required
+                    placeholder="Новый пароль"
+                  ></b-form-input>
+                </b-form-group>
+                <b-form-group id="input-group-3" label="Повторите новый пароль:" label-for="newPasswordRetry">
+                  <b-form-input
+                    id="newPasswordRetry"
+                    v-model="formChangePassword.newPasswordRetry"
+                    type="password"
+                    required
+                    placeholder="Новый пароль"
+                  ></b-form-input>
+                </b-form-group>
+                <b-form-invalid-feedback :state="formChangePasswordvalidation">Пароли не совпадают</b-form-invalid-feedback>
+                <b-form-invalid-feedback
+                  :state="formChangePassword.serverErrorShow"
+                >{{ formChangePassword.serverError }}</b-form-invalid-feedback>
+                <b-form-row class="justify-content-md-center">
+                  <b-button type="submit" variant="primary">Сменить пароль</b-button>
+                </b-form-row>
+              </b-form>
+            </b-card>
+          </b-col>
+          <b-col col md="6">
+            <b-card
+              bg-variant="light"
+              header-tag="header"
+              sub-title="Управление двухфакторной аутентификацией"
+              class="mb-2">
+              <template v-slot:header>
+                <h4 class="mb-0">2FA</h4>
+              </template>
+              <b-card-text>
+                2FA помогает защитить ваш аккаунт от взлома если злоумышленику известен пароль
+              </b-card-text>
+              <b-row class="justify-content-md-center">
+                <b-button
+                  id="2fa-button"
+                  variant="success"
+                  v-if="!user.ext.privateUserZone.enabled2FA"
+                  @click="twoFactorGenerate(); modal2FAEnable.show = !modal2FAEnable.show"
+                >Включить 2FA</b-button>
+                <b-button
+                  id="2fa-button"
+                  variant="danger"
+                  v-if="user.ext.privateUserZone.enabled2FA"
+                  @click="modal2FADisable.show = !modal2FADisable.show"
+                >Выключить 2FA</b-button>
+              </b-row>
+            </b-card>
+          </b-col>
+        </b-row>
+      <b-modal hide-header v-model="modal2FAEnable.show" id="modal-2fa-enable" @ok="twoFactorEnable">
+        <h6>1. Отсканируйте код приложением <b>Google Authenticator</b></h6>
+        <div class="d-block text-center">
+          <vue-qrcode :value="modal2FAEnableurl" />
+        </div>
+        <b-form-text class="mb-2">
+          Код для ручного ввода: 
+          <b>{{ modal2FAEnablesecretKey }}</b>
+        </b-form-text>
+        <h6>2. После успешного добавления введите 6 значный код</h6>
         <b-form-input v-model="modal2FAEnable.code" type="text" placeholder="Код из приложения"></b-form-input>
         <b-form-invalid-feedback :state="modal2FAEnable.validation">Неверный код</b-form-invalid-feedback>
       </b-modal>
-      <b-modal v-model="modal2FADisable.show" id="modal-2fa-disable" @ok="twoFactorDisable">
-        <p>Для отключения 2FA нужно ввести код из приложения:</p>
+      <b-modal hide-header v-model="modal2FADisable.show" id="modal-2fa-disable" @ok="twoFactorDisable">
+        <h6>Для отключения 2FA нужно ввести код из приложения:</h6>
         <b-form-input v-model="modal2FADisable.code" type="text" placeholder="Код из приложения"></b-form-input>
         <b-form-invalid-feedback :state="modal2FADisable.validation">Неверный код</b-form-invalid-feedback>
       </b-modal>

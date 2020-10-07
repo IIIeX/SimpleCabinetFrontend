@@ -1,96 +1,114 @@
 <template>
   <div class="about">
-    <b-container class="bv-example-row">
-      <b-row class="d-flex justify-content-center">
-        <b-col col lg="4">
-			<b-card bg-variant="light" no-body>
-				<SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
-				<b-card-body>
-					<b-button-group class="btn-block">
-						<b-button squared v-if="owner" variant="secondary" @click="uploadSkin()">Загрузить скин</b-button>
-					</b-button-group>
-					<b-button-group class="btn-block">
-						<b-button squared v-if="owner" variant="secondary" @click="uploadCloak()">Загрузить плащ</b-button>
-					</b-button-group>
-					<b-dropdown v-if="admin" text="Администрирование" variant="danger" class="btn-block rounded-0">
-						<b-dropdown-item
-							variant="danger"
-							@click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
-							>Сменить пароль</b-dropdown-item>
-						<b-dropdown-item
-							variant="danger"
-							@click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
-							>Сменить имя пользователя</b-dropdown-item>
-						<b-dropdown-item
-							v-if="user.ext.privateUserZone.enabled2FA"
-							variant="danger"
-							@click="adminDisable2FA()"
-							>Отключить 2FA</b-dropdown-item>
-					</b-dropdown>
-				</b-card-body>
-			</b-card>
-        </b-col>
-        <b-col col md>
-          <table class="table">
-            <tbody>
-              <tr>
-                <td>
-                  <b>Имя пользователя</b>
-                </td>
-                <td>
-                  <b>{{ user.username }}</b>
-                </td>
-              </tr>
-              <tr v-if="user.uuid">
-                <td>UUID</td>
-                <td>{{ user.uuid }}</td>
-              </tr>
-              <tr v-if="user.ext.status || editProfileForm.show">
-                <td>Статус</td>
-                <td v-if="!editProfileForm.show">{{ user.ext.status }}</td>
-                <td v-if="editProfileForm.show">
-                  <b-form-input
-                    v-model="editProfileForm.status"
-                    type="text"
-                    placeholder="Ваш статус"
-                  ></b-form-input>
-                </td>
-              </tr>
-              <tr>
-                <td>Пол</td>
-                <td
-                  v-if="!editProfileForm.show"
-                >{{ !user.ext.gender ? "Не указан" : user.ext.gender == "FEMALE" ? "Женский" : "Мужской" }}</td>
-                <td v-if="editProfileForm.show">
-                  <b-form-select
-                    v-model="editProfileForm.gender"
-                    :options="editProfileForm.genderOptions"
-                  ></b-form-select>
-                </td>
-              </tr>
-              <tr v-if="user.ext.email">
-                <td>Email</td>
-                <td>{{ user.ext.email }}</td>
-              </tr>
-              <tr v-if="user.ext.economyMoney > 0">
-                <td>Счет</td>
-                <td>{{ user.ext.economyMoney }}</td>
-              </tr>
-              <tr v-if="user.ext.donateMoney > 0">
-                <td>Донатный счет</td>
-                <td>{{ user.ext.donateMoney }}</td>
-              </tr>
-            </tbody>
-          </table>
+    <b-row class="d-flex justify-content-center">
+      <b-col col lg="4">
+        <b-card bg-variant="light" no-body>
+          <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
+          <b-card-body>
+            <b-button-group class="btn-block">
+              <b-button squared v-if="owner" variant="secondary" @click="uploadSkin()">Загрузить скин</b-button>
+            </b-button-group>
+            <b-button-group class="btn-block">
+              <b-button squared v-if="owner" variant="secondary" @click="uploadCloak()">Загрузить плащ</b-button>
+            </b-button-group>
+            <b-dropdown v-if="admin" text="Администрирование" variant="danger" class="btn-block rounded-0">
+              <b-dropdown-item
+                variant="danger"
+                @click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
+                >Сменить пароль</b-dropdown-item>
+             <b-dropdown-item
+                variant="danger"
+                @click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
+                >Сменить имя пользователя</b-dropdown-item>
+              <b-dropdown-item
+                v-if="user.ext.privateUserZone.enabled2FA"
+                variant="danger"
+                @click="adminDisable2FA()"
+                >Отключить 2FA</b-dropdown-item>
+            </b-dropdown>
+          </b-card-body>
+        </b-card>
+      </b-col>
+      <b-col col lg>
+        <b-card
+          v-if="user.uuid"
+          bg-variant="light"
+          title="UUID"
+          class="mb-2">
+          <b-card-sub-title>{{ user.uuid }}</b-card-sub-title>
+        </b-card>
+        <b-card
+          v-if="user.ext.status || editProfileForm.show"
+          bg-variant="light"
+          title="Статус"
+          class="mb-2">
+          <b-card-sub-title v-if="!editProfileForm.show">{{ user.ext.status }}</b-card-sub-title>
+          <b-card-sub-title v-if="editProfileForm.show">
+            <b-form-input
+              v-model="editProfileForm.status"
+              type="text"
+              placeholder="Ваш статус"
+            ></b-form-input>
+          </b-card-sub-title>
+        </b-card>
+        <b-row cols-md="2">
+          <b-col col md="6">
+            <b-card
+              bg-variant="light"
+              title="Имя"
+              class="mb-2">
+              <b-card-sub-title>{{ user.username }}</b-card-sub-title>
+            </b-card>
+          </b-col>
+          <b-col col md="6" v-if="user.ext.email">
+            <b-card
+              bg-variant="light"
+              title="Email"
+              class="mb-2">
+              <b-card-sub-title>{{ user.ext.email }}</b-card-sub-title>
+            </b-card>
+          </b-col>
+          <b-col col md="6">
+            <b-card
+              bg-variant="light"
+              title="Пол"
+              class="mb-2">
+              <b-card-sub-title v-if="!editProfileForm.show">{{ !user.ext.gender ? "Не указан" : user.ext.gender == "FEMALE" ? "Женский" : "Мужской" }}</b-card-sub-title>
+              <b-card-sub-title v-if="editProfileForm.show">
+                <b-form-select
+                  v-model="editProfileForm.gender"
+                  :options="editProfileForm.genderOptions"
+                ></b-form-select>
+              </b-card-sub-title>
+            </b-card>
+          </b-col>
+          <b-col col md="6" v-if="user.ext.economyMoney">
+            <b-card
+              bg-variant="light"
+              title="Счет"
+              class="mb-2">
+              <b-card-sub-title>{{ user.ext.economyMoney }}</b-card-sub-title>
+            </b-card>
+          </b-col>
+          <b-col col md="6" v-if="user.ext.donateMoney">
+            <b-card
+              bg-variant="light"
+              title="Донатный счет"
+              class="mb-2">
+              <b-card-sub-title>{{ user.ext.donateMoney }}</b-card-sub-title>
+            </b-card>
+          </b-col>
+        </b-row>
+        <b-row align-h="center">
           <b-button
             v-if="!editProfileForm.show && (admin || owner)"
             @click="editProfileForm.show = !editProfileForm.show"
             variant="outline-primary"
-          >Редактировать</b-button>
+            >Редактировать</b-button>
           <b-button v-if="editProfileForm.show" @click="editProfile" variant="primary">Применить</b-button>
-        </b-col>
-      </b-row>
-    </b-container>
+        </b-row>
+      </b-col>
+    </b-row>
     <b-modal
       v-model="modalAdminChangePassword.show"
       id="modal-admin-changepassword"

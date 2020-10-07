@@ -1,22 +1,32 @@
 <template>
   <div class="home">
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-      <b-form-group id="input-group-1" label="Username:" label-for="input-1">
-        <b-form-input id="input-1" v-model="form.username" required placeholder="Enter username"></b-form-input>
-      </b-form-group>
-
-      <b-form-group id="input-group-2" label="Password:" label-for="input-2">
-        <b-form-input
-          id="input-2"
-          v-model="form.password"
-          type="password"
-          required
-          placeholder="Enter password"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-invalid-feedback :state="form.serverErrorShow">{{ form.serverError }}</b-form-invalid-feedback>
-      <b-button type="submit" variant="primary">Login</b-button>
-    </b-form>
+    <b-row class="d-flex justify-content-center" align-v="center">
+      <b-col col lg="4">
+        <b-card
+          bg-variant="light"
+          title="Имя"
+          class="my-2">
+          <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+            <b-form-group id="input-group-1" label="Username:" label-for="input-1">
+              <b-form-input id="input-1" v-model="form.username" required placeholder="Enter username"></b-form-input>
+            </b-form-group>
+            <b-form-group id="input-group-2" label="Password:" label-for="input-2">
+              <b-form-input
+                id="input-2"
+                v-model="form.password"
+                type="password"
+                required
+                placeholder="Enter password"
+              ></b-form-input>
+            </b-form-group>
+            <b-form-invalid-feedback :state="form.serverErrorShow">{{ form.serverError }}</b-form-invalid-feedback>
+            <b-form-text align="center">
+              <b-button type="submit" variant="primary">Вход</b-button>
+            </b-form-text>
+          </b-form>
+        </b-card>
+      </b-col>
+    </b-row>
     <b-modal v-model="modalRequest2FA.show" id="modal-request2fa" @ok="send2FA">
       <b-form-input v-model="modalRequest2FA.totp" type="text" placeholder="Ключ из приложения"></b-form-input>
       <b-form-invalid-feedback
