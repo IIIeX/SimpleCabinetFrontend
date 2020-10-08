@@ -85,7 +85,7 @@
             </b-card>
           </b-col>
         </b-row>
-      <b-modal hide-header v-model="modal2FAEnable.show" id="modal-2fa-enable" @ok="twoFactorEnable">
+      <b-modal centered hide-header v-model="modal2FAEnable.show" id="modal-2fa-enable" @ok="twoFactorEnable">
         <h6>1. Отсканируйте код приложением <b>Google Authenticator</b></h6>
         <div class="d-block text-center">
           <vue-qrcode :value="modal2FAEnableurl" />
@@ -95,12 +95,12 @@
           <b>{{ modal2FAEnablesecretKey }}</b>
         </b-form-text>
         <h6>2. После успешного добавления введите 6 значный код</h6>
-        <b-form-input v-model="modal2FAEnable.code" type="text" placeholder="Код из приложения"></b-form-input>
+        <b-form-input v-model="modal2FAEnable.code" type="number" placeholder="Код из приложения"></b-form-input>
         <b-form-invalid-feedback :state="modal2FAEnable.validation">Неверный код</b-form-invalid-feedback>
       </b-modal>
-      <b-modal hide-header v-model="modal2FADisable.show" id="modal-2fa-disable" @ok="twoFactorDisable">
+      <b-modal centered hide-header v-model="modal2FADisable.show" id="modal-2fa-disable" @ok="twoFactorDisable">
         <h6>Для отключения 2FA нужно ввести код из приложения:</h6>
-        <b-form-input v-model="modal2FADisable.code" type="text" placeholder="Код из приложения"></b-form-input>
+        <b-form-input v-model="modal2FADisable.code" type="text" maxlength="6" placeholder="123456"></b-form-input>
         <b-form-invalid-feedback :state="modal2FADisable.validation">Неверный код</b-form-invalid-feedback>
       </b-modal>
     </b-tab>

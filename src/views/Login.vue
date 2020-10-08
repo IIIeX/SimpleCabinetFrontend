@@ -1,41 +1,46 @@
 <template>
-  <div class="home">
-    <b-row class="d-flex justify-content-center" align-v="center">
+  <div>
+    <b-row class="d-flex justify-content-center">
       <b-col col lg="4">
         <b-card
-          bg-variant="light"
-          title="Имя"
-          class="my-2">
+        bg-variant="light"
+        class="my-4"
+        footer-tag="footer">
           <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-            <b-form-group id="input-group-1" label="Username:" label-for="input-1">
-              <b-form-input id="input-1" v-model="form.username" required placeholder="Enter username"></b-form-input>
+            <b-form-group id="input-group-1" label-for="input-1">
+              <b-form-input id="input-1" v-model="form.username" required placeholder="Имя пользователя"></b-form-input>
             </b-form-group>
-            <b-form-group id="input-group-2" label="Password:" label-for="input-2">
+            <b-form-group id="input-group-2" label-for="input-2">
               <b-form-input
-                id="input-2"
-                v-model="form.password"
-                type="password"
-                required
-                placeholder="Enter password"
+              id="input-2"
+              v-model="form.password"
+              type="password"
+              required
+              placeholder="Пароль"
               ></b-form-input>
             </b-form-group>
             <b-form-invalid-feedback :state="form.serverErrorShow">{{ form.serverError }}</b-form-invalid-feedback>
             <b-form-text align="center">
-              <b-button type="submit" variant="primary">Вход</b-button>
-              <b-button @click="modalFogotPassword.show =  !modalFogotPassword.show">Забыли пароль</b-button>
+              <b-button type="submit" variant="primary" class="btn-block">Вход</b-button>
             </b-form-text>
           </b-form>
+          <template v-slot:footer>
+            <b-form-text align="right">
+              <em><b-link @click="modalFogotPassword.show =  !modalFogotPassword.show">Забыли пароль</b-link></em>
+            </b-form-text>
+          </template>
         </b-card>
       </b-col>
     </b-row>
-    <b-modal v-model="modalRequest2FA.show" id="modal-request2fa" @ok="send2FA">
-      <b-form-input v-model="modalRequest2FA.totp" type="text" placeholder="Ключ из приложения"></b-form-input>
+    <b-modal centered v-model="modalRequest2FA.show" id="modal-request2fa" @ok="send2FA" title="2FA Google Authenticator">
+      <b-form-input v-model="modalRequest2FA.totp" type="text" maxlength="6" placeholder="123456"></b-form-input>
       <b-form-invalid-feedback
-        :state="modalRequest2FA.serverErrorShow"
+      :state="modalRequest2FA.serverErrorShow"
       >{{ modalRequest2FA.serverError }}</b-form-invalid-feedback>
     </b-modal>
-    <b-modal v-model="modalFogotPassword.show" id="modal-fogotpassword" @ok="sendFogotPassword">
-      <b-form-input v-model="modalFogotPassword.email" type="email" placeholder="Ваш EMail"></b-form-input>
+    <b-modal hide-header centered v-model="modalFogotPassword.show" id="modal-fogotpassword" @ok="sendFogotPassword">
+      <h6>Для восстановления доступа укажите ваш email</h6>
+      <b-form-input v-model="modalFogotPassword.email" type="email" placeholder="email@example.ru"></b-form-input>
     </b-modal>
   </div>
 </template>
