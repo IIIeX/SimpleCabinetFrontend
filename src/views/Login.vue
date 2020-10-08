@@ -22,6 +22,7 @@
             <b-form-invalid-feedback :state="form.serverErrorShow">{{ form.serverError }}</b-form-invalid-feedback>
             <b-form-text align="center">
               <b-button type="submit" variant="primary">Вход</b-button>
+              <b-button @click="modalFogotPassword.show =  !modalFogotPassword.show">Забыли пароль</b-button>
             </b-form-text>
           </b-form>
         </b-card>
@@ -32,6 +33,9 @@
       <b-form-invalid-feedback
         :state="modalRequest2FA.serverErrorShow"
       >{{ modalRequest2FA.serverError }}</b-form-invalid-feedback>
+    </b-modal>
+    <b-modal v-model="modalFogotPassword.show" id="modal-fogotpassword" @ok="sendFogotPassword">
+      <b-form-input v-model="modalFogotPassword.email" type="email" placeholder="Ваш EMail"></b-form-input>
     </b-modal>
   </div>
 </template>
@@ -54,6 +58,10 @@ export default {
         show: false,
         serverError: null,
         serverErrorShow: true,
+      },
+      modalFogotPassword: {
+        email: null,
+        show: false
       },
       show: true,
     };
@@ -98,6 +106,19 @@ export default {
         return;
       }
       this.$router.push("/currentuser");
+    },
+    async sendFogotPassword(evt) {
+      evt.preventDefault();
+      try {
+        let result = await this.$store.dispatch("request", {
+          type: "lkPasswordReset",
+          email: this.modalFogotPassword.email,
+        });
+        console.log(result);
+      } catch (e) {
+        console.log(e);
+        return;
+      }
     },
     onReset(evt) {
       evt.preventDefault();
