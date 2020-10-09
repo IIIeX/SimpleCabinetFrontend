@@ -110,6 +110,9 @@
       </b-col>
     </b-row>
     <b-modal
+      hide-header
+      centered
+      size="sm"
       v-model="modalAdminChangePassword.show"
       id="modal-admin-changepassword"
       @ok="adminChangePassword"
@@ -121,6 +124,9 @@
       ></b-form-input>
     </b-modal>
     <b-modal
+      hide-header
+      centered
+      size="sm"
       v-model="modalAdminChangeUsername.show"
       id="modal-admin-changeusername"
       @ok="adminChangeUsername"

@@ -16,7 +16,6 @@
               <b-form v-if="formChangePassword.show" @submit="userChangePassword">
                 <b-form-group
                   id="input-group-1"
-                  label="Старый пароль:"
                   label-for="oldPassword">
                   <b-form-input
                     id="oldPassword"
@@ -28,7 +27,7 @@
                   </b-form-input>
                   <b-form-text id="password-help-block">Старый пароль нужен для подтверждения владения аккаунтом</b-form-text>
                 </b-form-group>
-                <b-form-group id="input-group-2" label="Введите новый пароль:" label-for="newPassword">
+                <b-form-group id="input-group-2" label-for="newPassword">
                   <b-form-input
                     id="newPassword"
                     v-model="formChangePassword.newPassword"
@@ -37,13 +36,13 @@
                     placeholder="Новый пароль"
                   ></b-form-input>
                 </b-form-group>
-                <b-form-group id="input-group-3" label="Повторите новый пароль:" label-for="newPasswordRetry">
+                <b-form-group id="input-group-3" label-for="newPasswordRetry">
                   <b-form-input
                     id="newPasswordRetry"
                     v-model="formChangePassword.newPasswordRetry"
                     type="password"
                     required
-                    placeholder="Новый пароль"
+                    placeholder="Повторите новый пароль"
                   ></b-form-input>
                 </b-form-group>
                 <b-form-invalid-feedback :state="formChangePasswordvalidation">Пароли не совпадают</b-form-invalid-feedback>
@@ -95,12 +94,12 @@
           <b>{{ modal2FAEnablesecretKey }}</b>
         </b-form-text>
         <h6>2. После успешного добавления введите 6 значный код</h6>
-        <b-form-input v-model="modal2FAEnable.code" type="number" placeholder="Код из приложения"></b-form-input>
+        <b-form-input v-model="modal2FAEnable.code" type="number" placeholder="123456"></b-form-input>
         <b-form-invalid-feedback :state="modal2FAEnable.validation">Неверный код</b-form-invalid-feedback>
       </b-modal>
       <b-modal centered hide-header v-model="modal2FADisable.show" id="modal-2fa-disable" @ok="twoFactorDisable">
         <h6>Для отключения 2FA нужно ввести код из приложения:</h6>
-        <b-form-input v-model="modal2FADisable.code" type="text" maxlength="6" placeholder="123456"></b-form-input>
+        <b-form-input v-model="modal2FADisable.code" type="number" maxlength="6" placeholder="123456"></b-form-input>
         <b-form-invalid-feedback :state="modal2FADisable.validation">Неверный код</b-form-invalid-feedback>
       </b-modal>
     </b-tab>
