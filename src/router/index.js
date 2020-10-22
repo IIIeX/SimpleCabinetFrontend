@@ -30,6 +30,13 @@ const routes = [
     name: 'UserByUsername',
     props: true,
     component: () => import('../views/UserByUsername.vue')
+  },
+  {
+
+    path: '/cb/passwordreset/:id/:uuid',
+    name: 'PasswordReset',
+    props: true,
+    component: () => import('../views/cb/PasswordReset.vue')
   }
 ]
 

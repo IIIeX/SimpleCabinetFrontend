@@ -1,16 +1,11 @@
 <template>
-  <div class="loading">
-    <b-row class="justify-content-md-center">
-      <b-col col md="6" class="my-4">
-        <b-alert variant="success" align="center" show>
-          <h4>Подождите, выполняем вход...</h4>
-        </b-alert>
-      </b-col>
-    </b-row>
-  </div>
+  <Wait>
+  </Wait>
 </template>
 <script>
+import Wait from "@/components/Wait.vue"
 export default {
+  components: {Wait},
   created: async function () {
     try {
       await this.$store.state.api.promises.auth;
