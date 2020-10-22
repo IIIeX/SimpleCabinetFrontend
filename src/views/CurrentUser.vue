@@ -205,7 +205,7 @@ export default {
        }
        console.log(res.redirectUri);
        console.log(body);
-       window.location = res.redirectUri+body;
+       window.location = res.redirectUri+"?"+body;
     },
     userChangePassword: async function (evt) {
       evt.preventDefault();
