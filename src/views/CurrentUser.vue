@@ -103,6 +103,9 @@
         <b-form-invalid-feedback :state="modal2FADisable.validation">Неверный код</b-form-invalid-feedback>
       </b-modal>
     </b-tab>
+    <b-tab title="Платежи">
+      <b-button @click="initPayment" variant="danger">Пополнить на 100р ( TEST )</b-button>
+    </b-tab>
   </b-tabs>
 </template>
 <script>
@@ -186,6 +189,24 @@ export default {
     }
   },
   methods: {
+    initPayment: async function() {
+       var res = await this.$store.dispatch("request", {
+            type: "lkInitPayment",
+            sum: "100.0",
+            variant: "ROBOKASSA"
+          });
+       var body = "";
+       var isFirst = true;
+       for(var k in res.params)
+       {
+         if(!isFirst) body+="&";
+         else isFirst = false;
+         body+=k+"="+encodeURIComponent(res.params[k]);
+       }
+       console.log(res.redirectUri);
+       console.log(body);
+       window.location = res.redirectUri+body;
+    },
     userChangePassword: async function (evt) {
       evt.preventDefault();
       this.formChangePassword.serverErrorShow = false;
