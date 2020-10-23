@@ -14,9 +14,13 @@
                 <h4 class="mb-0">Смена пароля</h4>
               </template>
               <b-form v-if="formChangePassword.show" @submit="userChangePassword">
-                <b-form-group
+                <b-input-group
                   id="input-group-1"
-                  label-for="oldPassword">
+                  label-for="oldPassword"
+                  class="mb-2">
+                  <b-input-group-prepend is-text>
+                    <b-icon icon="lock-fill" variant="primary"></b-icon>
+                  </b-input-group-prepend>
                   <b-form-input
                     id="oldPassword"
                     v-model="formChangePassword.oldPassword"
@@ -26,8 +30,11 @@
                     aria-describedby="password-help-block">
                   </b-form-input>
                   <b-form-text id="password-help-block">Старый пароль нужен для подтверждения владения аккаунтом</b-form-text>
-                </b-form-group>
-                <b-form-group id="input-group-2" label-for="newPassword">
+                </b-input-group>
+                <b-input-group id="input-group-2" label-for="newPassword" class="mb-2">
+                  <b-input-group-prepend is-text>
+                    <b-icon icon="lock-fill" variant="danger"></b-icon>
+                  </b-input-group-prepend>
                   <b-form-input
                     id="newPassword"
                     v-model="formChangePassword.newPassword"
@@ -35,16 +42,19 @@
                     required
                     placeholder="Новый пароль"
                   ></b-form-input>
-                </b-form-group>
-                <b-form-group id="input-group-3" label-for="newPasswordRetry">
+                </b-input-group>
+                <b-input-group id="input-group-3" label-for="newPasswordRetry" class="mb-2">
+                  <b-input-group-prepend is-text>
+                    <b-icon icon="lock-fill" variant="danger"></b-icon>
+                  </b-input-group-prepend>
                   <b-form-input
                     id="newPasswordRetry"
                     v-model="formChangePassword.newPasswordRetry"
                     type="password"
                     required
-                    placeholder="Повторите новый пароль"
+                    placeholder="Повторить новый пароль"
                   ></b-form-input>
-                </b-form-group>
+                </b-input-group>
                 <b-form-invalid-feedback :state="formChangePasswordvalidation">Пароли не совпадают</b-form-invalid-feedback>
                 <b-form-invalid-feedback
                   :state="formChangePassword.serverErrorShow"
@@ -94,7 +104,12 @@
           <b>{{ modal2FAEnablesecretKey }}</b>
         </b-form-text>
         <h6>2. После успешного добавления введите 6 значный код</h6>
-        <b-form-input v-model="modal2FAEnable.code" type="number" placeholder="123456"></b-form-input>
+        <b-input-group class="mb-2">
+          <b-input-group-prepend is-text>
+            <b-icon icon="shield-lock-fill" variant="primary"></b-icon>
+          </b-input-group-prepend>
+          <b-form-input v-model="modal2FAEnable.code" type="number" placeholder="123456"></b-form-input>
+        </b-input-group>
         <b-form-invalid-feedback :state="modal2FAEnable.validation">Неверный код</b-form-invalid-feedback>
       </b-modal>
       <b-modal centered hide-header v-model="modal2FADisable.show" id="modal-2fa-disable" @ok="twoFactorDisable">

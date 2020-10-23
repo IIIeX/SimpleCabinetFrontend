@@ -1,42 +1,46 @@
 <template>
-  <div>
-    <b-row class="d-flex justify-content-center">
-      <b-col col lg="4">
-        <b-card
-        bg-variant="light"
-        class="my-4">
-          <b-form @submit="onSubmit" v-if="show">
-            <b-form-group id="input-group-1" label-for="input-1">
-              <b-form-input id="input-1" v-model="form.username" required placeholder="Имя пользователя"></b-form-input>
-              <b-form-text>логин</b-form-text>
-            </b-form-group>
-            <b-form-group id="input-group-2" label-for="input-2">
-              <b-form-input
-                id="input-2"
-                v-model="form.password"
-                type="password"
-                required
-                placeholder="Пароль"
-              ></b-form-input>
-              <b-form-text>рекомендуется минимум 8 символов</b-form-text>
-            </b-form-group>
-            <b-form-group id="input-group-3" label-for="input-2">
-              <b-form-input
-                id="input-3"
-                v-model="form.email"
-                type="email"
-                required
-                placeholder="email@example.ru"
-              ></b-form-input>
-              <b-form-text>электронная почта</b-form-text>
-            </b-form-group>
-            <b-form-invalid-feedback :state="form.serverErrorShow">{{ form.serverError }}</b-form-invalid-feedback>
-            <b-button type="submit" variant="primary" class="btn-block">Регистрация</b-button>
-          </b-form>
-        </b-card>
-      </b-col>
-    </b-row>
-  </div>
+  <b-row class="d-flex justify-content-center">
+    <b-col col lg="4">
+      <b-card
+      bg-variant="light"
+      class="my-4">
+        <b-form @submit="onSubmit" v-if="show">
+          <b-input-group id="input-group-1" label-for="input-1" class="mb-2">
+            <b-input-group-prepend is-text>
+              <b-icon icon="person-fill" variant="primary"></b-icon>
+            </b-input-group-prepend>
+            <b-form-input id="input-1" v-model="form.username" required placeholder="Имя пользователя"></b-form-input>
+          </b-input-group>
+          <b-input-group id="input-group-2" label-for="input-2" class="mb-2">
+            <b-input-group-prepend is-text>
+              <b-icon icon="lock-fill" variant="primary"></b-icon>
+            </b-input-group-prepend>
+            <b-form-input
+              id="input-2"
+              v-model="form.password"
+              type="password"
+              required
+              placeholder="Пароль"
+            ></b-form-input>
+          </b-input-group>
+          <b-input-group id="input-group-3" label-for="input-2" class="mb-2">
+            <b-input-group-prepend is-text>
+              <b-icon icon="envelope-fill" variant="primary"></b-icon>
+            </b-input-group-prepend>
+            <b-form-input
+              id="input-3"
+              v-model="form.email"
+              type="email"
+              required
+              placeholder="email@address.ru"
+            ></b-form-input>
+          </b-input-group>
+          <b-form-invalid-feedback :state="form.serverErrorShow">{{ form.serverError }}</b-form-invalid-feedback>
+          <b-button type="submit" variant="primary" class="btn-block">Регистрация</b-button>
+        </b-form>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>

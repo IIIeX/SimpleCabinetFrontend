@@ -112,30 +112,40 @@
     <b-modal
       hide-header
       centered
-      size="sm"
+      size="md"
       v-model="modalAdminChangePassword.show"
       id="modal-admin-changepassword"
       @ok="adminChangePassword"
     >
-      <b-form-input
+      <b-input-group class="mb-2">
+        <b-input-group-prepend is-text>
+          <b-icon icon="lock-fill" variant="primary"></b-icon>
+        </b-input-group-prepend>
+        <b-form-input
         v-model="modalAdminChangePassword.newPassword"
         type="password"
         placeholder="Новый пароль"
-      ></b-form-input>
+        ></b-form-input>
+      </b-input-group>
     </b-modal>
     <b-modal
       hide-header
       centered
-      size="sm"
+      size="md"
       v-model="modalAdminChangeUsername.show"
       id="modal-admin-changeusername"
       @ok="adminChangeUsername"
     >
-      <b-form-input
+      <b-input-group class="mb-2">
+        <b-input-group-prepend is-text>
+          <b-icon icon="person-fill" variant="primary"></b-icon>
+        </b-input-group-prepend>
+        <b-form-input
         v-model="modalAdminChangeUsername.newUsername"
         type="text"
         placeholder="Новое имя пользователя"
-      ></b-form-input>
+        ></b-form-input>
+      </b-input-group>
     </b-modal>
   </div>
 </template>
