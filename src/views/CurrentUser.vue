@@ -225,11 +225,14 @@ export default {
     }
   },
   methods: {
-    initPayment: async function() {
+    initPayment: async function(evt) {
+      evt.preventDefault();
+      this.formChangePassword.serverErrorShow = true;
+      try {
        var res = await this.$store.dispatch("request", {
             type: "lkInitPayment",
-            sum: "100.0",
-            variant: "ROBOKASSA"
+            sum: this.modalInitPayment.summ,
+            variant: this.modalInitPayment.paymentId
           });
        var body = "";
        var isFirst = true;
@@ -242,6 +245,11 @@ export default {
        console.log(res.redirectUri);
        console.log(body);
        window.location = res.redirectUri+"?"+body;
+      } catch(e) {
+          console.log(e);
+          this.formChangePassword.serverError = e.error;
+          this.formChangePassword.serverErrorShow = false;
+      }
     },
     userChangePassword: async function (evt) {
       evt.preventDefault();
