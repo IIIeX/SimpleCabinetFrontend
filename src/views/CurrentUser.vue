@@ -117,9 +117,16 @@
         <b-form-input v-model="modal2FADisable.code" type="number" maxlength="6" placeholder="123456"></b-form-input>
         <b-form-invalid-feedback :state="modal2FADisable.validation">Неверный код</b-form-invalid-feedback>
       </b-modal>
+      <b-modal centered hide-header v-model="modalInitPayment.show" id="modal-2fa-disable" @ok="initPayment">
+        <b-input-group class="mb-2">
+          <b-form-select v-model="modalInitPayment.paymentId" :options="modalInitPayment.payments"></b-form-select>
+          <b-form-input v-model="modalInitPayment.summ" type="number" placeholder="Сумма"></b-form-input>
+          <b-form-invalid-feedback :state="modalInitPaymentValidation">Сумма должна быть в диапазоне от 10 до 60 000р</b-form-invalid-feedback>
+        </b-input-group>
+      </b-modal>
     </b-tab>
     <b-tab title="Платежи">
-      <b-button @click="initPayment" variant="danger">Пополнить на 100р ( TEST )</b-button>
+      <b-button @click="modalInitPayment.show = !modalInitPayment.show" variant="danger">Пополнить</b-button>
     </b-tab>
   </b-tabs>
 </template>
@@ -162,6 +169,12 @@ export default {
       console.log(data);
       return data;
     },
+    modalInitPaymentValidation: function() {
+      if(this.modalInitPayment.summ >= 10.0 && this.modalInitPayment.summ <= 60000.0) {
+        return true;
+      }
+      return false;
+    }
   },
   data: function () {
     return {
@@ -186,6 +199,14 @@ export default {
         code: null,
         validation: true,
       },
+      modalInitPayment: {
+        show: false,
+        payments: ["UNITPAY", "ROBOKASSA"],
+        paymentId: "UNITPAY",
+        summ: 100.0,
+        serverErrorShow: true,
+        serverError: "Unknown error"
+      }
     };
   },
   watch: {
