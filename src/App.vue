@@ -28,7 +28,7 @@
             <b-col col md class="text-center">
             </b-col>
             <b-col col md class="text-center">
-              <b-form-text>Created by Gravit @SimpleCabinet</b-form-text>
+              <b-form-text>Created by Gravit'a @SimpleCabinet</b-form-text>
             </b-col>
             <b-col col md class="text-center">
             </b-col>
