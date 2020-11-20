@@ -12,10 +12,12 @@
               triggers="hover"
             >Ошибка при попытке соедениться с сервером (Код: {{ serverconnect.code }})</b-tooltip>
           </b-nav-item>
+          <b-nav-item to="/shop">Магазин</b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/login">Войти</b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/register">Регистрация</b-nav-item>
           <b-nav-item v-if="this.$store.state.user.uuid" to="/currentuser">Личный кабинет</b-nav-item>
           <b-nav-item v-if="this.$store.state.user.uuid" @click="exitAccount">Выход</b-nav-item>
+          <b-nav-item to="/devtools" v-if="this.$store.state.config.devtools">DEV</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

@@ -5,11 +5,14 @@
         <b-card bg-variant="light" no-body>
           <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
           <b-card-body>
-            <b-button-group class="btn-block">
-              <b-button squared v-if="owner" variant="secondary" @click="uploadSkin()">Загрузить скин</b-button>
+            <b-button-group v-if="owner" class="btn-block">
+              <b-button squared variant="secondary" @click="uploadSkin()">Загрузить скин</b-button>
             </b-button-group>
-            <b-button-group class="btn-block">
-              <b-button squared v-if="owner" variant="secondary" @click="uploadCloak()">Загрузить плащ</b-button>
+            <b-button-group v-if="owner" class="btn-block">
+              <b-button squared variant="secondary" @click="uploadCloak()">Загрузить плащ</b-button>
+            </b-button-group>
+            <b-button-group v-if="owner" class="btn-block">
+              <b-button squared variant="primary" to="/currentuser/security">Настройки безопасности</b-button>
             </b-button-group>
             <b-dropdown v-if="admin" text="Администрирование" variant="danger" class="btn-block rounded-0">
               <b-dropdown-item

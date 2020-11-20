@@ -27,7 +27,8 @@ export default new Vuex.Store({
       }
     },
     config: {
-      projectName: null
+      projectName: null,
+      devtools: false
     },
     api: new GravitApi()
   },
@@ -60,6 +61,7 @@ export default new Vuex.Store({
     },
     onConfig(state, event) {
       state.config.projectName = event.projectName;
+      state.config.devtools = event.devtools;
     },
     enable2FA(state) {
       state.user.ext.privateUserZone.enabled2FA = true;
