@@ -3,6 +3,10 @@
     <b-row class="d-flex justify-content-center">
       <b-col col lg="4">
         <b-card bg-variant="light" no-body>
+          <b-card-header>
+            {{ user.username }}
+          </b-card-header>
+          <h2 style="text-align: center;"></h2>
           <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
           <b-card-body>
             <b-button-group v-if="owner" class="btn-block">
@@ -55,14 +59,6 @@
           </b-card-sub-title>
         </b-card>
         <b-row cols-md="2">
-          <b-col col md="6">
-            <b-card
-              bg-variant="light"
-              title="Имя"
-              class="mb-2">
-              <b-card-sub-title>{{ user.username }}</b-card-sub-title>
-            </b-card>
-          </b-col>
           <b-col col md="6" v-if="user.ext.email">
             <b-card
               bg-variant="light"

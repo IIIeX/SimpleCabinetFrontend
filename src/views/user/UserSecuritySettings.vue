@@ -136,6 +136,8 @@
           v-model="modal2FAEnable.code"
           type="number"
           placeholder="123456"
+          autofocus
+          v-on:keydown.enter.prevent='twoFactorEnable'
         ></b-form-input>
       </b-input-group>
       <b-form-invalid-feedback :state="modal2FAEnable.validation"

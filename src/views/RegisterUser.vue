@@ -9,7 +9,7 @@
             <b-input-group-prepend is-text>
               <b-icon icon="person-fill" variant="primary"></b-icon>
             </b-input-group-prepend>
-            <b-form-input id="input-1" v-model="form.username" required placeholder="Имя пользователя"></b-form-input>
+            <b-form-input id="input-1" v-model="form.username" required placeholder="Имя пользователя" autofocus></b-form-input>
           </b-input-group>
           <b-input-group id="input-group-2" label-for="input-2" class="mb-2">
             <b-input-group-prepend is-text>

@@ -10,7 +10,7 @@
             <b-input-group-prepend is-text>
               <b-icon icon="person-fill" variant="primary"></b-icon>
             </b-input-group-prepend>
-            <b-form-input id="input-1" v-model="form.username" required placeholder="Имя пользователя"></b-form-input>
+            <b-form-input id="input-1" v-model="form.username" autofocus required placeholder="Имя пользователя"></b-form-input>
           </b-input-group>
           <b-input-group id="input-group-2" label-for="input-2" class="mb-2">
             <b-input-group-prepend is-text>
@@ -41,7 +41,7 @@
         <b-input-group-prepend is-text>
           <b-icon icon="shield-lock-fill" variant="primary"></b-icon>
         </b-input-group-prepend>
-        <b-form-input v-model="modalRequest2FA.totp" type="text" maxlength="6" placeholder="123456"></b-form-input>
+        <b-form-input v-model="modalRequest2FA.totp" type="text" maxlength="6" placeholder="123456" v-on:keydown.enter.prevent='send2FA' autofocus></b-form-input>
         <b-form-invalid-feedback
         :state="modalRequest2FA.serverErrorShow"
         >{{ modalRequest2FA.serverError }}</b-form-invalid-feedback>
@@ -53,7 +53,7 @@
         <b-input-group-prepend is-text>
           <b-icon icon="envelope-fill" variant="primary"></b-icon>
         </b-input-group-prepend>
-        <b-form-input v-model="modalFogotPassword.email" type="email" placeholder="email@address.ru"></b-form-input>
+        <b-form-input v-model="modalFogotPassword.email" type="email" placeholder="email@address.ru" v-on:keydown.enter.prevent='sendFogotPassword' autofocus></b-form-input>
       </b-input-group>
     </b-modal>
   </b-row>
@@ -100,6 +100,7 @@ export default {
       } catch (e) {
         if (e.error == "auth.require2fa") {
           this.modalRequest2FA.show = true;
+          this.$nextTick(function() { this.$refs.modal2FAinput.focus(); });
           return;
         }
         console.log(e);
