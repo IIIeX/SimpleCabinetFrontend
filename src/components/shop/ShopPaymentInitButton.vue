@@ -64,7 +64,7 @@ export default {
   methods: {
     initPayment: async function (evt) {
       evt.preventDefault();
-      this.formChangePassword.serverErrorShow = true;
+      this.modalInitPayment.serverErrorShow = true;
       try {
         var res = await this.$store.dispatch("request", {
           type: "lkInitPayment",
@@ -83,8 +83,8 @@ export default {
         window.location = res.redirectUri + "?" + body;
       } catch (e) {
         console.log(e);
-        this.formChangePassword.serverError = e.error;
-        this.formChangePassword.serverErrorShow = false;
+        this.modalInitPayment.serverError = e.error;
+        this.modalInitPayment.serverErrorShow = false;
       }
     },
   },
