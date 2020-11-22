@@ -21,9 +21,7 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <b-container>
-      <router-view />
-    </b-container>
+    <router-view></router-view>
     <template>
         <footer class="footer mt-auto py-1" style="background-color: rgba(0,0,0,0.75);">
           <b-row class="d-flex mx-0 text-light">

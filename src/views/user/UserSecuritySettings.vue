@@ -1,7 +1,7 @@
 <template>
-  <b-container>
-    <b-row cols-md="2">
-      <b-col col md="6">
+  <b-container class="h-100">
+    <b-row class="d-flex justify-content-center py-3">
+      <b-col xl class="pb-3">
         <b-card bg-variant="light" header-tag="header" class="mb-2">
           <template v-slot:header>
             <h4 class="mb-0">Смена пароля</h4>
@@ -10,8 +10,7 @@
             <b-input-group
               id="input-group-1"
               label-for="oldPassword"
-              class="mb-2"
-            >
+              class="mb-2">
               <b-input-group-prepend is-text>
                 <b-icon icon="lock-fill" variant="primary"></b-icon>
               </b-input-group-prepend>
@@ -21,19 +20,13 @@
                 type="password"
                 required
                 placeholder="Введите текущий пароль"
-                aria-describedby="password-help-block"
-              >
+                aria-describedby="password-help-block">
               </b-form-input>
-              <!--<b-form-text id="password-help-block"
-                >Старый пароль нужен для подтверждения владения
-                аккаунтом</b-form-text
-              >--> <!-- TODO: Некорректно отображается -->
             </b-input-group>
             <b-input-group
               id="input-group-2"
               label-for="newPassword"
-              class="mb-2"
-            >
+              class="mb-2">
               <b-input-group-prepend is-text>
                 <b-icon icon="lock-fill" variant="danger"></b-icon>
               </b-input-group-prepend>
@@ -48,8 +41,7 @@
             <b-input-group
               id="input-group-3"
               label-for="newPasswordRetry"
-              class="mb-2"
-            >
+              class="mb-2">
               <b-input-group-prepend is-text>
                 <b-icon icon="lock-fill" variant="danger"></b-icon>
               </b-input-group-prepend>
@@ -58,25 +50,19 @@
                 v-model="formChangePassword.newPasswordRetry"
                 type="password"
                 required
-                placeholder="Повторить новый пароль"
-              ></b-form-input>
+                placeholder="Повторить новый пароль">
+              </b-form-input>
             </b-input-group>
-            <b-form-invalid-feedback :state="formChangePasswordvalidation"
-              >Пароли не совпадают</b-form-invalid-feedback
-            >
+            <b-form-invalid-feedback :state="formChangePasswordvalidation">Пароли не совпадают</b-form-invalid-feedback>
             <b-form-invalid-feedback
-              :state="formChangePassword.serverErrorShow"
-              >{{ formChangePassword.serverError }}</b-form-invalid-feedback
-            >
+              :state="formChangePassword.serverErrorShow">{{ formChangePassword.serverError }}</b-form-invalid-feedback>
             <b-form-row class="justify-content-md-center">
-              <b-button type="submit" variant="primary"
-                >Сменить пароль</b-button
-              >
+              <b-button type="submit" variant="outline-danger">Сменить пароль</b-button>
             </b-form-row>
           </b-form>
         </b-card>
       </b-col>
-      <b-col col md="6">
+      <b-col xl class="pb-3">
         <b-card
           bg-variant="light"
           header-tag="header"
@@ -93,7 +79,7 @@
           <b-row class="justify-content-md-center">
             <b-button
               id="2fa-button"
-              variant="success"
+              variant="outline-success"
               v-if="!user.ext.privateUserZone.enabled2FA"
               @click="
                 twoFactorGenerate();

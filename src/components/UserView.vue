@@ -1,24 +1,27 @@
 <template>
-  <div class="about">
-    <b-row class="d-flex justify-content-center">
-      <b-col col lg="4">
+  <b-container>
+    <b-row class="d-flex justify-content-center py-3">
+      <b-col col xl="3" class="pb-3">
         <b-card bg-variant="light" no-body>
-          <b-card-header>
-            {{ user.username }}
+          <b-card-header class="d-flex align-items-center">
+            <!-- TODO - доделать загрузку 2д изображения скина головы (или удалить <b-avatar></b-avatar>) -->
+            <b-avatar class="mr-2 avatar"></b-avatar>
+            <span class="mr-auto">{{ user.username }}</span>
           </b-card-header>
-          <h2 style="text-align: center;"></h2>
           <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
-          <b-card-body>
-            <b-button-group v-if="owner" class="btn-block">
-              <b-button squared variant="secondary" @click="uploadSkin()">Загрузить скин</b-button>
+          <b-button-group v-if="owner" vertical class="btn-block">
+            <b-button-group>
+              <b-button squared variant="light" @click="uploadSkin()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> скин</b-button>
+              <b-button squared variant="light" @click="uploadCloak()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> плащ</b-button>
             </b-button-group>
-            <b-button-group v-if="owner" class="btn-block">
-              <b-button squared variant="secondary" @click="uploadCloak()">Загрузить плащ</b-button>
-            </b-button-group>
-            <b-button-group v-if="owner" class="btn-block">
-              <b-button squared variant="primary" to="/user/security">Настройки безопасности</b-button>
-            </b-button-group>
-            <b-dropdown v-if="admin" text="Администрирование" variant="danger" class="btn-block rounded-0">
+            <b-button variant="light" @click="modalInitPayment.show = !modalInitPayment.show">
+              <b-icon icon="credit-card" aria-hidden="true"></b-icon> пополнить
+            </b-button>
+            <b-button variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
+            <b-dropdown v-if="admin" variant="light" dropright>
+              <template #button-content>
+                <b-icon icon="gear-fill" aria-hidden="true"></b-icon> администрирование
+              </template>
               <b-dropdown-item
                 variant="danger"
                 @click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
@@ -33,10 +36,10 @@
                 @click="adminDisable2FA()"
                 >Отключить 2FA</b-dropdown-item>
             </b-dropdown>
-          </b-card-body>
+          </b-button-group>
         </b-card>
       </b-col>
-      <b-col col lg>
+      <b-col col xl class="pb-3">
         <b-card
           v-if="user.uuid"
           bg-variant="light"
@@ -114,8 +117,7 @@
       size="md"
       v-model="modalAdminChangePassword.show"
       id="modal-admin-changepassword"
-      @ok="adminChangePassword"
-    >
+      @ok="adminChangePassword">
       <b-input-group class="mb-2">
         <b-input-group-prepend is-text>
           <b-icon icon="lock-fill" variant="primary"></b-icon>
@@ -133,8 +135,7 @@
       size="md"
       v-model="modalAdminChangeUsername.show"
       id="modal-admin-changeusername"
-      @ok="adminChangeUsername"
-    >
+      @ok="adminChangeUsername">
       <b-input-group class="mb-2">
         <b-input-group-prepend is-text>
           <b-icon icon="person-fill" variant="primary"></b-icon>
@@ -146,7 +147,26 @@
         ></b-form-input>
       </b-input-group>
     </b-modal>
-  </div>
+    <b-modal
+      centered
+      hide-header
+      v-model="modalInitPayment.show"
+      id="modal-Refill"
+      @ok="initPayment">
+      <b-input-group class="mb-2">
+        <b-form-select
+          v-model="modalInitPayment.paymentId"
+          :options="modalInitPayment.payments">
+        </b-form-select>
+        <b-form-input
+          v-model="modalInitPayment.summ"
+          type="number"
+          placeholder="Сумма">
+        </b-form-input>
+        <b-form-invalid-feedback :state="modalInitPaymentValidation">Сумма должна быть в диапазоне от 10 до 60.000р</b-form-invalid-feedback>
+      </b-input-group>
+    </b-modal>
+  </b-container>
 </template>
 <script>
 //import { mapState } from 'vuex';
@@ -188,6 +208,14 @@ export default {
           { value: "MALE", text: "Мужской" },
         ],
       },
+      modalInitPayment: {
+        show: false,
+        payments: ["UNITPAY", "ROBOKASSA"],
+        paymentId: "UNITPAY",
+        summ: 100.0,
+        serverErrorShow: true,
+        serverError: "Unknown error",
+      },
     };
   },
   watch: {
@@ -198,7 +226,17 @@ export default {
       this.editProfileForm.gender = newGender;
     },
   },
-  computed: {},
+  computed: {
+    modalInitPaymentValidation: function () {
+      if (
+        this.modalInitPayment.summ >= 10.0 &&
+        this.modalInitPayment.summ <= 60000.0
+      ) {
+        return true;
+      }
+      return false;
+    },
+  },
   methods: {
     editProfile: async function () {
       var res = await this.$store.dispatch("request", {
@@ -303,6 +341,31 @@ export default {
           };
         };
       });
+    },
+    initPayment: async function (evt) {
+      evt.preventDefault();
+      this.modalInitPayment.serverErrorShow = true;
+      try {
+        var res = await this.$store.dispatch("request", {
+          type: "lkInitPayment",
+          sum: this.modalInitPayment.summ,
+          variant: this.modalInitPayment.paymentId,
+        });
+        var body = "";
+        var isFirst = true;
+        for (var k in res.params) {
+          if (!isFirst) body += "&";
+          else isFirst = false;
+          body += k + "=" + encodeURIComponent(res.params[k]);
+        }
+        console.log(res.redirectUri);
+        console.log(body);
+        window.location = res.redirectUri + "?" + body;
+      } catch (e) {
+        console.log(e);
+        this.modalInitPayment.serverError = e.error;
+        this.modalInitPayment.serverErrorShow = false;
+      }
     },
   },
 };

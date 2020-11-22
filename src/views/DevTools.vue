@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <b-container>
         <ShopPaymentInitButton />
-    </div>
+    </b-container>
 </template>
 <script>
 import ShopPaymentInitButton from "../components/shop/ShopPaymentInitButton.vue"

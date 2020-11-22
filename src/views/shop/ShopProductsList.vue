@@ -1,12 +1,16 @@
 <template>
-    <div>
-        <b-row>
-        <b-col v-for="product in this.products" :key="product.id" cols="4">
-            <ShopProductCard :model="product"></ShopProductCard>
-        </b-col>
+    <b-container>
+        <b-row class="d-flex justify-content-center py-3">
+            <b-col v-for="product in this.products" :key="product.id" cols="4">
+                <ShopProductCard :model="product"></ShopProductCard>
+            </b-col>
         </b-row>
-        <b-pagination @change="followPage" v-model="this.page" :number-of-pages="this.pages"></b-pagination>
-    </div>
+        <b-row class="d-flex justify-content-center py-3">
+            <b-col cols="auto">
+                <b-pagination @change="followPage" v-model="this.page" :number-of-pages="this.pages"></b-pagination>
+            </b-col>
+        </b-row>
+    </b-container>
 </template>
 <script>
 import ShopProductCard from "@/components/shop/ShopProductCard.vue"
