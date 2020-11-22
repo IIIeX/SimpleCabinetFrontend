@@ -9,7 +9,7 @@ export default {
   created: async function () {
     try {
       await this.$store.state.api.promises.auth;
-      this.$router.push("/currentuser");
+      this.$router.push("/user");
     } catch (error) {
       this.$router.push("/login");
     }

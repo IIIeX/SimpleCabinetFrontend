@@ -28,7 +28,7 @@ api.onOpen = () => {
       }, (error) => {
         console.log(JSON.stringify(error))
       });
-      router.push("/currentuser");
+      router.push("/user");
      }, (error) => {
        console.log(error);
        router.push("/login");

@@ -16,12 +16,12 @@ const routes = [
     component: Index
   },
   {
-    path: '/currentuser',
+    path: '/user',
     name: 'CurrentUser',
     component: () => import('../views/CurrentUser.vue')
   },
   {
-    path: '/currentuser/security',
+    path: '/user/security',
     name: 'UserSecuritySettings',
     component: () => import('../views/user/UserSecuritySettings.vue')
   },

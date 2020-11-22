@@ -15,7 +15,7 @@
           <b-nav-item to="/shop">Магазин</b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/login">Войти</b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/register">Регистрация</b-nav-item>
-          <b-nav-item v-if="this.$store.state.user.uuid" to="/currentuser">Личный кабинет</b-nav-item>
+          <b-nav-item v-if="this.$store.state.user.uuid" to="/user">Личный кабинет</b-nav-item>
           <b-nav-item v-if="this.$store.state.user.uuid" @click="exitAccount">Выход</b-nav-item>
           <b-nav-item to="/devtools" v-if="this.$store.state.config.devtools">DEV</b-nav-item>
         </b-navbar-nav>

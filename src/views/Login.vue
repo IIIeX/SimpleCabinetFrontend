@@ -108,7 +108,7 @@ export default {
         this.form.serverErrorShow = false;
         return;
       }
-      this.$router.push("/currentuser");
+      this.$router.push("/user");
     },
     async send2FA(evt) {
       evt.preventDefault();
@@ -125,7 +125,7 @@ export default {
         this.modalRequest2FA.serverErrorShow = false;
         return;
       }
-      this.$router.push("/currentuser");
+      this.$router.push("/user");
     },
     async sendFogotPassword(evt) {
       evt.preventDefault();

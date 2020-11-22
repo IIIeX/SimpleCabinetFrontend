@@ -16,7 +16,7 @@
               <b-button squared variant="secondary" @click="uploadCloak()">Загрузить плащ</b-button>
             </b-button-group>
             <b-button-group v-if="owner" class="btn-block">
-              <b-button squared variant="primary" to="/currentuser/security">Настройки безопасности</b-button>
+              <b-button squared variant="primary" to="/user/security">Настройки безопасности</b-button>
             </b-button-group>
             <b-dropdown v-if="admin" text="Администрирование" variant="danger" class="btn-block rounded-0">
               <b-dropdown-item
