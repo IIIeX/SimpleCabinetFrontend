@@ -2,7 +2,7 @@
   <b-container class="h-100">
     <b-row class="d-flex justify-content-center py-3">
       <b-col xl class="pb-3">
-        <b-card bg-variant="light" header-tag="header" class="mb-2">
+        <b-card bg-variant="light" header-tag="header" class="mb-2 shadow">
           <template v-slot:header>
             <h4 class="mb-0">Смена пароля</h4>
           </template>
@@ -67,7 +67,7 @@
           bg-variant="light"
           header-tag="header"
           sub-title="Управление двухфакторной аутентификацией"
-          class="mb-2"
+          class="mb-2 shadow"
         >
           <template v-slot:header>
             <h4 class="mb-0">2FA</h4>

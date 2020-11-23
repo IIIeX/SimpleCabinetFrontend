@@ -4,7 +4,7 @@
       <b-col col lg="4">
         <b-card
         bg-variant="light"
-        class="my-4"
+        class="my-4 shadow"
         footer-tag="footer">
           <b-form @submit="onSubmit" @reset="onReset" v-if="show">
             <b-input-group id="input-group-1" label-for="input-1" class="mb-2">
