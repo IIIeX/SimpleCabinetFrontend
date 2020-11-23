@@ -2,11 +2,9 @@
   <b-container>
     <b-row class="d-flex justify-content-center py-3">
       <b-col col xl="3" class="pb-3">
-        <b-card bg-variant="light" no-body>
+        <b-card bg-variant="light" no-body class="shadow">
           <b-card-header class="d-flex align-items-center">
-            <!-- TODO - доделать загрузку 2д изображения скина головы (или удалить <b-avatar></b-avatar>) -->
-            <b-avatar class="mr-2 avatar"></b-avatar>
-            <span class="mr-auto">{{ user.username }}</span>
+            <h4 class="mb-0">{{ user.username }}</h4>
           </b-card-header>
           <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
           <b-button-group v-if="owner" vertical class="btn-block">
@@ -39,77 +37,70 @@
           </b-button-group>
         </b-card>
       </b-col>
-      <b-col col xl class="pb-3">
-        <b-card
-          v-if="user.uuid"
-          bg-variant="light"
-          title="UUID"
-          class="mb-2">
-          <b-card-sub-title>{{ user.uuid }}</b-card-sub-title>
-        </b-card>
-        <b-card
-          v-if="user.ext.status || editProfileForm.show"
-          bg-variant="light"
-          title="Статус"
-          class="mb-2">
-          <b-card-sub-title v-if="!editProfileForm.show">{{ user.ext.status }}</b-card-sub-title>
-          <b-card-sub-title v-if="editProfileForm.show">
+<b-col col xl="6" class="pb-3">
+  <b-card no-body class="shadow">
+    <b-card-header class="d-flex align-items-center">
+      <h4 class="mb-0">Информация</h4>
+    </b-card-header>
+    <b-list-group flush>
+      <b-list-group-item v-if="user.uuid" class="py-1">
+        <h6 class="d-flex justify-content-between align-items-center mb-0">
+          UUID
+          <b-alert show class="mb-0">{{ user.uuid }}</b-alert>
+        </h6>
+      </b-list-group-item>
+      <b-list-group-item v-if="user.ext.status || editProfileForm.show" class="py-1">
+        <h6 class="d-flex justify-content-between align-items-center mb-0">
+          Статус
+          <b-alert show class="mb-0" v-if="!editProfileForm.show">{{ user.ext.status }}</b-alert>
+          <span v-if="editProfileForm.show">
             <b-form-input
               v-model="editProfileForm.status"
               type="text"
-              placeholder="Ваш статус"
-            ></b-form-input>
-          </b-card-sub-title>
-        </b-card>
-        <b-row cols-md="2">
-          <b-col col md="6" v-if="user.ext.email">
-            <b-card
-              bg-variant="light"
-              title="Email"
-              class="mb-2">
-              <b-card-sub-title>{{ user.ext.email }}</b-card-sub-title>
-            </b-card>
-          </b-col>
-          <b-col col md="6">
-            <b-card
-              bg-variant="light"
-              title="Пол"
-              class="mb-2">
-              <b-card-sub-title v-if="!editProfileForm.show">{{ !user.ext.gender ? "Не указан" : user.ext.gender == "FEMALE" ? "Женский" : "Мужской" }}</b-card-sub-title>
-              <b-card-sub-title v-if="editProfileForm.show">
-                <b-form-select
-                  v-model="editProfileForm.gender"
-                  :options="editProfileForm.genderOptions"
-                ></b-form-select>
-              </b-card-sub-title>
-            </b-card>
-          </b-col>
-          <b-col col md="6" v-if="user.ext.economyMoney">
-            <b-card
-              bg-variant="light"
-              title="Счет"
-              class="mb-2">
-              <b-card-sub-title>{{ user.ext.economyMoney }}</b-card-sub-title>
-            </b-card>
-          </b-col>
-          <b-col col md="6" v-if="user.ext.donateMoney">
-            <b-card
-              bg-variant="light"
-              title="Донатный счет"
-              class="mb-2">
-              <b-card-sub-title>{{ user.ext.donateMoney }}</b-card-sub-title>
-            </b-card>
-          </b-col>
-        </b-row>
-        <b-row align-h="center">
-          <b-button
-            v-if="!editProfileForm.show && (admin || owner)"
-            @click="editProfileForm.show = !editProfileForm.show"
-            variant="outline-primary"
-            >Редактировать</b-button>
-          <b-button v-if="editProfileForm.show" @click="editProfile" variant="primary">Применить</b-button>
-        </b-row>
-      </b-col>
+              placeholder="Ваш статус"></b-form-input>
+          </span>
+        </h6>
+      </b-list-group-item>
+      <b-list-group-item v-if="user.ext.email" class="py-1">
+        <h6 class="d-flex justify-content-between align-items-center mb-0">
+          Email
+          <b-alert show class="mb-0">{{ user.ext.email }}</b-alert>
+        </h6>
+      </b-list-group-item>
+      <b-list-group-item class="py-1">
+        <h6 class="d-flex justify-content-between align-items-center mb-0">
+          Пол
+          <b-alert show class="mb-0" v-if="!editProfileForm.show">{{ !user.ext.gender ? "Не указан" : user.ext.gender == "FEMALE" ? "Женский" : "Мужской" }}</b-alert>
+          <span v-if="editProfileForm.show">
+            <b-form-select
+              v-model="editProfileForm.gender"
+              :options="editProfileForm.genderOptions">
+            </b-form-select>
+          </span>
+        </h6>
+      </b-list-group-item>
+      <b-list-group-item v-if="user.ext.economyMoney" class="py-1">
+        <h6 class="d-flex justify-content-between align-items-center mb-0">
+          Счет
+          <b-alert show class="mb-0">{{ user.ext.economyMoney }}</b-alert>
+        </h6>
+      </b-list-group-item>
+      <b-list-group-item v-if="user.ext.donateMoney" class="py-1">
+        <h6 class="d-flex justify-content-between align-items-center mb-0">
+          Донатный счет
+          <b-alert show class="mb-0">{{ user.ext.donateMoney }}</b-alert>
+        </h6>
+      </b-list-group-item>
+    </b-list-group>
+    <b-card-footer class="d-flex flex-row-reverse">
+      <b-button
+        v-if="!editProfileForm.show && (admin || owner)"
+        @click="editProfileForm.show = !editProfileForm.show"
+        variant="outline-info">Редактировать</b-button>
+      <b-button v-if="editProfileForm.show" @click="editProfile" variant="success">Применить</b-button>
+    </b-card-footer>
+  </b-card>
+</b-col>
     </b-row>
     <b-modal
       hide-header
