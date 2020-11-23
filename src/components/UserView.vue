@@ -7,7 +7,8 @@
             <h4 class="mb-0">{{ user.username }}</h4>
           </b-card-header>
           <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
-          <b-button-group v-if="owner" vertical class="btn-block">
+          <b-card-footer class="p-0">
+            <b-button-group v-if="owner" vertical class="btn-block">
             <b-button-group>
               <b-button squared variant="light" @click="uploadSkin()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> скин</b-button>
               <b-button squared variant="light" @click="uploadCloak()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> плащ</b-button>
@@ -16,25 +17,26 @@
               <b-icon icon="credit-card" aria-hidden="true"></b-icon> пополнить
             </b-button>
             <b-button variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
-            <b-dropdown v-if="admin" variant="light" dropright>
-              <template #button-content>
-                <b-icon icon="gear-fill" aria-hidden="true"></b-icon> администрирование
-              </template>
-              <b-dropdown-item
+              <b-dropdown v-if="admin" variant="light" dropright>
+                <template #button-content>
+                  <b-icon icon="gear-fill" aria-hidden="true"></b-icon> администрирование
+                </template>
+                <b-dropdown-item
                 variant="danger"
                 @click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
                 >Сменить пароль</b-dropdown-item>
-             <b-dropdown-item
+                <b-dropdown-item
                 variant="danger"
                 @click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
                 >Сменить имя пользователя</b-dropdown-item>
-              <b-dropdown-item
+                <b-dropdown-item
                 v-if="user.ext.privateUserZone.enabled2FA"
                 variant="danger"
                 @click="adminDisable2FA()"
                 >Отключить 2FA</b-dropdown-item>
-            </b-dropdown>
-          </b-button-group>
+              </b-dropdown>
+            </b-button-group>
+          </b-card-footer>
         </b-card>
       </b-col>
       <b-col col xl="6" class="pb-3">
