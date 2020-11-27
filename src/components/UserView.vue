@@ -1,23 +1,21 @@
 <template>
   <b-container>
     <b-row class="d-flex justify-content-center py-3">
-      <b-col col xl="3" class="pb-3">
+      <b-col xl="3" class="pb-3">
         <b-card bg-variant="light" no-body class="shadow">
-          <b-card-header class="d-flex align-items-center">
-            <h4 class="mb-0">{{ user.username }}</h4>
-          </b-card-header>
+          <b-card-header>{{ user.username }}</b-card-header>
           <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
           <b-card-footer class="p-0">
             <b-button-group v-if="owner" vertical class="btn-block">
-            <b-button-group>
-              <b-button squared variant="light" @click="uploadSkin()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> скин</b-button>
-              <b-button squared variant="light" @click="uploadCloak()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> плащ</b-button>
-            </b-button-group>
-            <b-button variant="light" @click="modalInitPayment.show = !modalInitPayment.show">
-              <b-icon icon="credit-card" aria-hidden="true"></b-icon> пополнить
-            </b-button>
-            <b-button variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
-              <b-dropdown v-if="admin" variant="light" dropright>
+              <b-button-group>
+                <b-button squared variant="light" @click="uploadSkin()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> скин</b-button>
+                <b-button squared variant="light" @click="uploadCloak()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> плащ</b-button>
+              </b-button-group>
+              <b-button variant="light" @click="modalInitPayment.show = !modalInitPayment.show">
+                <b-icon icon="credit-card" aria-hidden="true"></b-icon> пополнить
+              </b-button>
+              <b-button variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
+              <b-dropdown v-if="admin" variant="light" menu-class="w-100">
                 <template #button-content>
                   <b-icon icon="gear-fill" aria-hidden="true"></b-icon> администрирование
                 </template>
@@ -39,59 +37,57 @@
           </b-card-footer>
         </b-card>
       </b-col>
-      <b-col col xl="6" class="pb-3">
-        <b-card no-body class="shadow">
-          <b-card-header class="d-flex align-items-center">
-            <h4 class="mb-0">Информация</h4>
-          </b-card-header>
+      <b-col xl="5" class="pb-3">
+        <b-card no-body header="Информация" class="shadow">
           <b-list-group flush>
-            <b-list-group-item v-if="user.uuid" class="py-1">
-              <h6 class="d-flex justify-content-between align-items-center mb-0">
-                UUID
-                <b-alert show class="mb-0">{{ user.uuid }}</b-alert>
-              </h6>
+            <b-list-group-item v-if="user.uuid" variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">UUID</span>
+              <span class="w-75">
+                <b-form-input
+                  type="text"
+                  v-model="user.uuid"
+                  disabled></b-form-input>
+              </span>
             </b-list-group-item>
-            <b-list-group-item v-if="user.ext.status || editProfileForm.show" class="py-1">
-              <h6 class="d-flex justify-content-between align-items-center mb-0">
-                Статус
-                <b-alert show class="mb-0" v-if="!editProfileForm.show">{{ user.ext.status }}</b-alert>
-                <span v-if="editProfileForm.show">
-                  <b-form-input
-                    v-model="editProfileForm.status"
-                    type="text"
-                    placeholder="Ваш статус"></b-form-input>
-                </span>
-              </h6>
+            <b-list-group-item v-if="user.ext.status || editProfileForm.show" variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Статус</span>
+              <span v-if="!editProfileForm.show" class="w-75">
+                <b-form-input
+                  v-model="editProfileForm.status"
+                  type="text"
+                  placeholder="Ваш статус"
+                  disabled></b-form-input>
+              </span>
+              <span v-if="editProfileForm.show" class="w-75">
+                <b-form-input
+                  v-model="editProfileForm.status"
+                  type="text"
+                  placeholder="Ваш статус"></b-form-input>
+              </span>
             </b-list-group-item>
-            <b-list-group-item v-if="user.ext.email" class="py-1">
-              <h6 class="d-flex justify-content-between align-items-center mb-0">
-                Email
-                <b-alert show class="mb-0">{{ user.ext.email }}</b-alert>
-              </h6>
+            <b-list-group-item v-if="user.ext.email" variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Email</span>
+              <span class="w-75">
+                <b-form-input
+                  type="text"
+                  v-model="user.ext.email"
+                  disabled></b-form-input>
+              </span>
             </b-list-group-item>
-            <b-list-group-item class="py-1">
-              <h6 class="d-flex justify-content-between align-items-center mb-0">
-                Пол
-                <b-alert show class="mb-0" v-if="!editProfileForm.show">{{ !user.ext.gender ? "Не указан" : user.ext.gender == "FEMALE" ? "Женский" : "Мужской" }}</b-alert>
-                <span v-if="editProfileForm.show">
-                  <b-form-select
-                    v-model="editProfileForm.gender"
-                    :options="editProfileForm.genderOptions">
-                  </b-form-select>
-                </span>
-              </h6>
-            </b-list-group-item>
-            <b-list-group-item v-if="user.ext.economyMoney" class="py-1">
-              <h6 class="d-flex justify-content-between align-items-center mb-0">
-                Счет
-                <b-alert show class="mb-0">{{ user.ext.economyMoney }}</b-alert>
-              </h6>
-            </b-list-group-item>
-            <b-list-group-item v-if="user.ext.donateMoney" class="py-1">
-              <h6 class="d-flex justify-content-between align-items-center mb-0">
-                Донатный счет
-                <b-alert show class="mb-0">{{ user.ext.donateMoney }}</b-alert>
-              </h6>
+            <b-list-group-item variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Пол</span>
+              <span v-if="!editProfileForm.show" class="w-75">
+                <b-form-select
+                  v-model="editProfileForm.gender"
+                  :options="editProfileForm.genderOptions" disabled>
+                </b-form-select>
+              </span>
+              <span v-if="editProfileForm.show" class="w-75">
+                <b-form-select
+                  v-model="editProfileForm.gender"
+                  :options="editProfileForm.genderOptions">
+                </b-form-select>
+              </span>
             </b-list-group-item>
           </b-list-group>
           <b-card-footer class="d-flex flex-row-reverse">
@@ -101,6 +97,45 @@
               variant="outline-info">Редактировать</b-button>
             <b-button v-if="editProfileForm.show" @click="editProfile" variant="success">Применить</b-button>
           </b-card-footer>
+        </b-card>
+      </b-col>
+      <b-col xl="4" class="pb-3">
+        <b-card no-body header="Донат" class="shadow">
+          <b-card-title class="d-flex justify-content-center my-2">Валюта</b-card-title>
+          <b-list-group flush>
+            <b-list-group-item variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Рубли</span>
+              <b-badge variant="dark">{{ user.ext.donateMoney }}
+                <b-icon icon="cash-stack" aria-hidden="true"></b-icon>
+              </b-badge>
+            </b-list-group-item>
+            <b-list-group-item variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Игровая</span>
+              <b-badge variant="dark">{{ user.ext.economyMoney }}
+                <b-icon icon="cash-stack" aria-hidden="true"></b-icon>
+              </b-badge>
+            </b-list-group-item>
+          </b-list-group>
+          <b-card-title class="d-flex justify-content-center my-2">Группы</b-card-title>
+          <b-list-group flush>
+            <b-list-group-item variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Группа</span>
+              <!-- бадж для окончания времени группы -->
+              <!--<b-badge variant="danger">180 д</b-badge>-->
+            </b-list-group-item>
+            <b-list-group-item variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Группа</span>
+            </b-list-group-item>
+            <b-list-group-item variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Группа</span>
+            </b-list-group-item>
+            <b-list-group-item variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Группа</span>
+            </b-list-group-item>
+            <b-list-group-item variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">Группа</span>
+            </b-list-group-item>
+          </b-list-group>
         </b-card>
       </b-col>
     </b-row>
@@ -196,7 +231,7 @@ export default {
         status: this.user.ext.status,
         gender: this.user.ext.gender == undefined ? null : this.user.ext.gender,
         genderOptions: [
-          { value: null, text: "Не указано" },
+          { value: null, text: "Не указано", disabled: true },
           { value: "FEMALE", text: "Женский" },
           { value: "MALE", text: "Мужской" },
         ],
