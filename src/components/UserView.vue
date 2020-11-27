@@ -15,24 +15,7 @@
                 <b-icon icon="credit-card" aria-hidden="true"></b-icon> пополнить
               </b-button>
               <b-button variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
-              <b-dropdown v-if="admin" variant="light" menu-class="w-100">
-                <template #button-content>
-                  <b-icon icon="gear-fill" aria-hidden="true"></b-icon> администрирование
-                </template>
-                <b-dropdown-item
-                variant="danger"
-                @click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
-                >Сменить пароль</b-dropdown-item>
-                <b-dropdown-item
-                variant="danger"
-                @click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
-                >Сменить имя пользователя</b-dropdown-item>
-                <b-dropdown-item
-                v-if="user.ext.privateUserZone.enabled2FA"
-                variant="danger"
-                @click="adminDisable2FA()"
-                >Отключить 2FA</b-dropdown-item>
-              </b-dropdown>
+              <AdminPanel v-if="admin" :user="user" />
             </b-button-group>
           </b-card-footer>
         </b-card>
@@ -118,63 +101,14 @@
           </b-list-group>
           <b-card-title class="d-flex justify-content-center my-2">Группы</b-card-title>
           <b-list-group flush>
-            <b-list-group-item variant="light" class="d-flex align-items-center">
-              <span class="flex-grow-1">Группа</span>
-              <!-- бадж для окончания времени группы -->
-              <!--<b-badge variant="danger">180 д</b-badge>-->
-            </b-list-group-item>
-            <b-list-group-item variant="light" class="d-flex align-items-center">
-              <span class="flex-grow-1">Группа</span>
-            </b-list-group-item>
-            <b-list-group-item variant="light" class="d-flex align-items-center">
-              <span class="flex-grow-1">Группа</span>
-            </b-list-group-item>
-            <b-list-group-item variant="light" class="d-flex align-items-center">
-              <span class="flex-grow-1">Группа</span>
-            </b-list-group-item>
-            <b-list-group-item variant="light" class="d-flex align-items-center">
-              <span class="flex-grow-1">Группа</span>
+            <b-list-group-item v-for="group in user.ext.groups" :key="group.key" variant="light" class="d-flex align-items-center">
+              <span class="flex-grow-1">{{ group.name }}</span>
+              <b-badge variant="danger">{{ group.days ? group.days : "навсегда" }}</b-badge>
             </b-list-group-item>
           </b-list-group>
         </b-card>
       </b-col>
     </b-row>
-    <b-modal
-      hide-header
-      centered
-      size="md"
-      v-model="modalAdminChangePassword.show"
-      id="modal-admin-changepassword"
-      @ok="adminChangePassword">
-      <b-input-group class="mb-2">
-        <b-input-group-prepend is-text>
-          <b-icon icon="lock-fill" variant="primary"></b-icon>
-        </b-input-group-prepend>
-        <b-form-input
-        v-model="modalAdminChangePassword.newPassword"
-        type="password"
-        placeholder="Новый пароль"
-        ></b-form-input>
-      </b-input-group>
-    </b-modal>
-    <b-modal
-      hide-header
-      centered
-      size="md"
-      v-model="modalAdminChangeUsername.show"
-      id="modal-admin-changeusername"
-      @ok="adminChangeUsername">
-      <b-input-group class="mb-2">
-        <b-input-group-prepend is-text>
-          <b-icon icon="person-fill" variant="primary"></b-icon>
-        </b-input-group-prepend>
-        <b-form-input
-        v-model="modalAdminChangeUsername.newUsername"
-        type="text"
-        placeholder="Новое имя пользователя"
-        ></b-form-input>
-      </b-input-group>
-    </b-modal>
     <b-modal
       centered
       hide-header
@@ -199,33 +133,16 @@
 <script>
 //import { mapState } from 'vuex';
 import SkinViewer from "@/components/SkinViewer";
+import AdminPanel from "@/components/user/AdminPanel"
 //import func from '../../vue-temp/vue-editor-bridge';
 export default {
   props: ["user", "owner", "admin"],
-  components: { SkinViewer },
+  components: { SkinViewer, AdminPanel },
   //computed: mapState({
   //  user: state => state.user
   //})
   data: function () {
     return {
-      items: [{ a: 1 }, { a: 1 }, { a: 1 }],
-      modalChangePassword: {
-        show: false,
-        validation: true,
-        oldPassword: null,
-        newPassword: null,
-        newPasswordRetry: null,
-        serverErrorShow: true,
-        serverError: null,
-      },
-      modalAdminChangeUsername: {
-        show: false,
-        newUsername: null,
-      },
-      modalAdminChangePassword: {
-        show: false,
-        newPassword: null,
-      },
       editProfileForm: {
         show: false,
         status: this.user.ext.status,

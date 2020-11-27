@@ -23,7 +23,8 @@ export default new Vuex.Store({
         isBanned: false,
         privateUserZone: {
           enabled2FA: false
-        }
+        },
+        groups: []
       }
     },
     config: {
@@ -49,6 +50,7 @@ export default new Vuex.Store({
       state.user.ext.donateMoney = event.donateMoney;
       state.user.ext.extendedMoney = event.extendedMoney;
       state.user.ext.isBanned = event.isBanned;
+      state.user.ext.groups = event.groups;
       state.user.ext.privateUserZone.enabled2FA = event.privateUserZone.isEnabled2FA;
     },
     onUserInfo(state, event) {
