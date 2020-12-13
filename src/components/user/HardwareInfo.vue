@@ -32,7 +32,7 @@
           </b-alert>
         </b-col>
       </b-row>
-      <div>
+      <div v-if="!this.loading && this.info">
           <h4>Информация о железе пользователя {{ user.username }}</h4>
           <p>Данные запрошены {{ this.$store.state.user.username }}</p>
           <h2>Основные данные</h2>
