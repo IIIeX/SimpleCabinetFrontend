@@ -1,10 +1,6 @@
 <template>
-  <b-container>
-    <b-button
-      @click="modalInitPayment.show = !modalInitPayment.show"
-      variant="danger"
-      >Пополнить</b-button
-    >
+  <div>
+    <slot :handle="function() { modalInitPayment.show = !modalInitPayment.show }"></slot>
     <b-modal
       centered
       hide-header
@@ -28,7 +24,7 @@
         >
       </b-input-group>
     </b-modal>
-  </b-container>
+  </div>
 </template>
 <script>
 export default {
@@ -87,6 +83,9 @@ export default {
         this.modalInitPayment.serverErrorShow = false;
       }
     },
+    show: function() {
+      this.modalInitPayment.show = true;
+    }
   },
 };
 </script>

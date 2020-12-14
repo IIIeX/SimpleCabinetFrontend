@@ -36,6 +36,11 @@ const routes = [
     component: () => import('../views/shop/ShopProductsList.vue')
   },
   {
+    path: '/shop/orders',
+    name: 'ShopOrdersList',
+    component: () => import('../views/shop/ShopOrdersList.vue')
+  },
+  {
     path: '/devtools',
     name: 'DevTools',
     component: () => config.devtools ? import('../views/DevTools.vue') : import('../views/None.vue')

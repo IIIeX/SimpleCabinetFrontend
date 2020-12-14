@@ -11,8 +11,11 @@
                 <b-button squared variant="light" @click="uploadSkin()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> скин</b-button>
                 <b-button squared variant="light" @click="uploadCloak()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> плащ</b-button>
               </b-button-group>
-              <b-button variant="light" @click="modalInitPayment.show = !modalInitPayment.show">
+              <b-button variant="light" @click="$refs.paymentButton.show()">
                 <b-icon icon="credit-card" aria-hidden="true"></b-icon> пополнить
+
+              <ShopPaymentInitButton ref="paymentButton">
+              </ShopPaymentInitButton>
               </b-button>
               <b-button variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
               <AdminPanel v-if="admin" :user="user" />
@@ -109,35 +112,17 @@
         </b-card>
       </b-col>
     </b-row>
-    <b-modal
-      centered
-      hide-header
-      v-model="modalInitPayment.show"
-      id="modal-Refill"
-      @ok="initPayment">
-      <b-input-group class="mb-2">
-        <b-form-select
-          v-model="modalInitPayment.paymentId"
-          :options="modalInitPayment.payments">
-        </b-form-select>
-        <b-form-input
-          v-model="modalInitPayment.summ"
-          type="number"
-          placeholder="Сумма">
-        </b-form-input>
-        <b-form-invalid-feedback :state="modalInitPaymentValidation">Сумма должна быть в диапазоне от 10 до 60.000р</b-form-invalid-feedback>
-      </b-input-group>
-    </b-modal>
   </b-container>
 </template>
 <script>
 //import { mapState } from 'vuex';
 import SkinViewer from "@/components/SkinViewer";
 import AdminPanel from "@/components/user/AdminPanel"
+import ShopPaymentInitButton from "@/components/shop/ShopPaymentInitButton"
 //import func from '../../vue-temp/vue-editor-bridge';
 export default {
   props: ["user", "owner", "admin"],
-  components: { SkinViewer, AdminPanel },
+  components: { SkinViewer, AdminPanel, ShopPaymentInitButton },
   //computed: mapState({
   //  user: state => state.user
   //})
@@ -153,14 +138,6 @@ export default {
           { value: "MALE", text: "Мужской" },
         ],
       },
-      modalInitPayment: {
-        show: false,
-        payments: ["UNITPAY", "ROBOKASSA"],
-        paymentId: "UNITPAY",
-        summ: 100.0,
-        serverErrorShow: true,
-        serverError: "Unknown error",
-      },
     };
   },
   watch: {
@@ -172,15 +149,6 @@ export default {
     },
   },
   computed: {
-    modalInitPaymentValidation: function () {
-      if (
-        this.modalInitPayment.summ >= 10.0 &&
-        this.modalInitPayment.summ <= 60000.0
-      ) {
-        return true;
-      }
-      return false;
-    },
   },
   methods: {
     editProfile: async function () {
@@ -286,31 +254,6 @@ export default {
           };
         };
       });
-    },
-    initPayment: async function (evt) {
-      evt.preventDefault();
-      this.modalInitPayment.serverErrorShow = true;
-      try {
-        var res = await this.$store.dispatch("request", {
-          type: "lkInitPayment",
-          sum: this.modalInitPayment.summ,
-          variant: this.modalInitPayment.paymentId,
-        });
-        var body = "";
-        var isFirst = true;
-        for (var k in res.params) {
-          if (!isFirst) body += "&";
-          else isFirst = false;
-          body += k + "=" + encodeURIComponent(res.params[k]);
-        }
-        console.log(res.redirectUri);
-        console.log(body);
-        window.location = res.redirectUri + "?" + body;
-      } catch (e) {
-        console.log(e);
-        this.modalInitPayment.serverError = e.error;
-        this.modalInitPayment.serverErrorShow = false;
-      }
     },
   },
 };
