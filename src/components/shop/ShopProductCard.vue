@@ -2,7 +2,7 @@
         <b-card no-body class="shadow" overlay>
           <b-card-header class="d-flex align-items-center justify-content-between">
             <strong class="text-info">{{ model.name }}</strong>
-            <b-icon icon="info-circle-fill" variant="info" scale="1.5" :id="model.name"></b-icon>
+            <b-icon v-if="model.description" icon="info-circle-fill" variant="info" scale="1.5" :id="model.name"></b-icon>
           </b-card-header>
           <b-card-body class="d-flex align-items-center justify-content-between">
             <b-list-group>
@@ -13,7 +13,7 @@
                 <b-icon icon="collection-fill" variant="danger"></b-icon>
               </b-list-group-item>
             </b-list-group>
-            <b-img-lazy left width="64" src="https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/af/Apple_JE3_BE3.png"></b-img-lazy>
+            <b-img-lazy left width="64" :src="model.pictureUrl ? model.pictureUrl : 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/af/Apple_JE3_BE3.png'"></b-img-lazy>
             <b-form-spinbutton v-model="formQuantity" min="1" max="100" vertical></b-form-spinbutton>
           </b-card-body>
           <b-card-footer class="d-flex flex-row-reverse">
