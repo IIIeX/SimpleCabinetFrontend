@@ -1,7 +1,17 @@
 <template>
   <b-container>
     <b-row class="d-flex justify-content-center py-3">
-      <b-col v-for="product in this.products" :key="product.id" cols="4">
+      <b-col cols="auto">
+        <span>блок для фильтра</span>
+      </b-col>
+    </b-row>
+    <b-row class="d-flex justify-content-center py-3">
+      <b-col
+      lg="3"
+      class="pb-3"
+      v-for="product in this.products"
+      :key="product.id"
+      >
         <ShopProductCard :model="product"></ShopProductCard>
       </b-col>
     </b-row>
