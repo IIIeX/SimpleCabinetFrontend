@@ -33,7 +33,8 @@
 <script>
 export default {
     props: ["model"],
-    computed: {},
+    computed: {
+    },
     data: function() {
         return {
             formQuantity: 1

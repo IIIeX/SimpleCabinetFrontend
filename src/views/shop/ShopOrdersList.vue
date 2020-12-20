@@ -14,8 +14,8 @@
         <b-col cols="auto">
           <b-pagination
             @change="followPage"
-            :total-rows="this.pages*10"
-            :per-page="10"
+            :total-rows="this.pages*this.maxQuery"
+            :per-page="this.maxQuery"
           ></b-pagination>
         </b-col>
       </b-row>
@@ -31,11 +31,13 @@ export default {
       list: [],
       page: 1,
       pages: 14,
+      maxQuery: 12,
     };
   },
   created: async function () {
     console.log(123);
     this.list = await this.fetchOrders(0);
+    this.refreshPagesCount();
     console.log(this.list);
   },
   methods: {
@@ -46,13 +48,18 @@ export default {
         lastId: id,
       });
       console.log(info);
+      this.maxQuery = info.maxQuery;
       return info.list;
     },
 
     followPage: async function (page) {
       console.log(page);
       this.list = await this.fetchOrders((page - 1));
-      if(this.list.length < 10 && page < this.pages) this.pages = page;
+      this.page = page;
+      this.refreshPagesCount();
+    },
+    refreshPagesCount: function() {
+      if(this.list.length < this.maxQuery && this.page < this.pages) this.pages = this.page;
     },
   },
 };

@@ -24,8 +24,8 @@
         <b-pagination
           @change="followPage"
           v-model="this.page"
-          :total-rows="this.pages * 10"
-          :per-page="10"
+          :total-rows="this.pages * this.maxQuery"
+          :per-page="this.maxQuery"
         ></b-pagination>
       </b-col>
     </b-row>
@@ -40,6 +40,7 @@ export default {
     return {
       pages: 10,
       page: 1,
+      maxQuery: 12,
       products: [],
     };
   },
@@ -50,16 +51,22 @@ export default {
         lastId: id,
       });
       console.log(info);
+      this.maxQuery = info.maxQuery;
       return info.products;
     },
     followPage: async function (page) {
       console.log(page);
-      this.products = await this.fetchProducts((page - 1) * 10);
-      if (this.products.length < 10 && page < this.pages) this.pages = page;
+      this.products = await this.fetchProducts(page - 1);
+      this.page = page;
+      this.refreshPagesCount();
+    },
+    refreshPagesCount: function() {
+      if(this.products.length < this.maxQuery && this.page < this.pages) this.pages = this.page;
     },
   },
   created: async function () {
     this.products = await this.fetchProducts(0);
+    this.refreshPagesCount();
     console.log(this.products);
   },
 };
