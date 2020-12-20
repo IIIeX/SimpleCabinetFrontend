@@ -60,6 +60,7 @@ export default {
     },
     refreshPagesCount: function() {
       if(this.list.length < this.maxQuery && this.page < this.pages) this.pages = this.page;
+      if(this.list.length >= this.maxQuery && this.page >= this.pages) this.pages++;
     },
   },
 };

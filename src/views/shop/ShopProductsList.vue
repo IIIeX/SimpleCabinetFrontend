@@ -62,6 +62,7 @@ export default {
     },
     refreshPagesCount: function() {
       if(this.products.length < this.maxQuery && this.page < this.pages) this.pages = this.page;
+      if(this.products.length >= this.maxQuery && this.page >= this.pages) this.pages++;
     },
   },
   created: async function () {
