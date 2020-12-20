@@ -23,7 +23,6 @@
       <b-col cols="auto">
         <b-pagination
           @change="followPage"
-          v-model="this.page"
           :total-rows="this.pages * this.maxQuery"
           :per-page="this.maxQuery"
         ></b-pagination>
