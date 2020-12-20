@@ -4,55 +4,43 @@
       variant="danger"
       @click="
         show = !show;
-        fetchHardwareInfo();
-      "
-      >Просмотреть HardwareInfo</b-dropdown-item
-    >
+        fetchHardwareInfo();"
+    >Просмотреть HardwareInfo</b-dropdown-item>
     <b-modal
-      hide-header
       centered
+      scrollable
+      hide-footer
       size="md"
-      v-model="show"
-      id="modal-admin-changepassword"
-    >
-      <b-row v-if="this.loading" class="justify-content-md-center">
-        <b-col col md="6" class="my-4">
-          <b-alert variant="success" align="center" show>
-            <h4>Подождите, получаем данные</h4>
-          </b-alert>
-        </b-col>
-      </b-row>
-      <b-row
-        v-if="!this.loading && !this.info"
-        class="justify-content-md-center"
-      >
-        <b-col col md="6" class="my-4">
-          <b-alert variant="danger" align="center" show>
-            <h4>У пользователя отсутствует информация о железе</h4>
-          </b-alert>
-        </b-col>
-      </b-row>
+      v-model="show">
+      <template #modal-title>
+        HWID пользователя {{ user.username }}
+      </template>
+      <small>Данные запросил <strong>{{ this.$store.state.user.username }}</strong></small>
+      <b-alert v-if="this.loading" variant="success" align="center" show>
+        <h4>Подождите, получаем данные</h4>
+      </b-alert>
+      <b-alert v-if="!this.loading && !this.info" variant="danger" align="center" show>
+        <h4>У пользователя отсутствует информация о железе</h4>
+      </b-alert>
       <div v-if="!this.loading && this.info">
-          <h4>Информация о железе пользователя {{ user.username }}</h4>
-          <p>Данные запрошены {{ this.$store.state.user.username }}</p>
-          <h2>Основные данные</h2>
-      <b-table stacked :items="[this.info]" :fields="this.statisticFields">
-        <template #cell(processorMaxFreq)="data">
-        {{ ((data.item.processorMaxFreq) / (1000*1000)) / 1000 + "Ггц" }}
-      </template>
-      <template #cell(totalMemory)="data">
-        {{ Math.floor(data.item.totalMemory / (1024*1024)) + "Мб" }}
-      </template>
-      </b-table>
-      <h2>Идентификационные данные</h2>
-      <b-table stacked :items="[this.info]" :fields="this.sensitiveFields">
+        <h4>Основные данные</h4>
+        <b-table stacked :items="[this.info]" :fields="this.statisticFields">
+          <template #cell(processorMaxFreq)="data">
+            {{ ((data.item.processorMaxFreq) / (1000*1000)) / 1000 + "Ггц" }}
+          </template>
+          <template #cell(totalMemory)="data">
+            {{ Math.floor(data.item.totalMemory / (1024*1024)) + "Мб" }}
+          </template>
+        </b-table>
+        <h4>Идентификационные данные</h4>
+        <b-table stacked :items="[this.info]" :fields="this.sensitiveFields">
           <template #cell(displayId)="data">
-          <b-button variant="success" @click="downloadFile(data.item.displayId, 'edid')">Скачать</b-button>
-      </template>
-      <template #cell(publicKey)>
-          <b-button variant="success" @click="downloadFile(this.publicKey, 'key')">Скачать</b-button>
-      </template>
-      </b-table>
+            <b-button size="sm" variant="success" @click="downloadFile(data.item.displayId, 'edid')">Скачать</b-button>
+          </template>
+          <template #cell(publicKey)>
+            <b-button size="sm" variant="success" @click="downloadFile(this.publicKey, 'key')">Скачать</b-button>
+          </template>
+        </b-table>
       </div>
     </b-modal>
   </div>
@@ -87,8 +75,8 @@ export default {
               {label: "Разрядность", key: "bitness"},
               {label: "Число ядер", key: "physicalProcessors"},
               {label: "Число потоков", key: "logicalProcessors"},
-              {label: "Частота процессора", key: "processorMaxFreq"},
-              {label: "Объем оперативной памяти", key: "totalMemory"},
+              {label: "Частота ЦП", key: "processorMaxFreq"},
+              {label: "Объем ОЗУ", key: "totalMemory"},
           ];
       },
       sensitiveFields: function() {
