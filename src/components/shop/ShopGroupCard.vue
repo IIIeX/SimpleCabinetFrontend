@@ -4,7 +4,7 @@
             <strong class="text-info">{{ model.name }}</strong>
           </b-card-header>
           <b-card-body>
-            <b-card-text>{{ model.description }}</b-card-text>
+            <b-card-text v-if="model.description">{{ model.description }}</b-card-text>
             <b-form-spinbutton v-model="formQuantity" min="1" max="100"></b-form-spinbutton>
           </b-card-body>
           <b-card-footer align="center">

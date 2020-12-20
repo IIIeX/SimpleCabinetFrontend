@@ -1,8 +1,12 @@
 <template>
-  <div>
     <b-container>
       <b-row class="d-flex justify-content-center py-3">
-        <b-col v-for="order in this.list" :key="order.orderId" cols="4">
+        <b-col
+        lg="3"
+        class="pb-3"
+        v-for="order in this.list"
+        :key="order.orderId"
+        >
           <ShopOrderCard :order="order"></ShopOrderCard>
         </b-col>
       </b-row>
@@ -16,7 +20,6 @@
         </b-col>
       </b-row>
     </b-container>
-  </div>
 </template>
 <script>
 import ShopOrderCard from "@/components/shop/ShopOrderCard";

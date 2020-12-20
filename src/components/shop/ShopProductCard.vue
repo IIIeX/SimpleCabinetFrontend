@@ -9,19 +9,19 @@
               </b-tooltip>
             </span>
           </b-card-header>
-          <b-card-body class="d-flex align-items-center justify-content-between">
-            <b-list-group>
-              <b-list-group-item class="d-flex justify-content-between align-items-center">
-                <b-icon icon="alarm-fill" variant="danger"></b-icon>
+          <b-card-body align="center">
+            <b-img-lazy width="64" :src="model.pictureUrl ? model.pictureUrl : 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/af/Apple_JE3_BE3.png'"></b-img-lazy>
+            <b-form-spinbutton v-model="formQuantity" min="1" max="100" class="mt-2"></b-form-spinbutton>
+          </b-card-body>
+          <b-card-footer align="center">
+            <b-list-group flush class="mb-2">
+              <b-list-group-item variant="danger" class="p-1">
+                <small>Осталось 199 штук.</small>
               </b-list-group-item>
-              <b-list-group-item class="d-flex justify-content-between align-items-center">
-                <b-icon icon="collection-fill" variant="danger"></b-icon>
+              <b-list-group-item variant="danger" class="p-1">
+                <small>Осталось 199 дней.</small>
               </b-list-group-item>
             </b-list-group>
-            <b-img-lazy width="64" :src="model.pictureUrl ? model.pictureUrl : 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/af/Apple_JE3_BE3.png'"></b-img-lazy>
-            <b-form-spinbutton v-model="formQuantity" min="1" max="100" vertical></b-form-spinbutton>
-          </b-card-body>
-          <b-card-footer class="d-flex flex-row-reverse">
             <b-input-group size="sm">
               <b-input-group-prepend>
                 <b-input-group-text><b-icon icon="cash-stack" aria-hidden="true"></b-icon></b-input-group-text>
