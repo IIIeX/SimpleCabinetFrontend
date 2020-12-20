@@ -106,7 +106,7 @@
           <b-list-group flush>
             <b-list-group-item v-for="group in user.ext.groups" :key="group.key" variant="light" class="d-flex align-items-center">
               <span class="flex-grow-1">{{ group.name }}</span>
-              <b-badge variant="danger">{{ group.days ? group.days : "навсегда" }}</b-badge>
+              <b-badge variant="danger">{{ group.days >= 0 ? group.days+" дней" : "навсегда" }}</b-badge>
             </b-list-group-item>
           </b-list-group>
         </b-card>
