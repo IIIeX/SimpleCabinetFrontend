@@ -2,7 +2,11 @@
   <b-container>
     <b-row class="d-flex justify-content-center py-3">
       <b-col cols="auto">
-        <span>блок для фильтра</span>
+        <ShopCreateProduct ref="createProduct"></ShopCreateProduct>
+        <b-button-group v-if="(this.$store.state.user.permissions & 1) != 0">
+          <b-button variant="danger" @click="$refs.createProduct.show()">Создать новый товар</b-button>
+        </b-button-group>
+
       </b-col>
     </b-row>
     <b-row class="d-flex justify-content-center py-3">
@@ -29,8 +33,9 @@
 </template>
 <script>
 import ShopProductCard from "@/components/shop/ShopProductCard.vue";
+import ShopCreateProduct from "@/components/shop/ShopCreateProduct.vue";
 export default {
-  components: { ShopProductCard },
+  components: { ShopProductCard, ShopCreateProduct },
   data: function () {
     return {
       pages: 10,
