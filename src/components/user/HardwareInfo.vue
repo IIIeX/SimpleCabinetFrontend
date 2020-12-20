@@ -38,7 +38,7 @@
             <b-button size="sm" variant="success" @click="downloadFile(data.item.displayId, 'edid')">Скачать</b-button>
           </template>
           <template #cell(publicKey)>
-            <b-button size="sm" variant="success" @click="downloadFile(this.publicKey, 'key')">Скачать</b-button>
+            <b-button size="sm" variant="success" @click="downloadFile(publicKey, 'key')">Скачать</b-button>
           </template>
         </b-table>
       </div>
@@ -100,8 +100,11 @@ export default {
       this.info = info.info;
       this.publicKey = info.publicKey;
     },
-    downloadFile: function() {
-
+    downloadFile: function(data, name) {
+      var a = document.createElement("a"); //Create <a>
+      a.href = "data:application/octet-stream;base64," + data.split("-").join("+").split("_").join("/"); //Image Base64 Goes here
+      a.download = this.user.username+"."+name; //File name Here
+      a.click(); //Downloaded file
     }
   },
 };
