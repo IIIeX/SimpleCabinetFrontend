@@ -2,23 +2,20 @@
         <b-card no-body class="shadow">
           <b-card-header class="d-flex align-items-center justify-content-between">
             <strong class="text-info">{{ model.name }}</strong>
-            <span v-if="true">
-              <b-icon icon="info-circle-fill" variant="info" scale="1.5" :id="model.name"></b-icon>
-              <b-tooltip :target="model.name">
-                <span>Время окончания акции.</span><br/>
-                <span>Кол-во доступных заказов.</span>
-              </b-tooltip>
-            </span>
           </b-card-header>
-          <b-card-body v-if="model.description">
+          <b-card-body>
             <b-card-text>{{ model.description }}</b-card-text>
+            <b-form-spinbutton v-model="formQuantity" min="1" max="100"></b-form-spinbutton>
           </b-card-body>
-          <b-card-footer>
-            <b-form-group v-slot="{ asdasdasd }">
-              <b-form-radio v-model="formQuantity" :aria-describedby="asdasdasd" :name="model.name" value="1" selected>1 день</b-form-radio>
-              <b-form-radio v-model="formQuantity" :aria-describedby="asdasdasd" :name="model.name" value="7">7 дней</b-form-radio>
-              <b-form-radio v-model="formQuantity" :aria-describedby="asdasdasd" :name="model.name" value="30">30 дней</b-form-radio>
-            </b-form-group>
+          <b-card-footer align="center">
+            <b-list-group flush class="mb-2">
+              <b-list-group-item variant="danger" class="p-1">
+                <small>Осталось 199 штук.</small>
+              </b-list-group-item>
+              <b-list-group-item variant="danger" class="p-1">
+                <small>Осталось 199 дней.</small>
+              </b-list-group-item>
+            </b-list-group>
             <b-input-group size="sm">
               <b-input-group-prepend>
                 <b-input-group-text><b-icon icon="cash-stack" aria-hidden="true"></b-icon></b-input-group-text>
