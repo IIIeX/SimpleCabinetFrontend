@@ -3,25 +3,33 @@
     <slot :handle="function() { modalInitPayment.show = !modalInitPayment.show }"></slot>
     <b-modal
       centered
-      hide-header
+      ok-variant="success"
       v-model="modalInitPayment.show"
-      id="modal-2fa-disable"
-      @ok="initPayment"
-    >
+      @ok="initPayment">
+      <template #modal-title>
+        Пополнение баланса
+      </template>
+      <b-alert show>
+        Для пополнения баланса выберите <strong>Платежную систему</strong> и укажите <strong>сумму</strong>.
+      </b-alert>
       <b-input-group class="mb-2">
+        <b-input-group-prepend is-text>
+          <b-icon icon="shop" variant="success"></b-icon>
+        </b-input-group-prepend>
         <b-form-select
           v-model="modalInitPayment.paymentId"
-          :options="modalInitPayment.payments"
-        ></b-form-select>
+          :options="modalInitPayment.payments">
+        </b-form-select>
+        <b-input-group-prepend is-text>
+          <b-icon icon="cash-stack" variant="success"></b-icon>
+        </b-input-group-prepend>
         <b-form-input
           v-model="modalInitPayment.summ"
           type="number"
-          placeholder="Сумма"
-        ></b-form-input>
+          placeholder="Сумма">
+        </b-form-input>
         <b-form-invalid-feedback :state="modalInitPaymentValidation"
-          >Сумма должна быть в диапазоне от 10 до 60
-          000р</b-form-invalid-feedback
-        >
+          >Сумма должна быть в диапазоне от 10 до 60000</b-form-invalid-feedback>
       </b-input-group>
     </b-modal>
   </div>

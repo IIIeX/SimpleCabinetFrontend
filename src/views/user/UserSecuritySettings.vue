@@ -35,8 +35,7 @@
                 v-model="formChangePassword.newPassword"
                 type="password"
                 required
-                placeholder="Новый пароль"
-              ></b-form-input>
+                placeholder="Новый пароль"></b-form-input>
             </b-input-group>
             <b-input-group
               id="input-group-3"
@@ -67,8 +66,7 @@
           bg-variant="light"
           header-tag="header"
           sub-title="Управление двухфакторной аутентификацией"
-          class="mb-2 shadow"
-        >
+          class="mb-2 shadow">
           <template v-slot:header>
             <h4 class="mb-0">2FA</h4>
           </template>
@@ -83,17 +81,14 @@
               v-if="!user.ext.privateUserZone.enabled2FA"
               @click="
                 twoFactorGenerate();
-                modal2FAEnable.show = !modal2FAEnable.show;
-              "
-              >Включить 2FA</b-button
-            >
+                modal2FAEnable.show = !modal2FAEnable.show;">
+              Включить 2FA</b-button>
             <b-button
               id="2fa-button"
               variant="danger"
               v-if="user.ext.privateUserZone.enabled2FA"
-              @click="modal2FADisable.show = !modal2FADisable.show"
-              >Выключить 2FA</b-button
-            >
+              @click="modal2FADisable.show = !modal2FADisable.show">
+              Выключить 2FA</b-button>
           </b-row>
         </b-card>
       </b-col>
@@ -103,8 +98,7 @@
       hide-header
       v-model="modal2FAEnable.show"
       id="modal-2fa-enable"
-      @ok="twoFactorEnable"
-    >
+      @ok="twoFactorEnable">
       <h6>1. Отсканируйте код приложением <b>Google Authenticator</b></h6>
       <div class="d-block text-center">
         <vue-qrcode :value="modal2FAEnableurl" />
@@ -123,30 +117,23 @@
           type="number"
           placeholder="123456"
           autofocus
-          v-on:keydown.enter.prevent='twoFactorEnable'
-        ></b-form-input>
+          v-on:keydown.enter.prevent='twoFactorEnable'></b-form-input>
       </b-input-group>
-      <b-form-invalid-feedback :state="modal2FAEnable.validation"
-        >Неверный код</b-form-invalid-feedback
-      >
+      <b-form-invalid-feedback :state="modal2FAEnable.validation">Неверный код</b-form-invalid-feedback>
     </b-modal>
     <b-modal
       centered
       hide-header
       v-model="modal2FADisable.show"
       id="modal-2fa-disable"
-      @ok="twoFactorDisable"
-    >
+      @ok="twoFactorDisable">
       <h6>Для отключения 2FA нужно ввести код из приложения:</h6>
       <b-form-input
         v-model="modal2FADisable.code"
         type="number"
         maxlength="6"
-        placeholder="123456"
-      ></b-form-input>
-      <b-form-invalid-feedback :state="modal2FADisable.validation"
-        >Неверный код</b-form-invalid-feedback
-      >
+        placeholder="123456"></b-form-input>
+      <b-form-invalid-feedback :state="modal2FADisable.validation">Неверный код</b-form-invalid-feedback>
     </b-modal>
   </b-container>
 </template>

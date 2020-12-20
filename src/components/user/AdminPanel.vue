@@ -6,40 +6,35 @@
     <b-dropdown-item
       variant="danger"
       @click="modalAdminChangePassword.show = !modalAdminChangePassword.show"
-      >Сменить пароль</b-dropdown-item
-    >
+      >Сменить пароль</b-dropdown-item>
     <b-dropdown-item
       variant="danger"
       @click="modalAdminChangeUsername.show = !modalAdminChangeUsername.show"
-      >Сменить имя пользователя</b-dropdown-item
-    >
+      >Сменить имя пользователя</b-dropdown-item>
     <b-dropdown-item
       v-if="user.ext.privateUserZone.enabled2FA"
       variant="danger"
       @click="adminDisable2FA()"
-      >Отключить 2FA</b-dropdown-item
-    >
+      >Отключить 2FA</b-dropdown-item>
     <b-dropdown-item
       variant="danger"
       @click="adminExitUser()"
-      >Завершить все сессии</b-dropdown-item
-    >
+      >Завершить все сессии</b-dropdown-item>
     <b-dropdown-item
       variant="danger"
       @click="modalBanUser.show = !modalBanUser.show"
-      >Заблокировать</b-dropdown-item
-    >
-
+      >Заблокировать</b-dropdown-item>
     <HardwareInfo :user="user" />
-
     <b-modal
-      hide-header
       centered
       size="md"
+      ok-variant="danger"
       v-model="modalAdminChangePassword.show"
       id="modal-admin-changepassword"
-      @ok="adminChangePassword"
-    >
+      @ok="adminChangePassword">
+      <template #modal-title>
+        Сменить пароль <strong>{{ user.username }}</strong>?
+      </template>
       <b-input-group class="mb-2">
         <b-input-group-prepend is-text>
           <b-icon icon="lock-fill" variant="primary"></b-icon>
@@ -52,13 +47,15 @@
       </b-input-group>
     </b-modal>
     <b-modal
-      hide-header
       centered
       size="md"
+      ok-variant="danger"
       v-model="modalAdminChangeUsername.show"
       id="modal-admin-changeusername"
-      @ok="adminChangeUsername"
-    >
+      @ok="adminChangeUsername">
+      <template #modal-title>
+        Сменить имя <strong>{{ user.username }}</strong>?
+      </template>
       <b-input-group class="mb-2">
         <b-input-group-prepend is-text>
           <b-icon icon="person-fill" variant="primary"></b-icon>
@@ -71,23 +68,29 @@
       </b-input-group>
     </b-modal>
     <b-modal
-      hide-header
       centered
       size="md"
+      ok-variant="danger"
       v-model="modalBanUser.show"
-      id="modal-admin-changeusername"
-      @ok="adminBanUser"
-    >
-      <h2>Вы хотите забанить <span><b>{{ user.username }}</b></span>?</h2>
-      <p v-if="(user.permissions & 1) != 0"><span style="color: #f00;">Пользователь является администратором</span></p>
-      <p v-if="user.username == this.$store.state.user.username"><span style="color: #f00;">ЭТОТ ПОЛЬЗОВАТЕЛЬ - ВЫ</span></p>
-      <p>{{ user.ext.gender == "FEMALE" ? "Она" : user.ext.gender == "MALE" ? "Он" : "Этот пользователь" }} не сможет войти в лаунчер и личный кабинет, а все активные сессии будут завершены немедленно</p>
+      @ok="adminBanUser">
+      <template #modal-title>
+        Вы хотите забанить <strong>{{ user.username }}</strong>?
+      </template>
+      <b-alert v-if="(user.permissions & 1) != 0" variant="danger" align="center" show>
+        <strong>Пользователь является администратором</strong>
+      </b-alert>
+      <b-alert v-if="user.username == this.$store.state.user.username" variant="danger" align="center" show>
+        <strong>ЭТОТ ПОЛЬЗОВАТЕЛЬ - ВЫ</strong>
+      </b-alert>
+      <b-alert v-if="user.username == this.$store.state.user.username" variant="warning" show>
+        {{ user.ext.gender == "FEMALE" ? "Она" : user.ext.gender == "MALE" ? "Он" : "Этот пользователь" }} не сможет войти в лаунчер и личный кабинет, а все активные сессии будут завершены немедленно.
+      </b-alert>
       <b-input-group class="mb-2">
-        <b-form-checkbox v-model="modalBanUser.hardware"
-          >Забанить по железу</b-form-checkbox
-        >
+        <b-form-checkbox v-model="modalBanUser.hardware">Забанить по железу</b-form-checkbox>
       </b-input-group>
-      <p v-if="modalBanUser.hardware">Блокировка по железу затронет все аккаунты, которые разделяют один HardwareInfo с {{ user.ext.gender == "FEMALE" ? "ней" : user.ext.gender == "MALE" ? "ним" : "этим пользователем" }}</p>
+      <b-alert v-if="modalBanUser.hardware" variant="danger" show>
+        Блокировка по железу затронет все аккаунты, которые разделяют один <strong>HardwareInfo</strong> с {{ user.ext.gender == "FEMALE" ? "ней" : user.ext.gender == "MALE" ? "ним" : "этим пользователем" }}
+      </b-alert>
     </b-modal>
   </b-dropdown>
 </template>

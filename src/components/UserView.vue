@@ -13,9 +13,7 @@
               </b-button-group>
               <b-button variant="light" @click="$refs.paymentButton.show()">
                 <b-icon icon="credit-card" aria-hidden="true"></b-icon> пополнить
-
-              <ShopPaymentInitButton ref="paymentButton">
-              </ShopPaymentInitButton>
+                <ShopPaymentInitButton ref="paymentButton"></ShopPaymentInitButton>
               </b-button>
               <b-button variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
               <AdminPanel v-if="admin" :user="user" />
