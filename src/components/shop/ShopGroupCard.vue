@@ -35,7 +35,7 @@ export default {
     props: ["model"],
     computed: {
       endDateDays: function() {
-        var date = Date.parse(model.endDate);
+        var date = Date.parse(this.model.endDate);
         return (date - Date.now()) / (60*60*24);
       }
     },
