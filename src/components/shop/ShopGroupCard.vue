@@ -9,11 +9,11 @@
           </b-card-body>
           <b-card-footer align="center">
             <b-list-group flush class="mb-2">
-              <b-list-group-item variant="danger" class="p-1">
-                <small>Осталось 199 штук.</small>
+              <b-list-group-item v-if="model.count >= 0" variant="danger" class="p-1">
+                <small>Осталось {{ model.count }} штук.</small>
               </b-list-group-item>
-              <b-list-group-item variant="danger" class="p-1">
-                <small>Осталось 199 дней.</small>
+              <b-list-group-item v-if="model.endDate ? true : false" variant="danger" class="p-1">
+                <small>Осталось {{ endDateDays }} дней.</small>
               </b-list-group-item>
             </b-list-group>
             <b-input-group size="sm">
@@ -34,6 +34,10 @@
 export default {
     props: ["model"],
     computed: {
+      endDateDays: function() {
+        var date = Date.parse(model.endDate);
+        return (date - Date.now()) / (60*60*24);
+      }
     },
     data: function() {
         return {
