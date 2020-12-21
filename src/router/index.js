@@ -58,6 +58,12 @@ const routes = [
     component: () => import('../views/UserByUUID.vue')
   },
   {
+    path: '/users',
+    name: 'UsersList',
+    props: true,
+    component: () => import('../views/UsersList.vue')
+  },
+  {
 
     path: '/cb/passwordreset/:id/:uuid',
     name: 'PasswordReset',
