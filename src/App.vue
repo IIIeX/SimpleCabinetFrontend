@@ -75,6 +75,28 @@ export default {
           instance.$store.commit("exit");
         }
       }
+      else if(event.type == "lkOrderStatusChanged") {
+        var header = "Изменен статус заказа #"+event.orderId;
+        var variant = event.newStatus == "FAILED" ? "danger" : event.newStatus == "FINISHED" ? "success" : "primary";
+        var message;
+        if(event.newStatus == "FAILED") {
+          message = "Произошла ошибка при обработке заказа. Обратитесь к администратору";
+        }
+        else if(event.newStatus == "FINISHED") {
+          message = "Заказ успешно завершен";
+        }
+        else if(event.newStatus == "DELIVERY") {
+          message = "Заказ ожидает вас";
+        }
+        else {
+          message = "Статус заказа: "+event.newStatus;
+        }
+        instance.$bvToast.toast(message, {
+          title: header,
+          variant: variant,
+          autoHideDelay: 60000,
+        });
+      }
     };
     this.$store.state.api.handlers.add(this.serverconnect.handler);
   },

@@ -6,16 +6,16 @@
           <b-card-header>{{ user.username }}</b-card-header>
           <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
           <b-card-footer class="p-0">
-            <b-button-group v-if="owner" vertical class="btn-block">
-              <b-button-group>
+            <b-button-group vertical class="btn-block">
+              <b-button-group v-if="owner">
                 <b-button squared variant="light" @click="uploadSkin()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> скин</b-button>
                 <b-button squared variant="light" @click="uploadCloak()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> плащ</b-button>
               </b-button-group>
-              <b-button variant="light" @click="$refs.paymentButton.show()">
+              <b-button v-if="owner" variant="light" @click="$refs.paymentButton.show()">
                 <b-icon icon="credit-card" aria-hidden="true"></b-icon> пополнить
                 <ShopPaymentInitButton ref="paymentButton"></ShopPaymentInitButton>
               </b-button>
-              <b-button variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
+              <b-button v-if="owner" variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
               <AdminPanel v-if="admin" :user="user" />
             </b-button-group>
           </b-card-footer>
