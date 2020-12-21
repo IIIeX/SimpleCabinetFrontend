@@ -16,3 +16,7 @@ export default {
   },
 };
 </script>
+<style lang="sass">
+img.pixelated
+    image-rendering: pixelated
+</style>

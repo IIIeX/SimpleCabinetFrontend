@@ -10,17 +10,18 @@
           :id="model.name"
         ></b-icon>
         <b-tooltip :target="model.name">
-          <p>{{ model.description }}</p>
+          <span>{{ model.description }}</span>
         </b-tooltip>
       </span>
     </b-card-header>
     <b-card-body align="center">
       <b-img-lazy
         width="64"
+        class="pixelated"
         :src="
           model.pictureUrl
-            ? model.pictureUrl
-            : 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/af/Apple_JE3_BE3.png'
+          ? model.pictureUrl
+          : 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/af/Apple_JE3_BE3.png'
         "
       ></b-img-lazy>
       <b-form-spinbutton
@@ -31,7 +32,11 @@
       ></b-form-spinbutton>
     </b-card-body>
     <b-card-footer align="center">
-      <b-list-group flush class="mb-2">
+      <b-list-group
+        flush
+        class="mb-2"
+        v-if="(model.count >= 0 || model.endDate)"
+      >
         <b-list-group-item v-if="model.count >= 0" variant="danger" class="p-1">
           <small>Осталось {{ model.count }} штук.</small>
         </b-list-group-item>
@@ -41,9 +46,9 @@
       </b-list-group>
       <b-input-group size="sm">
         <b-input-group-prepend>
-          <b-input-group-text
-            ><b-icon icon="cash-stack" aria-hidden="true"></b-icon
-          ></b-input-group-text>
+          <b-input-group-text>
+            <b-icon icon="cash-stack" aria-hidden="true"></b-icon>
+          </b-input-group-text>
         </b-input-group-prepend>
         <b-form-input
           disabled

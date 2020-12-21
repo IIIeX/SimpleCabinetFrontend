@@ -1,29 +1,37 @@
 <template>
 <b-container>
-    <b-form inline>
-        <label class="mr-sm-2" for="inline-form-custom-select-pref">Поиск пользователя: </label>
-    <b-form-input class="mb-2 mr-sm-2 mb-sm-0" v-model="search" type="text"></b-form-input>
-    <b-button @click="refreshSearch()" variant="success">Найти</b-button>
-    </b-form>
-          <b-row class="d-flex justify-content-center py-3">
-        <b-col
-        lg="3"
-        class="pb-3"
-        v-for="user in this.list"
-        :key="user.orderId"
-        >
-          <UserMiniView :user="user"></UserMiniView>
-        </b-col>
-      </b-row>
-      <b-row class="d-flex justify-content-center py-3">
-        <b-col cols="auto">
-          <b-pagination
-            @change="followPage"
-            :total-rows="this.pages*this.maxQuery"
-            :per-page="this.maxQuery"
-          ></b-pagination>
-        </b-col>
-      </b-row>
+  <b-row class="d-flex justify-content-center py-3">
+    <b-col xl="6">
+    <b-input-group>
+      <b-input-group-append>
+        <b-input-group-text>
+          <b-icon icon="search" aria-hidden="true"></b-icon>
+        </b-input-group-text>
+      </b-input-group-append>
+      <b-form-input v-model="search" type="text"></b-form-input>
+      <b-input-group-append>
+        <b-button @click="refreshSearch()" variant="success">Найти</b-button>
+      </b-input-group-append>
+    </b-input-group>
+    </b-col>
+  </b-row>
+  <b-row class="d-flex justify-content-center py-3">
+    <b-col
+      lg="3"
+      class="pb-3"
+      v-for="user in this.list"
+      :key="user.orderId"
+    ><UserMiniView :user="user"></UserMiniView></b-col>
+  </b-row>
+  <b-row class="d-flex justify-content-center py-3">
+    <b-col cols="auto">
+      <b-pagination
+        @change="followPage"
+        :total-rows="this.pages*this.maxQuery"
+        :per-page="this.maxQuery"
+      ></b-pagination>
+    </b-col>
+  </b-row>
 </b-container>    
 </template>
 <script>

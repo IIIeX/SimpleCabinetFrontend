@@ -1,25 +1,43 @@
 <template>
-  <b-card>
-    <b-card-header class="d-flex align-items-center justify-content-between">
-      <strong class="text-info">{{ user.username }}</strong>
-    </b-card-header>
+  <b-card no-body>
+    <template #header>
+      <strong>{{ user.username }}</strong>
+    </template>
     <b-card-body>
-      <b-img :src="this.skinurl" fluid></b-img>
-      <b-alert show variant="secondary">UUID: {{ user.uuid }}</b-alert>
-      <b-alert show variant="success"
-        >Пол:
+      <b-alert
+        show
+        variant="light"
+        align="center"
+      >
+        <b-img-lazy
+        height="64"
+        class="pixelated"
+        :src="
+          this.skinurl
+          ? this.skinurl
+          : 'http://assets.mojang.com/SkinTemplates/steve.png'">
+        </b-img-lazy>
+      </b-alert>
+      <b-card-sub-title>UUID:</b-card-sub-title>
+      <b-alert show>{{ user.uuid }}</b-alert>
+      <b-card-sub-title>Пол:</b-card-sub-title>
+      <b-alert show>
         {{
           user.gender == "FEMALE"
             ? "Женский"
             : user.gender == "MALE"
             ? "Мужской"
             : "Не указан"
-        }}</b-alert
-      >
-      <b-button variant="primary" @click="followUser()"
-        >Перейти к профилю</b-button
-      >
+        }}</b-alert>
     </b-card-body>
+    <b-card-footer class="p-0">
+      <b-button
+      class="btn-block"
+      variant="info"
+      squared
+      @click="followUser()"
+      >Открыть профиль</b-button>
+    </b-card-footer>
   </b-card>
 </template>
 <script>

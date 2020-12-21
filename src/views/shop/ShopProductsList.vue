@@ -71,8 +71,3 @@ export default {
   },
 };
 </script>
-<style lang="sass">
-.card-body
-  img
-    image-rendering: pixelated
-</style>
