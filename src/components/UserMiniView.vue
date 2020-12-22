@@ -9,14 +9,9 @@
         variant="light"
         align="center"
       >
-        <b-img-lazy
-        height="64"
-        class="pixelated"
-        :src="
-          this.skinurl
-          ? this.skinurl
-          : 'http://assets.mojang.com/SkinTemplates/steve.png'">
-        </b-img-lazy>
+        <SkinHeadViewer ref="skinviewer">
+        </SkinHeadViewer>
+
       </b-alert>
       <b-card-sub-title>UUID:</b-card-sub-title>
       <b-alert show>{{ user.uuid }}</b-alert>
@@ -41,7 +36,9 @@
   </b-card>
 </template>
 <script>
+import SkinHeadViewer from "./SkinHeadViewer.vue"
 export default {
+  components: { SkinHeadViewer },
   data: function () {
     return {
       skinurl: null,
@@ -62,8 +59,13 @@ export default {
         uuid: this.user.uuid,
       });
       console.log(info);
-      if(info.playerProfile.skin)
+      if(info.playerProfile.skin) {
         this.skinurl = info.playerProfile.skin.url;
+        this.$refs.skinviewer.draw(this.skinurl);
+      }
+      else {
+        this.$refs.skinviewer.draw('http://assets.mojang.com/SkinTemplates/steve.png');
+      }
     },
   },
 };
