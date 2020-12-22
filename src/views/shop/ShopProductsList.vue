@@ -69,5 +69,16 @@ export default {
     this.refreshPagesCount();
     console.log(this.products);
   },
+  mounted: async function(){
+    try {
+      await this.$store.state.api.promises.auth;
+    } catch(e) {
+        this.$bvToast.toast("Для покупки необходимо войти в аккаунт", {
+          title: "Магазин",
+          variant: "danger",
+          autoHideDelay: 10000,
+        });
+    }
+  }
 };
 </script>

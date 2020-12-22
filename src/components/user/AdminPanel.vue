@@ -76,7 +76,7 @@
       <template #modal-title>
         Вы хотите забанить <strong>{{ user.username }}</strong>?
       </template>
-      <b-alert v-if="(user.permissions & 1) != 0" variant="danger" align="center" show>
+      <b-alert v-if="((user.permissions & 1) != 0) || checkAdminGroup()" variant="danger" align="center" show>
         <strong>Пользователь является администратором</strong>
       </b-alert>
       <b-alert v-if="user.username == this.$store.state.user.username" variant="danger" align="center" show>
@@ -132,6 +132,12 @@ export default {
       });
       console.log(res);
       this.modalAdminChangePassword.show = false;
+    },
+    checkAdminGroup: function() {
+      for (const e of this.user.ext.groups) {
+        if(e.key == "ADMIN") return true;
+      }
+      return false;
     },
     adminChangeUsername: async function (evt) {
       evt.preventDefault();
