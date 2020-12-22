@@ -19,6 +19,8 @@ export default {
             canvas.height = headpos;
             context.drawImage(img, headpos /*sourceX*/, headpos /*sourceX*/, headpos /*sourceWidth*/ , headpos /*sourceHeight*/,
                            0 /*destX*/, 0/*destY*/, headpos /*destWidth*/, headpos /*destHeight*/);
+            context.drawImage(img, headpos*5 /*sourceX*/, headpos /*sourceY*/, headpos /*sourceWidth*/ , headpos /*sourceHeight*/,
+                           0 /*destX*/, 0/*destY*/, headpos /*destWidth*/, headpos /*destHeight*/);
             result.src = canvas.toDataURL("image/png");
         };
         img.src = skinurl;
