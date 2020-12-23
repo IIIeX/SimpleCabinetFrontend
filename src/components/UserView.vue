@@ -152,7 +152,7 @@ export default {
     editProfile: async function () {
       var res = await this.$store.dispatch("request", {
         type: "lkUpdateExtendedInfo",
-        username: this.admin && !this.owner ? this.user.username : undefined,
+        userUsername: (this.admin && !this.owner) ? this.user.username : undefined,
         status: this.editProfileForm.status,
         gender: this.editProfileForm.gender,
       });

@@ -82,7 +82,7 @@
       <b-alert v-if="user.username == this.$store.state.user.username" variant="danger" align="center" show>
         <strong>ЭТОТ ПОЛЬЗОВАТЕЛЬ - ВЫ</strong>
       </b-alert>
-      <b-alert v-if="user.username == this.$store.state.user.username" variant="warning" show>
+      <b-alert variant="warning" show>
         {{ user.ext.gender == "FEMALE" ? "Она" : user.ext.gender == "MALE" ? "Он" : "Этот пользователь" }} не сможет войти в лаунчер и личный кабинет, а все активные сессии будут завершены немедленно.
       </b-alert>
       <b-input-group class="mb-2">
