@@ -7,12 +7,12 @@
           <b-collapse id="shop-collapse" is-nav>
             <b-navbar-nav>
               <b-nav-form>
-                <b-form-checkbox-group
+                <b-form-radio-group
                   v-model="filter"
                   :options="filtered"
                   buttons
                   button-variant="outline-success"
-                ></b-form-checkbox-group>
+                ></b-form-radio-group>
               </b-nav-form>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto">
@@ -91,8 +91,8 @@ export default {
       page: 1,
       maxQuery: 12,
       products: [],
-      filtered: ['Предметы', 'Блоки', 'Группы', 'Остальное'],
-      filter: [],
+      filtered: [{text: 'Все', value: null}, {text: 'Предметы и блоки', value: "ITEM"}, {text: 'Привилегии', value: "GROUP"}, {text: 'Другие услуги', value: "SPECIAL"}],
+      filter: null,
     };
   },
   methods: {
@@ -100,6 +100,7 @@ export default {
       var info = await this.$store.dispatch("request", {
         type: "lkFetchProducts",
         lastId: id,
+        filterByType: this.filter
       });
       console.log(info);
       this.maxQuery = info.maxQuery;
@@ -130,6 +131,14 @@ export default {
           variant: "danger",
           autoHideDelay: 10000,
         });
+    }
+  },
+  watch: {
+    "filter": async function(newValue, oldValue) {
+      if(newValue != oldValue)
+        this.products = await this.fetchProducts(0);
+        this.page = 1;
+        this.refreshPagesCount();
     }
   }
 };
