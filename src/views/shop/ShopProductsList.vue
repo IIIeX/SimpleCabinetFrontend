@@ -1,14 +1,64 @@
 <template>
   <b-container>
     <b-row class="d-flex justify-content-center py-3">
-      <b-col cols="auto">
+      <b-col col xl>
+        <b-navbar toggleable="lg" type="light" variant="light" class="shadow border">
+          <b-navbar-toggle target="shop-collapse"></b-navbar-toggle>
+          <b-collapse id="shop-collapse" is-nav>
+            <b-navbar-nav>
+              <b-nav-form>
+                <b-form-checkbox-group
+                  v-model="filter"
+                  :options="filtered"
+                  buttons
+                  button-variant="outline-success"
+                ></b-form-checkbox-group>
+              </b-nav-form>
+            </b-navbar-nav>
+            <b-navbar-nav class="ml-auto">
+              <b-nav-form>
+                <b-form-input class="mr-sm-2" placeholder="алмазный меч"></b-form-input>
+                <b-button variant="outline-success" type="submit">Поиск</b-button>
+              </b-nav-form>
+              <b-nav-item>
+                <b-button
+                variant="outline-dark"
+                block
+                >Заказы</b-button>
+              </b-nav-item>
+              <b-nav-item>
+                <b-button
+                variant="danger"
+                block
+                @click="$refs.createProduct.show()"
+                v-if="(this.$store.state.user.permissions & 1) != 0"
+                >Добавить товар</b-button>
+              </b-nav-item>
+            </b-navbar-nav>
+          </b-collapse>
+        </b-navbar>
         <ShopCreateProduct ref="createProduct"></ShopCreateProduct>
-        <b-button-group v-if="(this.$store.state.user.permissions & 1) != 0">
-          <b-button variant="danger" @click="$refs.createProduct.show()">Создать новый товар</b-button>
-        </b-button-group>
-
       </b-col>
     </b-row>
+    <!-- <b-row class="d-flex justify-content-center py-3">
+      <b-col col xl>
+        <ShopCreateProduct ref="createProduct"></ShopCreateProduct>
+        <b-input-group>
+          <b-input-group-prepend is-text>
+          <b-form-checkbox-group
+            v-model="filter"
+            :options="filtered"
+            switches
+          ></b-form-checkbox-group>
+          </b-input-group-prepend>
+          <b-form-input></b-form-input>
+          <b-input-group-append>
+            <b-button variant="outline-success">Поиск</b-button>
+            <b-button variant="danger" @click="$refs.createProduct.show()" v-if="(this.$store.state.user.permissions & 1) != 0">+</b-button>
+          </b-input-group-append>
+        </b-input-group>
+      </b-col>
+    </b-row> -->
     <b-row class="d-flex justify-content-center py-3">
       <b-col
       lg="3"
@@ -41,6 +91,8 @@ export default {
       page: 1,
       maxQuery: 12,
       products: [],
+      filtered: ['Предметы', 'Блоки', 'Группы', 'Остальное'],
+      filter: [],
     };
   },
   methods: {
