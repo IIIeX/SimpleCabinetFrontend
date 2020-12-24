@@ -2,38 +2,38 @@
   <b-container>
     <b-row class="d-flex justify-content-center py-3">
       <b-col col xl>
-        <b-navbar toggleable="lg" type="light" variant="light" class="shadow border">
+        <b-navbar toggleable="xl" type="light" variant="light" class="shadow border">
           <b-navbar-toggle target="shop-collapse"></b-navbar-toggle>
           <b-collapse id="shop-collapse" is-nav>
             <b-navbar-nav>
-              <b-nav-form>
+              <b-nav-form class="py-2">
                 <b-form-radio-group
                   v-model="filter"
                   :options="filtered"
                   buttons
                   button-variant="outline-success"
+                  size="sm"
                 ></b-form-radio-group>
               </b-nav-form>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto">
               <b-nav-form
+              class="py-2"
               @submit="goSearch"
               >
                 <b-form-input v-model="search" class="mr-sm-2" placeholder="алмазный меч"></b-form-input>
-                <b-button variant="outline-success" type="submit">Поиск</b-button>
+                <b-button variant="outline-success" class="mr-sm-2" type="submit">Поиск</b-button>
               </b-nav-form>
               <b-nav-item>
                 <b-button
                 v-if="$store.state.user.uuid ? true : false"
                 variant="outline-dark"
                 @click="$router.push('/shop/orders')"
-                block
                 >Заказы</b-button>
               </b-nav-item>
               <b-nav-item>
                 <b-button
                 variant="danger"
-                block
                 @click="$refs.createProduct.show()"
                 v-if="(this.$store.state.user.permissions & 1) != 0"
                 >Добавить товар</b-button>
