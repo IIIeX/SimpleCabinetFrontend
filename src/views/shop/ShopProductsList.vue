@@ -16,13 +16,17 @@
               </b-nav-form>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto">
-              <b-nav-form>
-                <b-form-input class="mr-sm-2" placeholder="алмазный меч"></b-form-input>
+              <b-nav-form
+              @submit="goSearch"
+              >
+                <b-form-input v-model="search" class="mr-sm-2" placeholder="алмазный меч"></b-form-input>
                 <b-button variant="outline-success" type="submit">Поиск</b-button>
               </b-nav-form>
               <b-nav-item>
                 <b-button
+                v-if="$store.state.user.uuid ? true : false"
                 variant="outline-dark"
+                @click="$router.push('/shop/orders')"
                 block
                 >Заказы</b-button>
               </b-nav-item>
@@ -66,7 +70,8 @@
       v-for="product in this.products"
       :key="product.id"
       >
-        <ShopProductCard :model="product"></ShopProductCard>
+        <ShopProductCard v-if="product.type != 'GROUP'" :model="product"></ShopProductCard>
+        <ShopGroupCard v-if="product.type == 'GROUP'" :model="product"></ShopGroupCard>
       </b-col>
     </b-row>
     <b-row class="d-flex justify-content-center py-3">
@@ -82,9 +87,10 @@
 </template>
 <script>
 import ShopProductCard from "@/components/shop/ShopProductCard.vue";
+import ShopGroupCard from "@/components/shop/ShopGroupCard.vue";
 import ShopCreateProduct from "@/components/shop/ShopCreateProduct.vue";
 export default {
-  components: { ShopProductCard, ShopCreateProduct },
+  components: { ShopProductCard, ShopGroupCard, ShopCreateProduct },
   data: function () {
     return {
       pages: 10,
@@ -93,6 +99,7 @@ export default {
       products: [],
       filtered: [{text: 'Все', value: null}, {text: 'Предметы и блоки', value: "ITEM"}, {text: 'Привилегии', value: "GROUP"}, {text: 'Другие услуги', value: "SPECIAL"}],
       filter: null,
+      search: null
     };
   },
   methods: {
@@ -100,11 +107,18 @@ export default {
       var info = await this.$store.dispatch("request", {
         type: "lkFetchProducts",
         lastId: id,
-        filterByType: this.filter
+        filterByType: this.filter,
+        filterByName: this.search ? this.search : null
       });
       console.log(info);
       this.maxQuery = info.maxQuery;
       return info.products;
+    },
+    goSearch: async function(e) {
+        e.preventDefault();
+        this.products = await this.fetchProducts(0);
+        this.page = 1;
+        this.refreshPagesCount();
     },
     followPage: async function (page) {
       console.log(page);
@@ -116,6 +130,7 @@ export default {
       if(this.products.length < this.maxQuery && this.page < this.pages) this.pages = this.page;
       if(this.products.length >= this.maxQuery && this.page >= this.pages) this.pages++;
     },
+
   },
   created: async function () {
     this.products = await this.fetchProducts(0);
