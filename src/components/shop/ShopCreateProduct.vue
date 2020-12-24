@@ -67,9 +67,11 @@
       >
           <b-form-input
           type="date"
+          v-model="endDate"
         ></b-form-input>
         <b-form-input
           type="time"
+          v-model="endTime"
         ></b-form-input>
       </b-form-group>
       <b-form-group
@@ -158,15 +160,48 @@ export default {
             sysExtra: null,
             sysNbt: null,
             sysQuantity: 1,
+            endDate: null,
+            endTime: null,
             sysDeliveryProvider: null
         };
+    },
+    computed: {
+        endDateObject: function() {
+          if(!this.endDate) return null;
+          var date = new Date(this.endDate);
+          return {
+            date: {
+              year: date.getFullYear(),
+              month: date.getMonth()+1,
+              day: date.getDate()
+            },
+            time: {
+              hour: 0,
+              minute: 0,
+              second: 0
+            }
+          }
+        }
     },
     methods: {
         show: function() {
             this.isShow = true;
         },
-        createProduct: function() {
-
+        createProduct: async function(evt) {
+          evt.preventDefault();
+          console.log(this.endDate);
+          console.log(this.endTime);
+          var res = await this.$store.dispatch("request", {
+                type: "lkCreateProduct",
+                name : this.name, price: this.price + 0.0, count: this.count ? this.count : -1,
+                description: this.description,
+                endDate: (this.endDate && this.endTime) ? this.endDateObject : null,
+                productType: this.type, visible: this.visible, isAllowStack: this.isStackable,
+                sysId: this.sysId, sysExtra: this.sysExtra, sysNbt: this.sysNbt, sysQuantity: this.sysQuantity,
+                sysDeliveryProvider: this.sysDeliveryProvider
+            });
+          console.log(res);
+          this.isShow = false;
         }
     }
 }

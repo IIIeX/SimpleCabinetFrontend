@@ -72,8 +72,9 @@ export default {
   props: ["model"],
   computed: {
     endDateDays: function() {
-      var date = Date.parse(this.model.endDate);
-      return (date - Date.now()) / (60*60*24);
+      var dateObj = this.model.endDate;
+      var date = new Date(dateObj.date.year, dateObj.date.month-1, dateObj.date.day,  dateObj.time.hour, dateObj.time.minute, dateObj.time.second);
+      return Math.floor((date.getTime() - Date.now()) / (60*60*24*1000));
     }
   },
   data: function () {
