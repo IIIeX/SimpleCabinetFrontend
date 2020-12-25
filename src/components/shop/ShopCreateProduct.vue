@@ -191,7 +191,7 @@ export default {
           evt.preventDefault();
           await this.$store.dispatch("request", {
                 type: "lkCreateProduct",
-                name : this.name, price: this.price + 0.0, count: this.count ? this.count : -1,
+                name : this.name, price: this.price, count: this.count ? this.count : -1,
                 description: this.description,
                 endDate: (this.endDate && this.endTime) ? this.endDateObject : null,
                 productType: this.type, visible: this.visible, isAllowStack: this.isStackable,

@@ -40,6 +40,7 @@ api.onOpen = () => {
    }
 };
 */
+api.debugmode = true;
 api.promises.auth = new Promise(function (resolve, reject) {
   api.promises.auth_resolve = resolve
   api.promises.auth_reject = reject
