@@ -6,8 +6,10 @@ import store from './store'
 import config from './config.js'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VueMarkdownIt from "markdown-it-vue"
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
+Vue.use(VueMarkdownIt);
 Vue.config.productionTip = false
 store.commit("onConfig", config);
 const api = store.state.api;
@@ -40,7 +42,8 @@ api.onOpen = () => {
    }
 };
 */
-api.debugmode = true;
+api.debugmode = false; // enable debugmode
+
 api.promises.auth = new Promise(function (resolve, reject) {
   api.promises.auth_resolve = resolve
   api.promises.auth_reject = reject

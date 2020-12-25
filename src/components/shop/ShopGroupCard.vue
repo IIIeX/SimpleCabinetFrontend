@@ -4,7 +4,7 @@
             <strong class="text-info">{{ model.name }}</strong>
           </b-card-header>
           <b-card-body>
-            <b-card-text v-if="model.description"><VueMarkdown :source="model.description"></VueMarkdown></b-card-text>
+            <b-card-text v-if="model.description"><markdown-it-vue :content="model.description"></markdown-it-vue></b-card-text>
             <b-form-spinbutton v-model="formQuantity" min="1" max="100"></b-form-spinbutton>
           </b-card-body>
           <b-card-footer align="center">
@@ -35,10 +35,8 @@
         </b-card>
 </template>
 <script>
-import VueMarkdown from 'vue-markdown-v2'
 export default {
     props: ["model"],
-    components: { VueMarkdown },
     computed: {
       endDateDays: function() {
         var dateObj = this.model.endDate;

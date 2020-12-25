@@ -10,7 +10,7 @@
           :id="model.name"
         ></b-icon>
         <b-tooltip :target="model.name">
-          <span><VueMarkdown :source="model.description"></VueMarkdown></span>
+          <span><markdown-it-vue :content="model.description"></markdown-it-vue></span>
         </b-tooltip>
       </span>
     </b-card-header>
@@ -68,10 +68,8 @@
   </b-card>
 </template>
 <script>
-import VueMarkdown from 'vue-markdown-v2'
 export default {
   props: ["model"],
-  components: { VueMarkdown },
   computed: {
     endDateDays: function() {
       var dateObj = this.model.endDate;
