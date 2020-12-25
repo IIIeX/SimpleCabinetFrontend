@@ -59,5 +59,12 @@ export default {
       }
     },
   },
+  watch: {
+    "user.uuid": function(newValue, oldValue) {
+        if(newValue != oldValue) {
+          this.fetchUserSkinInfo();
+        }
+    },
+  }
 };
 </script>

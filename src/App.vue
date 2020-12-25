@@ -15,6 +15,7 @@
           <b-nav-item to="/shop">Магазин</b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/login">Войти</b-nav-item>
           <b-nav-item v-if="!this.$store.state.user.uuid" to="/register">Регистрация</b-nav-item>
+          <b-nav-item v-if="this.$store.state.user.uuid" to="/users">Пользователи</b-nav-item>
           <b-nav-item v-if="this.$store.state.user.uuid" to="/user">Личный кабинет</b-nav-item>
           <b-nav-item v-if="this.$store.state.user.uuid" @click="exitAccount">Выход</b-nav-item>
           <b-nav-item to="/devtools" v-if="this.$store.state.config.devtools">DEV</b-nav-item>
@@ -49,6 +50,8 @@ export default {
     },
   },
   mounted: function () {
+    console.log("SimpleCabinet by Gravit'a 1.0.0");
+    console.log("License MIT, docs and source code: https://github.com/SimpleCabinet/SimpleCabinetPublicDocs");
     var instance = this;
     this.$store.state.api.callbacks.onclose = function (error) {
       if (error.wasClean) return;
