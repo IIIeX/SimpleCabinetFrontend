@@ -58,7 +58,21 @@ export default {
       var info = await this.$store.dispatch("request", {
         type: "lkFetchUsers",
         lastId: id,
-        filterByName: this.search
+        filterByName: this.search ? this.search : null
+      });
+      var list = [];
+      for (const i of info.list) {
+        list.push({
+          username: i.username,
+          client: ""
+        });
+      }
+      var skininfo = await this.$store.dispatch("request", {
+        type: "batchProfileByUsername",
+        list: list
+      });
+      skininfo.playerProfiles.forEach(function(value, i) {
+          info.list[i].playerProfile = value;
       });
       this.maxQuery = info.maxQuery;
       return info.list;

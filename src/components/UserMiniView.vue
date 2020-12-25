@@ -46,12 +46,8 @@ export default {
       this.$router.push("/user/name/" + this.user.username);
     },
     fetchUserSkinInfo: async function () {
-      var info = await this.$store.dispatch("request", {
-        type: "profileByUUID",
-        uuid: this.user.uuid,
-      });
-      if(info.playerProfile.skin) {
-        this.skinurl = info.playerProfile.skin.url;
+      if(this.user.playerProfile && this.user.playerProfile.skin) {
+        this.skinurl = this.user.playerProfile.skin.url;
         this.$refs.skinviewer.draw(this.skinurl);
       }
       else {
