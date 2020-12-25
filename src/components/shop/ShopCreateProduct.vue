@@ -31,6 +31,8 @@
           type="textarea"
           placeholder="Самый лучший товар"
         ></b-form-textarea>
+        <label>Предпросмотр:</label>
+        <p><VueMarkdown :source="description"></VueMarkdown></p>
       </b-form-group>
       <b-form-group
       label="Тип товара"
@@ -144,7 +146,9 @@
     </div>
 </template>
 <script>
+import VueMarkdown from 'vue-markdown-v2'
 export default {
+    components: { VueMarkdown },
     data: function() {
         return {
             isShow: false,
