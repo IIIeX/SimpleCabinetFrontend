@@ -82,11 +82,8 @@ export default {
           else isFirst = false;
           body += k + "=" + encodeURIComponent(res.params[k]);
         }
-        console.log(res.redirectUri);
-        console.log(body);
         window.location = res.redirectUri + "?" + body;
       } catch (e) {
-        console.log(e);
         this.modalInitPayment.serverError = e.error;
         this.modalInitPayment.serverErrorShow = false;
       }

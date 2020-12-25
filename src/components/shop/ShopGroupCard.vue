@@ -51,12 +51,30 @@ export default {
     },
     methods: {
         createOrder: async function() {
-            var res = await this.$store.dispatch("request", {
-                type: "lkCreateOrder",
-                productId: this.model.id,
-                quantity: this.formQuantity
-            });
-            console.log(res);
+            try {
+        var res = await this.$store.dispatch("request", {
+          type: "lkCreateOrder",
+          productId: this.model.id,
+          quantity: this.formQuantity,
+        });
+        this.$bvToast.toast(
+          "Заказ #" + res.orderId + " успешно создан и передан в обработку",
+          {
+            title: "Покупка товара",
+            variant: "success",
+            autoHideDelay: 15000,
+          }
+        );
+        if(this.model.count > 0) {
+          this.model.count -= this.formQuantity;
+        }
+      } catch (e) {
+        this.$bvToast.toast(e.error, {
+          title: "Покупка товара не удалась",
+          variant: "danger",
+          autoHideDelay: 15000,
+        });
+      }
         }
     }
 }

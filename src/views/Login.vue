@@ -105,7 +105,6 @@ export default {
           this.$nextTick(function() { this.$refs.modal2FAinput.focus(); });
           return;
         }
-        console.log(e);
         this.form.serverError = e.error;
         this.form.serverErrorShow = false;
         return;
@@ -132,11 +131,10 @@ export default {
     async sendFogotPassword(evt) {
       evt.preventDefault();
       try {
-        let result = await this.$store.dispatch("request", {
+        await this.$store.dispatch("request", {
           type: "lkPasswordReset",
           email: this.modalFogotPassword.email,
         });
-        console.log(result);
       } catch (e) {
         console.log(e);
         return;

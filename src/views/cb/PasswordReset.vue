@@ -64,20 +64,18 @@ export default {
       evt.preventDefault();
       this.form.serverErrorShow = true;
       try {
-        var res = await this.$store.dispatch("request", {
+        await this.$store.dispatch("request", {
           type: "lkPasswordResetApply",
           id: this.id,
           uuid: this.uuid,
           newPassword: this.form.password,
         });
       } catch (e) {
-        console.log(e);
         this.form.serverError = e.error;
         this.form.serverErrorShow = false;
         return;
       }
       this.$router.push("/login");
-      console.log(res);
     },
   },
 };

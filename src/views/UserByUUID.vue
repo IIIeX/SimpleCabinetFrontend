@@ -26,8 +26,6 @@ export default {
         type: "lkExtendedInfo",
         uuid,
       });
-      console.log(info);
-      console.log(extInfo);
       return {
         username: info.playerProfile.username,
         uuid: info.playerProfile.uuid,

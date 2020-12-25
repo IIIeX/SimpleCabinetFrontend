@@ -20,7 +20,6 @@ export default {
   },
   watch: {
     uuid: function (newUuid, oldUuid) {
-      console.log("Changed uuid", newUuid, oldUuid);
       if (!newUuid && oldUuid) {
         this.$router.push("/login");
       }

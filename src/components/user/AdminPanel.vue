@@ -117,20 +117,18 @@ export default {
   },
   methods: {
     adminDisable2FA: async function () {
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "lkTwoFactorEnable",
         userUsername: this.user.username,
       });
-      console.log(res);
     },
     adminChangePassword: async function (evt) {
       evt.preventDefault();
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "lkChangePassword",
         userUsername: this.user.username,
         newPassword: this.modalAdminChangePassword.newPassword,
       });
-      console.log(res);
       this.modalAdminChangePassword.show = false;
     },
     checkAdminGroup: function() {
@@ -141,30 +139,27 @@ export default {
     },
     adminChangeUsername: async function (evt) {
       evt.preventDefault();
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "lkChangeUsername",
         userUsername: this.user.username,
         newUsername: this.modalAdminChangeUsername.newUsername,
       });
-      console.log(res);
       this.modalAdminChangeUsername.show = false;
     },
     adminBanUser: async function (evt) {
       evt.preventDefault();
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "lkBanUser",
         userUsername: this.user.username,
       });
-      console.log(res);
       this.modalBanUser.show = false;
     },
     adminExitUser: async function () {
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "exit",
         exitAll: true,
         username: this.user.username,
       });
-      console.log(res);
     }
   },
 };

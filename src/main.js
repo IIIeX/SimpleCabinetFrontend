@@ -48,14 +48,11 @@ api.callbacks.onopen = () => {
   var sessionId = localStorage.getItem("sessionId");
   if (sessionId) {
     api.sendRequest("restoreSession", { session: sessionId, needUserInfo: true }, (result) => {
-      console.log(result);
       store.commit('onUserInfo', result.userInfo);
       api.sendRequest('lkExtendedInfo', {}, (extInfo) => {
-        console.log(extInfo);
         store.commit('onExtInfo', extInfo);
         api.promises.auth_resolve();
       }, (error) => {
-        console.log(JSON.stringify(error));
         api.promises.auth_reject(error);
       });
     }, (error) => {

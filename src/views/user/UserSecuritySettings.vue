@@ -174,7 +174,6 @@ export default {
         .encode(this.modal2FAEnable.encodedSecretKey)
         .split("=")
         .join("");
-      console.log(data);
       return data;
     },
   },
@@ -205,7 +204,6 @@ export default {
   },
   watch: {
     uuid: function (newUuid, oldUuid) {
-      console.log("Changed uuid", newUuid, oldUuid);
       if (!newUuid && oldUuid) {
         this.$router.push("/login");
       }
@@ -231,7 +229,7 @@ export default {
       } else {
         this.formChangePassword.validation = true;
         try {
-          var res = await this.$store.dispatch("request", {
+          await this.$store.dispatch("request", {
             type: "lkChangePassword",
             oldPassword: this.formChangePassword.oldPassword,
             newPassword: this.formChangePassword.newPassword,
@@ -251,25 +249,21 @@ export default {
             autoHideDelay: 5000,
           });
         } catch (e) {
-          console.log(e);
           this.formChangePassword.serverError = e.error;
           this.formChangePassword.serverErrorShow = false;
           return;
         }
-        console.log(res);
       }
     },
     twoFactorGenerate: function () {
       var array = new Uint8Array(16);
       GetRandomValues(array);
-      console.log(array.length);
       this.modal2FAEnable.encodedSecretKey = array;
     },
     twoFactorEnable: async function (evt) {
       evt.preventDefault();
-      console.log(window.btoa(this.modal2FAEnable.encodedSecretKey));
       try {
-        var res = await this.$store.dispatch("request", {
+        await this.$store.dispatch("request", {
           type: "lkTwoFactorEnable",
           data: Base64.fromUint8Array(
             this.modal2FAEnable.encodedSecretKey,
@@ -288,7 +282,6 @@ export default {
         this.modal2FAEnable.validation = false;
         return;
       }
-      console.log(res);
       this.modal2FAEnable.show = false;
       this.modal2FAEnable.encodedSecretKey = null;
     },

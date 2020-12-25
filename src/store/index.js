@@ -162,7 +162,6 @@ export default new Vuex.Store({
     },
     request: async function (context, data) {
       await context.state.api.promises.onopen;
-      console.log(data);
       return new Promise(function (resolve, reject) {
         context.state.api.sendRequest(data.type, data, resolve, reject);
       });

@@ -49,10 +49,8 @@ export default {
     };
   },
   created: async function () {
-    console.log(123);
     this.list = await this.fetchUsers(0);
     this.refreshPagesCount();
-    console.log(this.list);
   },
   methods: {
     fetchUsers: async function (id) {
@@ -62,7 +60,6 @@ export default {
         lastId: id,
         filterByName: this.search
       });
-      console.log(info);
       this.maxQuery = info.maxQuery;
       return info.list;
     },
@@ -72,7 +69,6 @@ export default {
         this.refreshPagesCount();
     },
     followPage: async function (page) {
-      console.log(page);
       this.list = await this.fetchUsers((page - 1));
       this.page = page;
       this.refreshPagesCount();

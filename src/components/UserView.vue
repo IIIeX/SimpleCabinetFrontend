@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     editProfile: async function () {
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "lkUpdateExtendedInfo",
         userUsername: (this.admin && !this.owner) ? this.user.username : undefined,
         status: this.editProfileForm.status,
@@ -159,39 +159,35 @@ export default {
       this.user.ext.status = this.editProfileForm.status;
       this.user.ext.gender = this.editProfileForm.gender;
       this.editProfileForm.show = false;
-      console.log(res);
     },
     adminDisable2FA: async function () {
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "lkTwoFactorEnable",
         userUsername: this.user.username,
       });
-      console.log(res);
     },
     adminChangePassword: async function (evt) {
       evt.preventDefault();
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "lkChangePassword",
         userUsername: this.user.username,
         newPassword: this.modalAdminChangePassword.newPassword,
       });
-      console.log(res);
       this.modalAdminChangePassword.show = false;
     },
     adminChangeUsername: async function (evt) {
       evt.preventDefault();
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "lkChangeUsername",
         userUsername: this.user.username,
         newUsername: this.modalAdminChangeUsername.newUsername,
       });
-      console.log(res);
       this.modalAdminChangeUsername.show = false;
     },
     uploadSkin: async function () {
       const data = await this.readFileToBase64();
       try {
-        var result = await this.$store.dispatch("request", {
+        await this.$store.dispatch("request", {
           type: "lkUploadSkin",
           skinType: "SKIN",
           data: data.split("+").join("-").split("/").join("_"),
@@ -205,12 +201,11 @@ export default {
         });
         return;
       }
-      console.log(result);
     },
     uploadCloak: async function () {
       const data = await this.readFileToBase64();
       try {
-        var result = await this.$store.dispatch("request", {
+        await this.$store.dispatch("request", {
           type: "lkUploadSkin",
           skinType: "CLOAK",
           data: data.split("+").join("-").split("/").join("_"),
@@ -223,7 +218,6 @@ export default {
         });
         return;
       }
-      console.log(result);
     },
     readFileToBase64: async function () {
       return new Promise((resolve, reject) => {

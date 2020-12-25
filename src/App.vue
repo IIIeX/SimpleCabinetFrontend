@@ -41,10 +41,9 @@
 export default {
   methods: {
     exitAccount: async function () {
-      var res = await this.$store.dispatch("request", {
+      await this.$store.dispatch("request", {
         type: "exit",
       });
-      console.log(res);
       this.$store.commit("exit");
       this.$router.push("/");
     },

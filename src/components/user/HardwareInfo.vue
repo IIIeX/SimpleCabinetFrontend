@@ -95,7 +95,6 @@ export default {
         type: "lkUserHardwareInfo",
         userUsername: this.user.username,
       });
-      console.log(info);
       this.loading = false;
       this.info = info.info;
       this.publicKey = info.publicKey;

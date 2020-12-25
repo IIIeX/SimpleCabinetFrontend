@@ -189,9 +189,7 @@ export default {
         },
         createProduct: async function(evt) {
           evt.preventDefault();
-          console.log(this.endDate);
-          console.log(this.endTime);
-          var res = await this.$store.dispatch("request", {
+          await this.$store.dispatch("request", {
                 type: "lkCreateProduct",
                 name : this.name, price: this.price + 0.0, count: this.count ? this.count : -1,
                 description: this.description,
@@ -200,7 +198,6 @@ export default {
                 sysId: this.sysId, sysExtra: this.sysExtra, sysNbt: this.sysNbt, sysQuantity: this.sysQuantity,
                 sysDeliveryProvider: this.sysDeliveryProvider
             });
-          console.log(res);
           this.isShow = false;
         }
     }

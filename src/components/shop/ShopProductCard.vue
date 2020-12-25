@@ -98,8 +98,11 @@ export default {
             autoHideDelay: 15000,
           }
         );
+        if(this.model.count > 0) {
+          this.model.count -= this.formQuantity;
+        }
       } catch (e) {
-        this.$bvToast.toast(e, {
+        this.$bvToast.toast(e.error, {
           title: "Покупка товара не удалась",
           variant: "danger",
           autoHideDelay: 15000,

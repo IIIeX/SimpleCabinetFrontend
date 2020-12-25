@@ -50,7 +50,6 @@ export default {
         type: "profileByUUID",
         uuid: this.user.uuid,
       });
-      console.log(info);
       if(info.playerProfile.skin) {
         this.skinurl = info.playerProfile.skin.url;
         this.$refs.skinviewer.draw(this.skinurl);
