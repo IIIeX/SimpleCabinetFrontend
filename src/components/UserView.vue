@@ -5,6 +5,7 @@
         <b-card bg-variant="light" no-body class="shadow">
           <b-card-header>{{ user.username }}</b-card-header>
           <SkinViewer ref="skinviewer" :skinUrl="user.skin" :cloakUrl="user.cloak"></SkinViewer>
+          <b-alert v-if="!user.skin" show variant="danger" align="center">У {{ owner ? "вас" : user.ext.gender == "FEMALE" ? "неё" : user.ext.gender == "MALE" ? "него" : "этого пользователя" }} не установлен скин</b-alert>
           <b-card-footer class="p-0">
             <b-button-group vertical class="btn-block">
               <b-button-group v-if="owner">
