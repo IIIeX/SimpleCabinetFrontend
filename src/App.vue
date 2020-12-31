@@ -72,6 +72,20 @@ export default {
       else if(event.type == "userInfo") {
         instance.$store.commit("onUserInfo", event.userInfo);
       }
+      else if(event.type == "lkExtendedInfo") {
+        instance.$store.commit("onExtInfo", event);
+      }
+      else if(event.type == "auth") {
+        instance.$store.state.api.promises.auth = new Promise(function (resolve, reject) {
+          instance.$store.state.api.promises.auth_resolve = resolve
+          instance.$store.state.api.promises.auth_reject = reject
+        });
+        instance.$store.commit("onAuth", event);
+        if(event.session) {
+          localStorage.setItem("sessionId", event.session);
+        }
+        instance.$store.state.api.promises.auth_resolve();
+      }
       else if(event.type == "exit") {
         if(event.reason != "NO_EXIT") {
           instance.$store.commit("exit");
