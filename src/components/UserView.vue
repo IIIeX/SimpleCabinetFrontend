@@ -9,8 +9,16 @@
           <b-card-footer class="p-0">
             <b-button-group vertical class="btn-block">
               <b-button-group v-if="owner">
-                <b-button squared variant="light" @click="uploadSkin()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> скин</b-button>
-                <b-button squared variant="light" @click="uploadCloak()"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> плащ</b-button>
+                <b-button squared variant="light" @click="uploadSkin()" class="w-75"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> скин</b-button>
+                <b-button squared variant="light" class="border-0 bg-light" id="tp-remove-skin" bg-light>
+                  <b-icon icon="x-circle" variant="danger" aria-label="Удалить скин"></b-icon>
+                </b-button>
+              </b-button-group>
+              <b-button-group v-if="owner">
+                <b-button squared variant="light" @click="uploadCloak()" class="w-75"><b-icon icon="file-earmark-image" aria-hidden="true"></b-icon> плащ</b-button>
+                <b-button squared variant="light" class="border-0" id="tp-remove-cloak">
+                  <b-icon icon="x-circle" variant="danger" aria-label="Удалить плащ"></b-icon>
+                </b-button>
               </b-button-group>
               <b-button v-if="owner" variant="light" @click="$refs.paymentButton.show()">
                 <b-icon icon="credit-card" aria-hidden="true"></b-icon> пополнить
@@ -19,6 +27,12 @@
               <b-button v-if="owner" variant="light" to="/user/security"><b-icon icon="lock-fill" aria-hidden="true"></b-icon> безопасность</b-button>
               <AdminPanel v-if="admin" :user="user" />
             </b-button-group>
+            <b-tooltip target="tp-remove-skin" triggers="hover" placement="right">
+              Удалить скин
+            </b-tooltip>
+            <b-tooltip target="tp-remove-cloak" triggers="hover" placement="right">
+              Удалить плащ
+            </b-tooltip>
           </b-card-footer>
         </b-card>
       </b-col>
