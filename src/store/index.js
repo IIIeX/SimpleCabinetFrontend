@@ -53,6 +53,10 @@ export default new Vuex.Store({
       state.user.ext.groups = event.groups;
       state.user.ext.privateUserZone.enabled2FA = event.privateUserZone.isEnabled2FA;
     },
+    onPermissions(state, event) {
+      state.user.permissions = event.permissions;
+      state.user.flags = event.flags;
+    },
     onUserInfo(state, event) {
       state.user.permissions = event.permissions.permissions;
       state.user.flags = event.permissions.flags;

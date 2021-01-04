@@ -3,8 +3,14 @@
           <b-card-header class="d-flex align-items-center justify-content-between">
             <strong class="text-info">{{ model.name }}</strong>
           </b-card-header>
-          <b-card-body>
-            <b-card-text v-if="model.description"><markdown-it-vue :content="model.description"></markdown-it-vue></b-card-text>
+          <b-card-body align="center">
+                <b-img-lazy
+                  v-if="model.pictureUrl"
+                  fluid
+                  class="pixelated"
+                  :src="model.pictureUrl"
+                ></b-img-lazy>
+            <b-card-text v-if="model.description" align="left"><markdown-it-vue :content="model.description"></markdown-it-vue></b-card-text>
             <b-form-spinbutton v-model="formQuantity" min="1" max="100"></b-form-spinbutton>
           </b-card-body>
           <b-card-footer align="center">
